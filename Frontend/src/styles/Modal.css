@@ -1,0 +1,125 @@
+/* ===== Modal overlay ===== */
+.modal-overlay {
+    position: fixed;
+    inset: 0; /* top:0; left:0; right:0; bottom:0 */
+    background-color: rgba(0, 0, 0, 0.6); /* un poco más oscuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px); /* efecto blur detrás del modal */
+}
+
+/* ===== Modal content ===== */
+.modal-content {
+    background-color: #fff;
+    padding: 30px 35px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    animation: fadeIn 0.25s ease-out;
+    position: relative;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Titulos del modal */
+.modal-content h2,
+.modal-content h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+    font-weight: 600;
+    text-align: center;
+}
+
+.form-group {
+  display: flex;
+  align-items: center; 
+  gap: 8px; 
+  margin-bottom: auto;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: #333;
+  min-width: 100px; /* ancho mínimo para que queden alineados */
+}
+
+
+
+/* ===== Botones ===== */
+.btn-submit {
+    background-color: #4caf50;
+    color: #fff;
+    width: 100%;
+    padding: 14px 0;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #43a047;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.btn-confirm {
+    background-color: #f44336;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-confirm:hover {
+    background-color: #d32f2f;
+    box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+}
+
+.btn-cancel,
+.btn-close {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover,
+.btn-close:hover {
+    background-color: #bdbdbd;
+}
+
+/* ===== Contenedor de acciones ===== */
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* ===== Toast ===== */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    z-index: 2000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    opacity: 0.95;
+}
+
+/* ===== Animación fadeIn ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+}

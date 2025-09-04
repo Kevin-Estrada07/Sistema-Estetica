@@ -1,0 +1,83 @@
+/* Sidebar.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+.sidebar {
+  width: 200px; /* 🔹 más delgado */
+  min-height: 100vh;
+  background: #fff0f5; /* rosita suave */
+  padding: 1.5rem 1rem; /* 🔹 menos padding para subir */
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: sticky;
+  top: 0;
+}
+
+/* Logo */
+.sidebar .logo {
+  font-size: 1.2rem; /* 🔹 más pequeño */
+  font-weight: 600;
+  color: #d17a8a;
+  text-align: center;
+  margin-bottom: 0rem; 
+}
+
+/* Nav */
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar nav ul li a {
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+  font-size: 1rem; /* 🔹 más delgado */
+  padding: 0.4rem 0.6rem; /* 🔹 menos padding */
+  border-radius: 8px;
+  display: block;
+  transition: background 0.3s, color 0.3s;
+}
+
+.sidebar nav ul li a:hover {
+  background: #ffe6ef;
+  color: #d17a8a;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #d17a8a;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 8px 0;
+  text-align: left;
+  transition: color 0.3s;
+}
+
+.logout-btn:hover {
+  color: #b35d70;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    height: 100%;
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+}

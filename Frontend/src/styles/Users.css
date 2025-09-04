@@ -1,0 +1,204 @@
+/* ======== Layout ======== */
+
+.users-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* ======== Header ======== */
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.users-header h1 {
+  font-size: 1.8rem;
+  color: #444;
+}
+
+.btn-register {
+  background: #e91e63;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.btn-register:hover {
+  background: #c2185b;
+}
+
+/* ======== Tabla ======== */
+.table-container {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th {
+  background: #f8bbd0;
+  color: #333;
+  padding: 12px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.users-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.users-table tr:hover {
+  background: #fde4ec;
+}
+
+/* Botón eliminar  */
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-delete:hover {
+  background: #d32f2f;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ======== Formularios ======== */
+.form-user {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-user input,
+.form-user select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.form-user input:focus,
+.form-user select:focus {
+  border: 1px solid #e91e63;
+}
+
+.btn-submit {
+  background-color: #4CAF50;
+  color: white;
+  width: 100%;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
+  background-color: #45a049;
+}
+
+
+.btn-close {
+  margin-top: 12px;
+  background: transparent;
+  border: none;
+  color: #777;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* ======== Alerts ======== */
+.alert {
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.alert.error {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.alert.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* ======== Estados ======== */
+.no-access {
+  text-align: center;
+  color: #c62828;
+  font-weight: bold;
+  margin-top: 50px;
+}
+
+.loading {
+  color: #666;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  z-index: 999;
+  animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
+}
+
+
+/* ======== Animaciones ======== */
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-50%) translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+

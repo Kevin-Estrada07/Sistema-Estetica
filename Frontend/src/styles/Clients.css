@@ -1,0 +1,117 @@
+.clients-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #f9f9f9;
+    overflow-x: auto;
+}
+
+/* Header y acciones */
+.clients-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.clients-header h1 {
+    font-size: 28px;
+    margin: 0;
+}
+
+.clients-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 200px;
+}
+
+.btn-register {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.btn-register:hover {
+    background-color: #45a049;
+}
+
+/* Tabla */
+.table-wrapper {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.clients-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.clients-table th {
+    background: #f8bbd0;
+    color: #333;
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.clients-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+
+.clients-table tr:hover {
+    background-color: #fde4ec;
+}
+
+/* Botones de acción */
+.btn-edit, .btn-delete {
+    transition: all 0.3s ease;
+}
+.btn-edit {
+    background-color: #2196F3;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #1976D2;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #d32f2f;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    opacity: 0.9;
+    z-index: 2000;
+    font-weight: bold;
+} 
