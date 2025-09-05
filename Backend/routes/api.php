@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Http\Request;
@@ -52,3 +53,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('citas', AppointmentController::class);
 });
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/empleados', [EmpleadoController::class, 'index']);
+});
+

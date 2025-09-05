@@ -4,7 +4,8 @@ import Modal from "../components/Modal";
 import { appointmentsAPI } from "../api/appointmentsAPI";
 import { clientsAPI } from "../api/clientesAPI";
 import { servicesAPI } from "../api/serviciosAPI";
-import { adminAPI } from "../api/adminAPI";
+// import { adminAPI } from "../api/adminAPI";
+import { empleadosAPI } from "../api/empleadosAPI";
 import "../styles/Appointments.css";
 
 const Appointments = () => {
@@ -36,16 +37,16 @@ const Appointments = () => {
 
   const fetchData = async () => {
     try {
-      const [a, c, s, u] = await Promise.all([
+      const [a, c, s, e] = await Promise.all([
         appointmentsAPI.getAll(),
         clientsAPI.getAll(),
         servicesAPI.getAll(),
-        adminAPI.getAllUsers(),
+        empleadosAPI.getAll(),
       ]);
       setAppointments(a.data);
       setClients(c.data);
       setServices(s.data);
-      setUsers(u.data);
+      setUsers(e.data); // ahora carga estilistas
     } catch {
       setError("Error cargando datos");
     } finally {
@@ -181,8 +182,7 @@ const Appointments = () => {
                       <td>
                         <select
                           value={a.estado}
-                          onChange={(e) => handleEstadoChange(a.id, e.target.value)}
-                        >
+                          onChange={(e) => handleEstadoChange(a.id, e.target.value)}>
                           <option value="pendiente">Pendiente</option>
                           {/* <option value="confirmada">Confirmada</option> */}
                           <option value="completada">Completada</option>
