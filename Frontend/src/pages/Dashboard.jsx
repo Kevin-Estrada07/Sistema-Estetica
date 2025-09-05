@@ -1,17 +1,21 @@
 import React from "react";
 import "../styles/Dashboard.css";
 import Sidebar from '../components/Sidebar';
-// import Header from '../components/Header';
-
+import { useAuth } from "../context/AuthContext"; // importamos el contexto
 
 const Dashboard = () => {
+  const { user } = useAuth(); // obtenemos el usuario logueado
+
   return (
     <div className="dashboard">
       <Sidebar />
 
       <main className="content">
         <header className="header">
-          <h1>Bienvenido(a)💖</h1>
+          <h1>Bienvenido(a) 💖 {user?.name}</h1>
+          {user?.role && (
+            <p className="user-role">Rol: <strong>{user.role.name}</strong></p>
+          )}
         </header>
 
         <section className="cards">

@@ -28,8 +28,19 @@ const AdminRoute = ({ children }) => {
 
   if (loading) return <p>Cargando...</p>;
 
-  return user && user.role?.name === "admin" ? children : <Navigate to="/unauthorized" />;
+  if (!user) {
+    // si no hay sesión -> login
+    return <Navigate to="/" />;
+  }
+
+  if (user.role?.name !== "admin") {
+    // si hay sesión pero no es admin -> acceso denegado
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return children;
 };
+
 
 function App() {
   return (
