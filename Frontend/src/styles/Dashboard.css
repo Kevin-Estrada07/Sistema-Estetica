@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -105,7 +104,78 @@ body {
   box-shadow: 0 4px 10px rgba(214, 51, 132, 0.1);
 }
 
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .panel h2 {
   margin-top: 0;
   color: #d63384;
+}
+
+.calendar-wrapper {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.fc .fc-daygrid-day {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.fc .fc-daygrid-day:hover {
+  background: #f3f4f6;
+}
+
+.event-details p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.event-details strong {
+  color: #4c1d95;
+  /* morado elegante */
+}
+
+.btn-register {
+  background: #10b981;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.btn-register:hover {
+  background: #059669;
+}
+
+/* Mejorar presentación de eventos */
+.fc-event {
+  border-radius: 0.5rem !important;
+  padding: 4px !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: linear-gradient(135deg, #7c3aed, #9333ea) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* Día actual resaltado */
+.fc-day-today {
+  background: #f3e8ff !important;
+  border: 2px solid #7c3aed !important;
 }

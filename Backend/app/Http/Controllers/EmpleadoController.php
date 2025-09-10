@@ -22,7 +22,7 @@ class EmpleadoController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        // Filtrar por rol estilista (ajusta si tu tabla se llama roles o role)
+        // Filtrar por rol estilista 
         $empleados = User::whereHas('role', function ($q) {
             $q->where('name', 'Estilista');
         })->get(['id', 'name']);
@@ -35,7 +35,7 @@ class EmpleadoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //s
     }
 
     /**
