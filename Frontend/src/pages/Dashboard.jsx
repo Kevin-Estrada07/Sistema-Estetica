@@ -6,10 +6,12 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import esLocale from "@fullcalendar/core/locales/es"; 
+import esLocale from "@fullcalendar/core/locales/es";
 import { appointmentsAPI } from "../api/appointmentsAPI";
 import Modal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
+import { adminAPI } from "../api/adminAPI";
+
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -17,6 +19,11 @@ const Dashboard = () => {
 
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [stats, setStats] = useState({
+    citasHoy: 0,
+    clientes: 0,
+    servicios: 0,
+  });
 
   const fetchAppointments = async () => {
     try {
@@ -41,6 +48,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchAppointments();
+    const fetchStats = async () => {
+      try {
+        const res = await adminAPI.getDashboardStats();
+        setStats(res.data.stats);
+      } catch (err) {
+        console.error("❌ Error cargando estadísticas:", err);
+      }
+    };
+    fetchStats();
   }, []);
 
   return (
@@ -60,15 +76,15 @@ const Dashboard = () => {
         <section className="cards">
           <div className="card">
             <h3>Citas de Hoy</h3>
-            <p>8</p>
+            <p>{stats.citasHoy}</p>
           </div>
           <div className="card">
-            <h3>Clientes nuevos</h3>
-            <p>3</p>
+            <h3>Clientes</h3>
+            <p>{stats.clientes}</p>
           </div>
           <div className="card">
-            <h3>Servicios activos</h3>
-            <p>12</p>
+            <h3>Servicios Activos</h3>
+            <p>{stats.servicios}</p>
           </div>
         </section>
 
@@ -90,7 +106,7 @@ const Dashboard = () => {
                 center: "title",
                 right: "dayGridMonth,timeGridWeek,timeGridDay",
               }}
-              locales={[esLocale]} 
+              locales={[esLocale]}
               locale="es"
               buttonText={{
                 today: "Hoy",

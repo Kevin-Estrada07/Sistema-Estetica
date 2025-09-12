@@ -23,5 +23,7 @@ export const adminAPI = {
     logout: () => api.post("/logout"),
     deleteUser: (id) => {
         return api.delete(`/users/${id}`);
-    }
+    },
+    getDashboardStats: () => api.get("/dashboard/stats"),
 };
+

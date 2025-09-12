@@ -12,14 +12,12 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        // Traer citas con sus relaciones y ordenadas por ID ascendente
-        $appointments = Appointment::with(['cliente', 'servicio', 'empleado'])
+        $appointments = Appointment::with(['cliente:id,nombre', 'servicio:id,nombre', 'empleado:id,name'])
             ->orderBy('id', 'asc')
-            ->get();
+            ->get(); // 20 por página
 
         return response()->json($appointments);
     }
-
 
     /**
      * Store a newly created resource in storage.
