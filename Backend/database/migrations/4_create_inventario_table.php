@@ -17,7 +17,6 @@ return new class extends Migration
             $table->text('descripcion');
             $table->integer('cantidad');
             $table->decimal('precio_unitario', 10, 2);
-            $table->integer('stock_minimo');
             $table->timestamps();
         });
     }

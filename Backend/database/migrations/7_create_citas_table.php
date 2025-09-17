@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('empleado_id')->constrained('users')->onDelete('cascade');
             $table->date('fecha');
             $table->time('hora');
-            $table->enum('estado', ['pendiente', 'confirmada', 'cancelada', 'completada']);
+            $table->enum('estado', ['pendiente', 'en proceso', 'cancelada', 'completada']);
             $table->text('notas')->nullable();
             $table->timestamps();
         });

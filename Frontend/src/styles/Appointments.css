@@ -79,6 +79,25 @@
     background-color: #fde4ec;
 }
 
+/* Botones de acción */
+.btn-attend {
+    padding: 6px 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-attend {
+    background-color: #6200ff;
+    color: white;
+}
+
+.btn-attend:hover {
+    background-color: #1976D2;
+}
+
 
 /* Toast */
 .toast {

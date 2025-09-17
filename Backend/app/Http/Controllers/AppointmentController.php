@@ -12,7 +12,7 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $appointments = Appointment::with(['cliente:id,nombre', 'servicio:id,nombre', 'empleado:id,name'])
+        $appointments = Appointment::with(['cliente:id,nombre', 'servicio:id,nombre,precio', 'empleado:id,name'])
             ->orderBy('id', 'asc')
             ->get(); // 20 por página
 
@@ -30,7 +30,7 @@ class AppointmentController extends Controller
             'empleado_id' => 'required|exists:users,id',
             'fecha' => 'required|date',
             'hora' => 'required',
-            'estado' => 'required|string|in:pendiente,completada,cancelada',
+            'estado' => 'required|string|in:pendiente,en proceso,completada,cancelada',
             'notas' => 'nullable|string'
         ]);
 
@@ -62,7 +62,7 @@ class AppointmentController extends Controller
             'empleado_id' => 'required|exists:users,id',
             'fecha' => 'required|date',
             'hora' => 'required',
-            'estado' => 'required|string|in:pendiente,completada,cancelada',
+            'estado' => 'required|string|in:pendiente,en proceso,completada,cancelada',
             'notas' => 'nullable|string'
         ]);
 

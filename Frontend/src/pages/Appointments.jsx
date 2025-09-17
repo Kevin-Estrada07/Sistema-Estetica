@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FaEdit, FaTrashAlt, FaUserCheck } from "react-icons/fa";
 import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { appointmentsAPI } from "../api/appointmentsAPI";
@@ -7,6 +8,9 @@ import { servicesAPI } from "../api/serviciosAPI";
 // import { adminAPI } from "../api/adminAPI";
 import { empleadosAPI } from "../api/empleadosAPI";
 import "../styles/Appointments.css";
+import PaymentModal from "../components/PaymentModal";
+import { productsAPI } from "../api/productsAPI";
+
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -31,22 +35,28 @@ const Appointments = () => {
 
   const [toast, setToast] = useState("");
 
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [products, setProducts] = useState([]);
+
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-      const [a, c, s, e] = await Promise.all([
+      const [a, c, s, e, p] = await Promise.all([
         appointmentsAPI.getAll(),
         clientsAPI.getAll(),
         servicesAPI.getAll(),
         empleadosAPI.getAll(),
+        productsAPI.getAll()
       ]);
       setAppointments(a.data);
       setClients(c.data);
       setServices(s.data);
-      setUsers(e.data); // ahora carga estilistas
+      setUsers(e.data);
+      setProducts(p.data);
     } catch {
       setError("Error cargando datos");
     } finally {
@@ -113,6 +123,18 @@ const Appointments = () => {
     setEstado("pendiente");
     setNotas("");
   };
+
+  // Para el pago
+  const openPaymentModal = (appointment) => {
+    setSelectedAppointment(appointment);
+    setIsPaymentModalOpen(true);
+  };
+
+  const closePaymentModal = () => {
+    setSelectedAppointment(null);
+    setIsPaymentModalOpen(false);
+  };
+
 
   const handleEstadoChange = async (id, newEstado) => {
     try {
@@ -184,18 +206,23 @@ const Appointments = () => {
                           value={a.estado}
                           onChange={(e) => handleEstadoChange(a.id, e.target.value)}>
                           <option value="pendiente">Pendiente</option>
-                          {/* <option value="confirmada">Confirmada</option> */}
+                          <option value="en proceso">En Proceso</option>
                           <option value="completada">Completada</option>
                           <option value="cancelada">Cancelada</option>
                         </select>
                       </td>
                       <td>{a.notas}</td>
                       <td>
-                        <button className="btn-edit" onClick={() => openEditModal(a)}>
-                          ✏️ Editar
+                        <button className="btn-attend" onClick={() => openPaymentModal(a)}>
+                          <FaUserCheck /> Pagar
                         </button>
+
+                        <button className="btn-edit" onClick={() => openEditModal(a)}>
+                          <FaEdit /> Editar
+                        </button>
+
                         <button className="btn-delete" onClick={() => setConfirmDelete(a)}>
-                          🗑 Eliminar
+                          <FaTrashAlt /> Eliminar
                         </button>
                       </td>
                     </tr>
@@ -209,8 +236,7 @@ const Appointments = () => {
         <Modal
           isOpen={isModalOpen}
           onClose={closeModal}
-          title={editAppointment ? "Editar Cita" : "Nueva Cita"}
-        >
+          title={editAppointment ? "Editar Cita" : "Nueva Cita"}>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Cliente</label>
@@ -257,6 +283,7 @@ const Appointments = () => {
               <label>Estado</label>
               <select value={estado} onChange={(e) => setEstado(e.target.value)}>
                 <option value="pendiente">Pendiente</option>
+                <option value="en proceso">En Proceso</option>
                 <option value="completada">Completada</option>
                 <option value="cancelada">Cancelada</option>
               </select>
@@ -284,8 +311,7 @@ const Appointments = () => {
                   onClick={() => {
                     handleDelete(confirmDelete.id);
                     setConfirmDelete(null);
-                  }}
-                >
+                  }}>
                   Sí
                 </button>
                 <button onClick={() => setConfirmDelete(null)}>No</button>
@@ -293,6 +319,13 @@ const Appointments = () => {
             }
           />
         )}
+        {/* Modal de pago */}
+        <PaymentModal
+          isOpen={isPaymentModalOpen}
+          onClose={closePaymentModal}
+          appointment={selectedAppointment}
+          products={products || []}
+        />
 
         {toast && <div className="toast">{toast}</div>}
       </main>
