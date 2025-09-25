@@ -101,8 +101,7 @@ const PaymentModal = ({ isOpen, onClose, appointment, onPay, products }) => {
                     <label>Método de pago:</label>
                     <select
                         value={paymentMethod}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                    >
+                        onChange={(e) => setPaymentMethod(e.target.value)}>
                         <option value="efectivo">Efectivo</option>
                         <option value="tarjeta">Tarjeta</option>
                         <option value="transferencia">Transferencia</option>

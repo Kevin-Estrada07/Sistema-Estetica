@@ -43,7 +43,9 @@ class AppointmentController extends Controller
      */
     public function show($id)
     {
-        $appointment = Appointment::findOrFail($id);
+        $appointment = Appointment::with(['cliente', 'servicio', 'empleado'])
+            ->findOrFail($id);
+
         return response()->json($appointment, 200);
     }
 
@@ -78,6 +80,21 @@ class AppointmentController extends Controller
 
         return response()->json("actualizado", 200);
     }
+
+    public function updateEstado(Request $request, Appointment $cita)
+    {
+        $request->validate([
+            'estado' => 'required|string|in:pendiente,en proceso,completada,cancelada',
+        ]);
+
+        $cita->update(['estado' => $request->estado]);
+
+        return response()->json([
+            'message' => 'Estado de la cita actualizado',
+            'cita' => $cita
+        ], 200);
+    }
+
 
     /**
      * Remove the specified resource from storage.

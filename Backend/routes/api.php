@@ -8,6 +8,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Http\Request;
 
@@ -56,9 +57,44 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::put('/citas/{cita}/estado', [AppointmentController::class, 'updateEstado']);
+});
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/empleados', [EmpleadoController::class, 'index']);
 });
 
+//Datos de Dashboard Inicio - Reportes
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/dashboard/stats', [DashboardController::class, 'dashboardStats']);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/dashboard/citas-completadas', [DashboardController::class, 'citasCompletadas']);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/dashboard/citas-canceladas', [DashboardController::class, 'citasCanceladas']);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/dashboard/ingresos-por-dia', [DashboardController::class, 'ingresosPorDia']);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/dashboard/citas-por-dia', [DashboardController::class, 'CitasPorDia']);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/dashboard/ingresos-por-servicio', [DashboardController::class, 'IngresosPorServicio']);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/dashboard/detalle-citas-dia', [DashboardController::class, 'DetalleCitasPorDia']);
+});
+
+// Ventas: accesibles a todos los roles autenticados
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResource('ventas', SaleController::class);
 });

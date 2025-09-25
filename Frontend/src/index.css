@@ -1,6 +1,7 @@
+
 :root {
-  --primary: #d946ef;  /* rosa/fucsia */
-  --secondary: #a78bfa; /* lila */
+  --primary: #d946ef;  
+  --secondary: #a78bfa; 
   --text: #333333;
   --background: #ffffff;
   
@@ -17,6 +18,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 
 a {
   font-weight: 500;

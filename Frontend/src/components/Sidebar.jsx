@@ -26,7 +26,7 @@ const Sidebar = () => {
           <li><Link to="/clients">Clientes</Link></li>
           <li><Link to="/services">Servicios</Link></li>
           <li><Link to="/products">Inventario</Link></li>
-          <li><a href="#">Reportes</a></li>
+          <li><Link to="/reports">Reportes</Link></li>
           <li><Link to="/users">Usuarios</Link></li>
           <li>
             <button className="logout-btn" onClick={handleLogout}>

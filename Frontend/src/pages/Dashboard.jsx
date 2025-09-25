@@ -93,6 +93,11 @@ const Dashboard = () => {
             <h2>📅 Agenda de Citas</h2>
             <button
               className="btn-register"
+              onClick={() => navigate("/payment")}>
+              ➕ Nueva Venta
+            </button>
+            <button
+              className="btn-register"
               onClick={() => navigate("/citas")}>
               ➕ Registrar Cita
             </button>

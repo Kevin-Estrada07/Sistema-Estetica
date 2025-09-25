@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { FaEdit, FaTrashAlt, FaUserCheck } from "react-icons/fa";
 import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
@@ -52,17 +53,26 @@ const Appointments = () => {
         empleadosAPI.getAll(),
         productsAPI.getAll()
       ]);
+
+      console.log("Appointments:", a.data);
+      console.log("Clients:", c.data);
+      console.log("Services:", s.data);
+      console.log("Empleados:", e.data);
+      console.log("Products:", p.data);
+
       setAppointments(a.data);
       setClients(c.data);
       setServices(s.data);
       setUsers(e.data);
       setProducts(p.data);
-    } catch {
+    } catch (err) {
+      console.error("Error en fetchData:", err.response?.data || err.message);
       setError("Error cargando datos");
     } finally {
       setLoading(false);
     }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,11 +134,11 @@ const Appointments = () => {
     setNotas("");
   };
 
-  // Para el pago
-  const openPaymentModal = (appointment) => {
-    setSelectedAppointment(appointment);
-    setIsPaymentModalOpen(true);
-  };
+  // // Para el pago
+  // const openPaymentModal = (appointment) => {
+  //   setSelectedAppointment(appointment);
+  //   setIsPaymentModalOpen(true);
+  // };
 
   const closePaymentModal = () => {
     setSelectedAppointment(null);
@@ -213,9 +223,12 @@ const Appointments = () => {
                       </td>
                       <td>{a.notas}</td>
                       <td>
-                        <button className="btn-attend" onClick={() => openPaymentModal(a)}>
+                        {/* <button className="btn-attend" onClick={() => openPaymentModal(a)}>
                           <FaUserCheck /> Pagar
-                        </button>
+                        </button> */}
+                        <Link to={`/payment/${a.id}`} className="btn-attend">
+                          <FaUserCheck /> Pagar
+                        </Link>
 
                         <button className="btn-edit" onClick={() => openEditModal(a)}>
                           <FaEdit /> Editar

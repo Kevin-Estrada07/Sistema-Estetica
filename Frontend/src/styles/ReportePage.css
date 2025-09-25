@@ -1,0 +1,180 @@
+/* ReportPage general */
+.report-page {
+    display: flex;
+    min-height: 100vh;
+    background: #f9fafb;
+}
+
+.report-content {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+/* Header */
+.reporte-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.reporte-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.reporte-range {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.reporte-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: none;
+}
+
+.btn-green {
+    background: #34d399;
+    color: white;
+}
+
+.btn-green:hover {
+    background: #059669;
+}
+
+.btn-blue {
+    background: #60a5fa;
+    color: white;
+}
+
+.btn-blue:hover {
+    background: #2563eb;
+}
+
+.btn-indigo {
+    background: #6366f1;
+    color: white;
+}
+
+.btn-indigo:hover {
+    background: #4338ca;
+}
+
+/* Filtros */
+.reporte-filtros {
+    color: #6366f1 !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filtro-item {
+    color: #000000;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+}
+
+.reporte-filtros input,
+.reporte-filtros select {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.9rem;
+}
+
+/* Cards KPIs */
+.reporte-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.card {
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.card-label {
+    font-size: 1.5rem !important;
+    /* color: #8c00ff !important;  */
+}
+
+.card-value {
+    font-size: 1.4rem !important;
+    margin-top: 0.2rem;
+    color: red !important;
+}
+
+/* Charts */
+.reporte-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.chart {
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chart.full {
+    grid-column: span 2;
+}
+
+/* Tabla */
+.reporte-tabla {
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.75rem;
+}
+
+th,
+td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+}
+
+th {
+    background: #f3f4f6;
+    font-weight: 600;
+}
