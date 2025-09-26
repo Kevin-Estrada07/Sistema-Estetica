@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/Header.css';
 import Login from '../pages/Login';
 
 const Header = () => {
@@ -26,32 +25,54 @@ const Header = () => {
   return (
     <>
       <header className={`header ${hideHeader ? "hidden" : ""}`}>
-        <div className='logo'>
-          <h1>Estética Bella</h1>
-        </div>
+        <div className='container'>
+          <div className='logo'>
+            <h1>
+              <span className="logo-main">Estética</span>
+              <span className="logo-accent">Bella</span>
+            </h1>
+            <div className="logo-underline"></div>
+          </div>
 
-        <nav className={`nav ${isOpen ? 'open' : ''}`}>
-          <a href="#services" onClick={() => setIsOpen(false)}>Conexión</a>
-          <a href="#services" onClick={() => setIsOpen(false)}>Servicios</a>
-          <a href="#appointment" onClick={() => setIsOpen(false)}>Agendar Cita</a>
-          <a href="#contact" onClick={() => setIsOpen(false)}>Contacto</a>
-          {/* Botón login modal */}
+          <nav className={`nav ${isOpen ? 'open' : ''}`}>
+            <div className="nav-overlay" onClick={() => setIsOpen(false)}></div>
+            <div className="nav-content">
+              <a href="#services" className="nav-link" onClick={() => setIsOpen(false)}>
+                <span>Conexión</span>
+              </a>
+              <a href="#services" className="nav-link" onClick={() => setIsOpen(false)}>
+                <span>Servicios</span>
+              </a>
+              <a href="#appointment" className="nav-link" onClick={() => setIsOpen(false)}>
+                <span>Agendar Cita</span>
+              </a>
+              <a href="#contact" className="nav-link" onClick={() => setIsOpen(false)}>
+                <span>Contacto</span>
+              </a>
+              <button
+                className="login-button-header"
+                onClick={() => { setShowLogin(true); setIsOpen(false); }}
+>
+                <span className="button-text">Iniciar Sesión</span>
+                <div className="button-glow"></div>
+              </button>
+            </div>
+          </nav>
+
           <button
-            className="login-button-header"
-            onClick={() => { setShowLogin(true); setIsOpen(false); }}
+            className={`hamburger ${isOpen ? "active" : ""}`}
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Menú"
           >
-            Iniciar Sesión
+            <div className="hamburger-box">
+              <div className="hamburger-inner">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
           </button>
-        </nav>
-
-        <button
-          className={`hamburger ${isOpen ? "active" : ""}`}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        </div>
       </header>
 
       {/* Modal Login */}

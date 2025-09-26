@@ -5,7 +5,6 @@ import Services from '../components/Services';
 import AppointmentForm from '../components/AppointmentForm.jsx';
 import Testimonials from '../components/Testimonials';
 import Footer from '../components/Footer';
-import Conexion from '../components/Conexion';
 
 function Home() {
   return (
@@ -16,7 +15,6 @@ function Home() {
       <AppointmentForm />
       <Testimonials />
       <Footer />
-      <Conexion />
     </>
   );
 }
