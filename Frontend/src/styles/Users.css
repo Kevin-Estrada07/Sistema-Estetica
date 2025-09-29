@@ -1,204 +1,530 @@
-/* ======== Layout ======== */
+/* ============================================ */
+/* CONTENEDOR PRINCIPAL - USUARIOS */
+/* ============================================ */
 
-.users-content {
-  flex: 1;
-  padding: 20px;
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+    background: #f5f7fa;
 }
 
-/* ======== Header ======== */
+.users-content {
+    flex: 1;
+    padding: 24px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    margin-left: 220px;
+}
+
+/* ============================================ */
+/* HEADER Y ACCIONES */
+/* ============================================ */
+
 .users-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+    background: white;
+    padding: 20px 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .users-header h1 {
-  font-size: 1.8rem;
-  color: #444;
+    font-size: clamp(24px, 4vw, 32px);
+    margin: 0;
+    color: #2c3e50;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 .btn-register {
-  background: #e91e63;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-register:hover {
-  background: #c2185b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
 }
 
-/* ======== Tabla ======== */
+.btn-register:active {
+    transform: translateY(0);
+}
+
+/* ============================================ */
+/* TABLA DE USUARIOS */
+/* ============================================ */
+
 .table-container {
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .users-table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
 }
 
 .users-table th {
-  background: #f8bbd0;
-  color: #333;
-  padding: 12px;
-  text-align: center;
-  vertical-align: middle;
+    background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
+    color: #2c3e50;
+    padding: 16px 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .users-table td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  text-align: center;
+    padding: 16px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+    color: #555;
+    font-size: 14px;
+    vertical-align: middle;
 }
 
-.users-table tr:hover {
-  background: #fde4ec;
+.users-table tbody tr {
+    transition: all 0.3s ease;
 }
 
-/* Botón eliminar  */
+.users-table tbody tr:hover {
+    background: linear-gradient(135deg, #fff5f8 0%, #ffe0ec 100%);
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(244, 143, 177, 0.2);
+}
+
+/* ============================================ */
+/* BOTONES DE ACCIÓN */
+/* ============================================ */
+
 .btn-delete {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  background: #f44336;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    color: white;
+    box-shadow: 0 3px 10px rgba(244, 67, 54, 0.3);
 }
 
 .btn-delete:hover {
-  background: #d32f2f;
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
 }
 
+.btn-delete:active {
+    transform: translateY(0);
+}
 
-/* ======== Formularios ======== */
+/* ============================================ */
+/* FORMULARIO DEL MODAL */
+/* ============================================ */
+
 .form-user {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 8px;
 }
 
-.form-user input,
-.form-user select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  outline: none;
-  transition: border 0.3s;
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: slideInForm 0.3s ease;
 }
 
-.form-user input:focus,
-.form-user select:focus {
-  border: 1px solid #e91e63;
+@keyframes slideInForm {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.btn-submit {
-  background-color: #4CAF50;
-  color: white;
-  width: 100%;
-  padding: 12px 0;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+.form-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.btn-submit:hover {
-  background-color: #45a049;
+.form-group label::before {
+    content: "●";
+    color: #f48fb1;
+    font-size: 10px;
 }
 
-
-.btn-close {
-  margin-top: 12px;
-  background: transparent;
-  border: none;
-  color: #777;
-  cursor: pointer;
-  font-size: 0.9rem;
+.form-group input,
+.form-group select {
+    padding: 12px 16px;
+    border: 2px solid #e1e8ed;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    color: #2c3e50;
 }
 
-/* ======== Alerts ======== */
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #f48fb1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.1);
+    transform: translateY(-2px);
+}
+
+.form-group input:hover,
+.form-group select:hover {
+    border-color: #f8bbd0;
+}
+
+.form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f48fb1' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+}
+
+.form-group select option {
+    padding: 10px;
+    background: white;
+}
+
+.form-group input::placeholder {
+    color: #95a5a6;
+    font-style: italic;
+}
+
+.form-group input:invalid:not(:placeholder-shown) {
+    border-color: #ff5252;
+}
+
+.form-group input:valid:not(:placeholder-shown) {
+    border-color: #4CAF50;
+}
+
+/* ============================================ */
+/* ALERTAS */
+/* ============================================ */
+
 .alert {
-  padding: 8px 10px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  font-size: 0.9rem;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .alert.error {
-  background: #ffebee;
-  color: #c62828;
+    background: #ffebee;
+    color: #f44336;
+    border-left: 4px solid #f44336;
 }
 
 .alert.success {
-  background: #e8f5e9;
-  color: #2e7d32;
+    background: #e8f5e9;
+    color: #4CAF50;
+    border-left: 4px solid #4CAF50;
 }
 
-/* ======== Estados ======== */
-.no-access {
-  text-align: center;
-  color: #c62828;
-  font-weight: bold;
-  margin-top: 50px;
+/* ============================================ */
+/* BOTONES DEL MODAL */
+/* ============================================ */
+
+.btn-submit,
+.btn-cancel,
+.btn-confirm {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #f48fb1 0%, #f06292 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(244, 143, 177, 0.4);
+    width: 100%;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 143, 177, 0.5);
+    background: linear-gradient(135deg, #f06292 0%, #ec407a 100%);
+}
+
+.btn-cancel {
+    background: #e0e0e0;
+    color: #555;
+}
+
+.btn-cancel:hover {
+    background: #d0d0d0;
+    transform: translateY(-2px);
+}
+
+.btn-confirm {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+}
+
+.btn-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
+    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+}
+
+/* ============================================ */
+/* ESTADOS Y MENSAJES */
+/* ============================================ */
+
+.loading,
+.error {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 40px;
+    font-weight: 500;
 }
 
 .loading {
-  color: #666;
+    color: #666;
 }
 
+.error {
+    color: #f44336;
+    background: #ffebee;
+    padding: 16px;
+    border-radius: 12px;
+    border-left: 4px solid #f44336;
+}
+
+/* Toast mejorado */
 .toast {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #4caf50;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  font-weight: bold;
-  z-index: 999;
-  animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    opacity: 0;
+    z-index: 2000;
+    font-weight: 600;
+    font-size: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease forwards, slideOut 0.3s ease 2.7s forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-
-
-/* ======== Animaciones ======== */
 
 @keyframes slideIn {
-  from {
-    transform: translateX(-50%) translateY(30px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-@keyframes fadeOut {
-  to {
-    opacity: 0;
-  }
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
 }
 
+/* ============================================ */
+/* SCROLLBAR PERSONALIZADO */
+/* ============================================ */
+
+.table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #f48fb1;
+    border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: #f06292;
+}
+
+/* ============================================ */
+/* RESPONSIVE DESIGN */
+/* ============================================ */
+
+@media screen and (max-width: 1024px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .users-content {
+        padding: 20px;
+        margin-left: 0;
+    }
+
+    .users-header {
+        padding: 16px 20px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .users-content {
+        padding: 16px;
+    }
+
+    .users-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+    }
+
+    .users-header h1 {
+        font-size: 24px;
+    }
+
+    .btn-register {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .users-table th,
+    .users-table td {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+
+    .btn-delete {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .toast {
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+        font-size: 14px;
+    }
+
+    .form-user {
+        gap: 16px;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .btn-submit,
+    .btn-cancel,
+    .btn-confirm {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .users-content {
+        padding: 12px;
+    }
+
+    .users-header {
+        padding: 12px;
+    }
+
+    .users-header h1 {
+        font-size: 20px;
+    }
+}
+
+/* ============================================ */
+/* ACCESIBILIDAD */
+/* ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

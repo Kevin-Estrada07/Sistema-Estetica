@@ -116,7 +116,7 @@ const Services = () => {
         setEditService(null);
         setName(""); setDescription(""); setDuration(""); setPrice("");
     };
-
+ 
     return (
         <div className="dashboard">
             <Sidebar />

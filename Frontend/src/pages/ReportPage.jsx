@@ -207,7 +207,7 @@ export default function ReportPage() {
                         </ResponsiveContainer>
                     </div>
 
-                    <div className="chart full">
+                    <div className="chart">
                         <h3>Ingresos por servicio</h3>
                         <ResponsiveContainer>
                             <PieChart>

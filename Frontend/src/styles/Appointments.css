@@ -1,8 +1,18 @@
+/* Contenedor dashboard principal */
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+    background: #f5f7fa;
+}
+
+/* Contenedor principal */
 .appointments-content {
     flex: 1;
-    padding: 20px;
-    background-color: #f9f9f9;
-    overflow-x: auto;
+    padding: 24px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    margin-left: 220px;
 }
 
 /* Header y acciones */
@@ -11,104 +21,632 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    gap: 16px;
+    margin-bottom: 28px;
+    background: white;
+    padding: 20px 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .appointments-header h1 {
-    font-size: 28px;
+    font-size: clamp(24px, 4vw, 32px);
     margin: 0;
+    color: #2c3e50;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 .appointments-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .search-input {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    width: 200px;
+    padding: 12px 16px;
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    font-size: 15px;
+    width: 260px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
 .btn-register {
-    padding: 8px 16px;
-    background-color: #4CAF50;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 12px;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-register:hover {
-    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.btn-register:active {
+    transform: translateY(0);
 }
 
 /* Tabla */
 .table-wrapper {
     background: white;
-    border-radius: 10px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .appointments-table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 800px;
 }
 
 .appointments-table th {
-    background: #f8bbd0;
-    color: #333;
-    padding: 12px;
+    background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
+    color: #2c3e50;
+    padding: 16px 12px;
     text-align: center;
-    vertical-align: middle;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .appointments-table td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
+    padding: 16px 12px;
+    border-bottom: 1px solid #f0f0f0;
     text-align: center;
+    color: #555;
+    font-size: 14px;
+    vertical-align: middle;
 }
 
-.appointments-table tr:hover {
-    background-color: #fde4ec;
+.appointments-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.appointments-table tbody tr:hover {
+    background: linear-gradient(135deg, #fff5f8 0%, #ffe0ec 100%);
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(244, 143, 177, 0.2);
+}
+
+.appointments-table select {
+    padding: 8px 12px;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    background: white;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.appointments-table select:focus {
+    outline: none;
+    border-color: #f48fb1;
+    box-shadow: 0 0 0 3px rgba(244, 143, 177, 0.1);
+}
+
+.appointments-table select[value="pendiente"] {
+    color: #ff9800;
+    border-color: #ffe0b2;
+}
+
+.appointments-table select[value="en proceso"] {
+    color: #2196F3;
+    border-color: #bbdefb;
+}
+
+.appointments-table select[value="completada"] {
+    color: #4CAF50;
+    border-color: #c8e6c9;
+}
+
+.appointments-table select[value="cancelada"] {
+    color: #f44336;
+    border-color: #ffcdd2;
 }
 
 /* Botones de acción */
-.btn-attend {
-    padding: 6px 10px;
-    margin-right: 5px;
+.appointments-table td:last-child {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-bottom: none;
+}
+
+.btn-attend,
+.btn-edit,
+.btn-delete {
+    padding: 8px 14px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
 }
 
 .btn-attend {
-    background-color: #6200ff;
+    background: linear-gradient(135deg, #6200ff 0%, #4a00cc 100%);
     color: white;
+    box-shadow: 0 3px 10px rgba(98, 0, 255, 0.3);
 }
 
 .btn-attend:hover {
-    background-color: #1976D2;
+    background: linear-gradient(135deg, #4a00cc 0%, #3700a3 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(98, 0, 255, 0.4);
 }
 
+.btn-edit {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    color: white;
+    box-shadow: 0 3px 10px rgba(33, 150, 243, 0.3);
+}
 
-/* Toast */
+.btn-edit:hover {
+    background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    color: white;
+    box-shadow: 0 3px 10px rgba(244, 67, 54, 0.3);
+}
+
+.btn-delete:hover {
+    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+}
+
+.btn-attend:active,
+.btn-edit:active,
+.btn-delete:active {
+    transform: translateY(0);
+}
+
+/* Estados de carga y error */
+.appointments-content > p {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    margin-top: 40px;
+    font-weight: 500;
+}
+
+.error {
+    color: #f44336;
+    background: #ffebee;
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    border-left: 4px solid #f44336;
+}
+
+/* Toast mejorado */
 .toast {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #333;
+    bottom: 24px;
+    right: 24px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
     color: white;
-    padding: 12px 18px;
-    border-radius: 8px;
-    opacity: 0.9;
+    padding: 16px 24px;
+    border-radius: 12px;
+    opacity: 0;
     z-index: 2000;
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease forwards, slideOut 0.3s ease 2.7s forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .appointments-content {
+        padding: 20px;
+        margin-left: 0;
+    }
+
+    .appointments-header {
+        padding: 16px 20px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .appointments-content {
+        padding: 16px;
+    }
+
+    .appointments-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+    }
+
+    .appointments-header h1 {
+        font-size: 24px;
+    }
+
+    .appointments-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .btn-register {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .appointments-table th,
+    .appointments-table td {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+
+    .btn-attend,
+    .btn-edit,
+    .btn-delete {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .toast {
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .appointments-content {
+        padding: 12px;
+    }
+
+    .appointments-header {
+        padding: 12px;
+    }
+
+    .appointments-header h1 {
+        font-size: 20px;
+    }
+
+    .appointments-table td:last-child {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .btn-attend,
+    .btn-edit,
+    .btn-delete {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Scrollbar personalizado */
+.table-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #f48fb1;
+    border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #f06292;
+}
+
+/* ============================================ */
+/* ESTILOS DEL MODAL Y FORMULARIO */
+/* ============================================ */
+
+/* Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 62, 80, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+/* Caja del modal */
+.modal-content {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: modalFade 0.3s ease;
+    z-index: 3100;
+}
+
+@keyframes modalFade {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Formulario dentro del modal */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: slideInForm 0.3s ease;
+}
+
+@keyframes slideInForm {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.form-group label::before {
+    content: "●";
+    color: #f48fb1;
+    font-size: 10px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 12px 16px;
+    border: 2px solid #e1e8ed;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    color: #2c3e50;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #f48fb1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.1);
+    transform: translateY(-2px);
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+    border-color: #f8bbd0;
+}
+
+/* Select personalizado */
+.form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f48fb1' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+}
+
+.form-group select option {
+    padding: 10px;
+    background: white;
+}
+
+/* Textarea */
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+/* Input tipo date y time */
+.form-group input[type="date"],
+.form-group input[type="time"] {
+    cursor: pointer;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator,
+.form-group input[type="time"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(64%) sepia(18%) saturate(1453%) hue-rotate(295deg) brightness(99%) contrast(95%);
+}
+
+/* Grid para fecha y hora en 2 columnas */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Botón submit del formulario */
+.modal-content form .btn-register {
+    margin-top: 12px;
+    padding: 14px 28px;
+    font-size: 16px;
+    width: 100%;
+    justify-content: center;
+    background: linear-gradient(135deg, #f48fb1 0%, #f06292 100%);
+    box-shadow: 0 4px 15px rgba(244, 143, 177, 0.4);
+}
+
+.modal-content form .btn-register:hover {
+    background: linear-gradient(135deg, #f06292 0%, #ec407a 100%);
+    box-shadow: 0 6px 20px rgba(244, 143, 177, 0.5);
+}
+
+/* Estados de validación */
+.form-group input:invalid:not(:placeholder-shown),
+.form-group select:invalid:not(:placeholder-shown) {
+    border-color: #ff5252;
+}
+
+.form-group input:valid:not(:placeholder-shown),
+.form-group select:valid {
+    border-color: #4CAF50;
+}
+
+/* Placeholder mejorado */
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #95a5a6;
+    font-style: italic;
+}
+
+/* Responsive del formulario */
+@media screen and (max-width: 768px) {
+    .modal-content {
+        max-width: 90%;
+        padding: 16px;
+    }
+
+    .modal-content form {
+        gap: 16px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .modal-content form .btn-register {
+        padding: 12px;
+        font-size: 14px;
+    }
 }

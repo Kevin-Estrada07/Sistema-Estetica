@@ -64,14 +64,33 @@ const Dashboard = () => {
       <Sidebar />
 
       <main className="content">
-        <header className="header">
-          <h1>Bienvenido(a) 💖 {user?.name}</h1>
-          {user?.role && (
-            <p className="user-role">
-              Rol: <strong>{user.role.name}</strong>
-            </p>
-          )}
+        <header className="headerDashboard">
+          <div className="welcome-section">
+            <h1 className="welcome-title">
+              Bienvenido(a), <span className="user-name">{user?.name}</span> 💖
+            </h1>
+            {user?.role && (
+              <p className="user-role">
+                Rol: <span className="role-badge">{user.role.name}</span>
+              </p>
+            )}
+          </div>
+
+          <div className="header-buttons">
+            <button
+              className="btn-register"
+              onClick={() => navigate("/payment")}>
+              ➕ Nueva Venta
+            </button>
+            <button
+              className="btn-register"
+              onClick={() => navigate("/citas")}>
+              ➕ Registrar Cita
+            </button>
+          </div>
         </header>
+
+
 
         <section className="cards">
           <div className="card">
@@ -91,16 +110,7 @@ const Dashboard = () => {
         <section className="panel">
           <div className="panel-header">
             <h2>📅 Agenda de Citas</h2>
-            <button
-              className="btn-register"
-              onClick={() => navigate("/payment")}>
-              ➕ Nueva Venta
-            </button>
-            <button
-              className="btn-register"
-              onClick={() => navigate("/citas")}>
-              ➕ Registrar Cita
-            </button>
+
           </div>
           <div className="calendar-wrapper">
             <FullCalendar

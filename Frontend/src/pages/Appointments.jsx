@@ -238,7 +238,7 @@ const Appointments = () => {
                           <FaTrashAlt /> Eliminar
                         </button>
                       </td>
-                    </tr>
+                    </tr> 
                   ))}
               </tbody>
             </table>
