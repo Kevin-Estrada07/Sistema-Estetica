@@ -37,22 +37,21 @@ const Header = () => {
           <nav className={`nav ${isOpen ? 'open' : ''}`}>
             <div className="nav-overlay" onClick={() => setIsOpen(false)}></div>
             <div className="nav-content">
-              <a href="#services" className="nav-link" onClick={() => setIsOpen(false)}>
+              {/* <a href="#services" className="nav-link" onClick={() => setIsOpen(false)}>
                 <span>Conexión</span>
-              </a>
+              </a> */}
               <a href="#services" className="nav-link" onClick={() => setIsOpen(false)}>
                 <span>Servicios</span>
               </a>
               <a href="#appointment" className="nav-link" onClick={() => setIsOpen(false)}>
                 <span>Agendar Cita</span>
               </a>
-              <a href="#contact" className="nav-link" onClick={() => setIsOpen(false)}>
-                <span>Contacto</span>
+              <a href="#testimonials" className="nav-link" onClick={() => setIsOpen(false)}>
+                <span>Opiniones</span>
               </a>
               <button
                 className="login-button-header"
-                onClick={() => { setShowLogin(true); setIsOpen(false); }}
->
+                onClick={() => { setShowLogin(true); setIsOpen(false); }}>
                 <span className="button-text">Iniciar Sesión</span>
                 <div className="button-glow"></div>
               </button>

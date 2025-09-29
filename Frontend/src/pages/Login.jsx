@@ -20,7 +20,7 @@ const Login = ({ onClose }) => {
     } catch (err) {
       setError(err.message || "Error al iniciar sesión");
     }
-  };
+  }; 
 
   return (
     <div className="login-overlay">
