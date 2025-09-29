@@ -246,6 +246,7 @@ export default function ReportPage() {
                                         <td>{c.users}</td>
                                         <td>{c.fecha}</td>
                                         <td>{c.estado}</td>
+                                        <td>{c.servicio_precio}</td>
                                     </tr>
                                 ))}
                             </tbody>

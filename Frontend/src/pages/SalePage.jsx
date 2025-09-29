@@ -137,7 +137,7 @@ const SalePage = () => {
             <div className="payment-page">
                 <header className="payment-header">
                     <h2>💳 Nueva Venta {appointmentId ? "(Desde cita)" : ""}</h2>
-                    <button className="btn-back" onClick={() => navigate("/ventas")}>⬅ Volver</button>
+                    <button className="btn-back" onClick={() => navigate("/citas")}>⬅ Volver</button>
                 </header>
 
                 <section className="client-section">

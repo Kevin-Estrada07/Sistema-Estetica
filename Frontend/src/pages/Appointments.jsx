@@ -9,7 +9,7 @@ import { servicesAPI } from "../api/serviciosAPI";
 // import { adminAPI } from "../api/adminAPI";
 import { empleadosAPI } from "../api/empleadosAPI";
 import "../styles/Appointments.css";
-import PaymentModal from "../components/PaymentModal";
+// import PaymentModal from "../components/PaymentModal";
 import { productsAPI } from "../api/productsAPI";
 
 
@@ -333,12 +333,12 @@ const Appointments = () => {
           />
         )}
         {/* Modal de pago */}
-        <PaymentModal
+        {/* <PaymentModal
           isOpen={isPaymentModalOpen}
           onClose={closePaymentModal}
           appointment={selectedAppointment}
           products={products || []}
-        />
+        /> */}
 
         {toast && <div className="toast">{toast}</div>}
       </main>

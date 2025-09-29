@@ -162,7 +162,8 @@ class DashboardController extends Controller
                 'servicios.nombre as servicios',
                 'users.name as users',
                 'citas.fecha',
-                'citas.estado'
+                'citas.estado',
+                'servicios.precio as servicio_precio'
             )
             ->whereBetween('citas.fecha', [$inicio, $fin])
             ->orderBy('citas.fecha', 'desc')
