@@ -11,7 +11,7 @@ import generatePDF from "../components/generatePDF";
 import "../styles/PaymentPage.css";
 
 
-const SalePage = () => {
+const SalePage = () => { 
     const { user } = useAuth();
     const { appointmentId } = useParams(); // opcional
     const navigate = useNavigate();
@@ -225,7 +225,7 @@ const SalePage = () => {
                     </div>
                     <div className="actions">
                         <button className="btn-pay" onClick={handlePay}>✅ Pagar</button>
-                        <button className="btn-cancel" onClick={() => navigate("/ventas")}>❌ Cancelar</button>
+                        <button className="btn-cancel" onClick={() => navigate("/citas")}>❌ Cancelar</button>
                     </div>
                 </section>
             </div>
