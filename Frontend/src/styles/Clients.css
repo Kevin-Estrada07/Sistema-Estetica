@@ -2,12 +2,8 @@
 /* CONTENEDOR PRINCIPAL - CLIENTES */
 /* ============================================ */
 
-.dashboard {
-    display: flex;
-    min-height: 100vh;
-    background: #f5f7fa;
-}
 
+ 
 .clients-content {
     flex: 1;
     padding: 24px;
@@ -473,7 +469,7 @@
 /* RESPONSIVE DESIGN */
 /* ============================================ */
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
     .dashboard {
         flex-direction: column;
     }

@@ -2,26 +2,28 @@
 
 .dashboard {
   display: flex;
-  font-family: 'Poppins', sans-serif;
-  background: #fdf6fb;
-  /* fondo suave */
   min-height: 100vh;
+  background: #f5f7fa;
 }
 
 .content {
   flex: 1;
   margin-left: 220px;
-  /* espacio para sidebar fijo */
   padding: 2rem;
 }
 
 /* ===== HEADER ===== */
 .headerDashboard {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+  background: white;
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .headerDashboard div h1 {

@@ -55,14 +55,13 @@ const Dashboard = () => {
       } catch (err) {
         console.error("❌ Error cargando estadísticas:", err);
       }
-    };
+    }; 
     fetchStats();
   }, []);
 
   return (
     <div className="dashboard">
       <Sidebar />
-
       <main className="content">
         <header className="headerDashboard">
           <div className="welcome-section">

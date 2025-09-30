@@ -15,7 +15,7 @@ import { productsAPI } from "../api/productsAPI";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState([]);  
   const [services, setServices] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -159,7 +159,7 @@ const Appointments = () => {
   };
 
   return (
-    <div className="dashboard">
+    <div className="">
       <Sidebar />
       <main className="appointments-content">
         <header className="appointments-header">
