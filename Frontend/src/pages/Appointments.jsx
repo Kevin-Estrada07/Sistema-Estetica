@@ -6,16 +6,13 @@ import Modal from "../components/Modal";
 import { appointmentsAPI } from "../api/appointmentsAPI";
 import { clientsAPI } from "../api/clientesAPI";
 import { servicesAPI } from "../api/serviciosAPI";
-// import { adminAPI } from "../api/adminAPI";
 import { empleadosAPI } from "../api/empleadosAPI";
 import "../styles/Appointments.css";
-// import PaymentModal from "../components/PaymentModal";
-import { productsAPI } from "../api/productsAPI";
 
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
-  const [clients, setClients] = useState([]);  
+  const [clients, setClients] = useState([]);
   const [services, setServices] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,9 +33,7 @@ const Appointments = () => {
 
   const [toast, setToast] = useState("");
 
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [products, setProducts] = useState([]);
+
 
   useEffect(() => {
     fetchData();
@@ -46,25 +41,29 @@ const Appointments = () => {
 
   const fetchData = async () => {
     try {
-      const [a, c, s, e, p] = await Promise.all([
-        appointmentsAPI.getAll(),
+      // obtener las citas para la tabla
+      const citasRes = await appointmentsAPI.getInfo();
+
+      // obtener info para los selects del formulario
+      const [clientesRes, serviciosRes, empleadosRes] = await Promise.all([
         clientsAPI.getAll(),
         servicesAPI.getAll(),
-        empleadosAPI.getAll(),
-        productsAPI.getAll()
+        empleadosAPI.getAll()
       ]);
 
-      console.log("Appointments:", a.data);
-      console.log("Clients:", c.data);
-      console.log("Services:", s.data);
-      console.log("Empleados:", e.data);
-      console.log("Products:", p.data);
+      console.log("Appointments:", citasRes.data);
+      console.log("Clients:", clientesRes.data);
+      console.log("Services:", serviciosRes.data);
+      console.log("Empleados:", empleadosRes.data);
 
-      setAppointments(a.data);
-      setClients(c.data);
-      setServices(s.data);
-      setUsers(e.data);
-      setProducts(p.data);
+      // tabla
+      setAppointments(Array.isArray(citasRes.data.data) ? citasRes.data.data : []);
+
+      // selects
+      setClients(Array.isArray(clientesRes.data) ? clientesRes.data : []);
+      setServices(Array.isArray(serviciosRes.data) ? serviciosRes.data : []);
+      setUsers(Array.isArray(empleadosRes.data) ? empleadosRes.data : []);
+
     } catch (err) {
       console.error("Error en fetchData:", err.response?.data || err.message);
       setError("Error cargando datos");
@@ -72,7 +71,6 @@ const Appointments = () => {
       setLoading(false);
     }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -138,8 +136,7 @@ const Appointments = () => {
 
   const handleEstadoChange = async (id, newEstado) => {
     try {
-      const appointment = appointments.find((a) => a.id === id);
-      await appointmentsAPI.update(id, { ...appointment, estado: newEstado });
+      await appointmentsAPI.updateEstado(id, { estado: newEstado }); // enviar solo estado
       setAppointments((prev) =>
         prev.map((a) => (a.id === id ? { ...a, estado: newEstado } : a))
       );
@@ -191,14 +188,14 @@ const Appointments = () => {
               <tbody>
                 {appointments
                   .filter((a) =>
-                    search ? a.cliente?.nombre.toLowerCase().includes(search.toLowerCase()) : true
+                    search ? a.cliente.toLowerCase().includes(search.toLowerCase()) : true
                   )
                   .map((a) => (
                     <tr key={a.id}>
                       <td>{a.id}</td>
-                      <td>{a.cliente?.nombre}</td>
-                      <td>{a.servicio?.nombre}</td>
-                      <td>{a.empleado?.name}</td>
+                      <td>{a.cliente}</td>
+                      <td>{a.servicio}</td>
+                      <td>{a.empleado}</td>
                       <td>{a.fecha}</td>
                       <td>{a.hora}</td>
                       <td>
@@ -228,7 +225,7 @@ const Appointments = () => {
                           <FaTrashAlt /> Eliminar
                         </button>
                       </td>
-                    </tr> 
+                    </tr>
                   ))}
               </tbody>
             </table>
@@ -305,31 +302,23 @@ const Appointments = () => {
           <Modal
             isOpen={!!confirmDelete}
             onClose={() => setConfirmDelete(null)}
-            title={`¿Eliminar cita de ${confirmDelete.cliente?.nombre}?`}
+            title={`¿Eliminar cita de ${confirmDelete.cliente}?`}
             hideCloseButton
             actions={
               <>
                 <button
-                  className="btn-delete"
+                  className="btn-confirm "
                   onClick={() => {
                     handleDelete(confirmDelete.id);
                     setConfirmDelete(null);
                   }}>
                   Sí
                 </button>
-                <button onClick={() => setConfirmDelete(null)}>No</button>
+                <button className="btn-cancel " onClick={() => setConfirmDelete(null)}>No</button>
               </>
             }
           />
         )}
-        {/* Modal de pago */}
-        {/* <PaymentModal
-          isOpen={isPaymentModalOpen}
-          onClose={closePaymentModal}
-          appointment={selectedAppointment}
-          products={products || []}
-        /> */}
-
         {toast && <div className="toast">{toast}</div>}
       </main>
     </div>

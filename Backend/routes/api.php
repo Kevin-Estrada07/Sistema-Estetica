@@ -60,6 +60,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/citas/{cita}/estado', [AppointmentController::class, 'updateEstado']);
 });
 
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/info', [AppointmentController::class, 'InfTabla']);
+});
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/empleados', [EmpleadoController::class, 'index']);

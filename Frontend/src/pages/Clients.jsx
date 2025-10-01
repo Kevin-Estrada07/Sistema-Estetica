@@ -237,14 +237,12 @@ const Clients = () => {
                         <>
                             <button
                                 className="btn-confirm"
-                                onClick={() => { handleDelete(confirmDelete.id); setConfirmDelete(null); }}
-                            >
+                                onClick={() => { handleDelete(confirmDelete.id); setConfirmDelete(null); }}>
                                 Sí
                             </button>
                             <button
                                 className="btn-cancel"
-                                onClick={() => setConfirmDelete(null)}
-                            >
+                                onClick={() => setConfirmDelete(null)}>
                                 No
                             </button>
                         </>
@@ -256,5 +254,5 @@ const Clients = () => {
         </div>
     );
 };
- 
+
 export default Clients;

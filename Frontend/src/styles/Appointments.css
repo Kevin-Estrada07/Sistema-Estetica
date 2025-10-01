@@ -3,7 +3,7 @@
     display: flex;
     min-height: 100vh;
     background: #f5f7fa;
-    position: relative; 
+    position: relative;
 
 }
 
@@ -290,6 +290,24 @@
     align-items: center;
     gap: 10px;
 }
+
+.btn-submit,
+.btn-cancel,
+.btn-confirm {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
 
 @keyframes slideIn {
     from {

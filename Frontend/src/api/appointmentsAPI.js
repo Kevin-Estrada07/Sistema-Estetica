@@ -16,5 +16,6 @@ export const appointmentsAPI = {
   create: (data) => api.post("/citas", data, getAuthHeaders()),
   update: (id, data) => api.put(`/citas/${id}`, data, getAuthHeaders()),
   updateEstado: (id, data) => api.put(`/citas/${id}/estado`, data, getAuthHeaders()),
+  getInfo: () => api.get("/info", getAuthHeaders()),
   delete: (id) => api.delete(`/citas/${id}`, getAuthHeaders())
 };

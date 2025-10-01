@@ -34,6 +34,6 @@ class Appointment extends Model
 
     public function empleado()
     {
-        return $this->belongsTo(User::class, 'empleado_id'); // Asumiendo que empleado es un usuario con rol estilista
+        return $this->belongsTo(User::class, 'empleado_id');
     }
 }

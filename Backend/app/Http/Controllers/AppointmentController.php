@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AppointmentController extends Controller
 {
@@ -89,7 +90,7 @@ class AppointmentController extends Controller
 
         $cita->update(['estado' => $request->estado]);
 
-        return response()->json([ 
+        return response()->json([
             'message' => 'Estado de la cita actualizado',
             'cita' => $cita
         ], 200);
@@ -103,5 +104,39 @@ class AppointmentController extends Controller
     {
         $cita->delete();
         return response()->json(['message' => 'Cita eliminada']);
+    }
+
+    public function InfTabla()
+    {
+        try {
+            $appointments = Appointment::with(['cliente', 'servicio', 'empleado'])->orderBy('id', 'asc')->get();
+
+            $data = $appointments->map(function ($a) {
+                return [
+                    'id' => $a->id,
+                    'cliente_id' => $a->cliente_id,
+                    'servicio_id' => $a->servicio_id,
+                    'empleado_id' => $a->empleado_id,
+                    'cliente' => $a->cliente->nombre ?? null,
+                    'servicio' => $a->servicio->nombre ?? null,
+                    'empleado' => $a->empleado->name ?? null,
+                    'fecha' => $a->fecha,
+                    'hora' => $a->hora,
+                    'estado' => $a->estado,
+                    'notas' => $a->notas,
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener citas',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
