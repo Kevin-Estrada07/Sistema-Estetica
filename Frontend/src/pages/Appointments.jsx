@@ -134,16 +134,6 @@ const Appointments = () => {
     setNotas("");
   };
 
-  // // Para el pago
-  // const openPaymentModal = (appointment) => {
-  //   setSelectedAppointment(appointment);
-  //   setIsPaymentModalOpen(true);
-  // };
-
-  const closePaymentModal = () => {
-    setSelectedAppointment(null);
-    setIsPaymentModalOpen(false);
-  };
 
 
   const handleEstadoChange = async (id, newEstado) => {

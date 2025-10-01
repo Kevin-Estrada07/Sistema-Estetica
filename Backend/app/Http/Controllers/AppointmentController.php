@@ -89,7 +89,7 @@ class AppointmentController extends Controller
 
         $cita->update(['estado' => $request->estado]);
 
-        return response()->json([
+        return response()->json([ 
             'message' => 'Estado de la cita actualizado',
             'cita' => $cita
         ], 200);
