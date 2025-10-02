@@ -1,6 +1,5 @@
 // ReportePage.jsx
 import React, { useState, useEffect } from "react";
-import "../styles/ReportePage.css";
 import { dashboard } from "../api/dashboard";
 
 import {
@@ -20,6 +19,8 @@ import {
 import { Download, Calendar, Printer } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import "../styles/ReportePage.css";
+import { ReportPDF } from "../components/ReportPDF";
+
 
 export default function ReportPage() {
     const [inicio, setInicio] = useState(() => {
@@ -136,6 +137,9 @@ export default function ReportPage() {
                         <button onClick={imprimir} className="btn btn-blue">
                             <Printer size={16} /> Imprimir
                         </button>
+                        <button onClick={() => ReportPDF(data, { inicio, fin })} className="btn btn-blue">
+                            <Download size={16} /> Exportar PDF
+                        </button>
                     </div>
                 </header>
 
@@ -148,18 +152,6 @@ export default function ReportPage() {
                         <Calendar size={18} />
                         <input type="date" value={fin} onChange={(e) => setFin(e.target.value)} />
                     </label>
-
-                    <select className="filtro-item" value={servicioFilter} onChange={(e) => setServicioFilter(e.target.value)}>
-                        <option value="todos">Todos los servicios</option>
-                        <option value="corte">Corte</option>
-                        <option value="peinado">Peinado</option>
-                    </select>
-
-                    <select className="filtro-item" value={empleadoFilter} onChange={(e) => setEmpleadoFilter(e.target.value)}>
-                        <option value="todos">Todos los empleados</option>
-                        <option value="luis">Luis</option>
-                        <option value="sofia">Sofía</option>
-                    </select>
 
                     <button onClick={fetchReporte} className="btn btn-indigo">Actualizar</button>
                 </section>
@@ -180,10 +172,10 @@ export default function ReportPage() {
 
                 </section>
 
-                <section className="reporte-charts">
+                <section id="chart-ingresos" className="reporte-charts">
                     <div className="chart">
                         <h3>Ingresos por día</h3>
-                        <ResponsiveContainer width="100%" height={250}>
+                        <ResponsiveContainer width="100%" height={280}>
                             <LineChart data={data.ingresosPorDia}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="dia" />
@@ -194,9 +186,9 @@ export default function ReportPage() {
                         </ResponsiveContainer>
                     </div>
 
-                    <div className="chart">
+                    <div id="chart-citas" className="chart">
                         <h3>Citas por día</h3>
-                        <ResponsiveContainer width="100%" height={250}>
+                        <ResponsiveContainer width="100%" height={280}>
                             <BarChart data={data.citasPorDia}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="dia" />
@@ -207,9 +199,9 @@ export default function ReportPage() {
                         </ResponsiveContainer>
                     </div>
 
-                    <div className="chart">
+                    <div id="chart-servicios" className="chart">
                         <h3>Ingresos por servicio</h3>
-                        <ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height={280}>
                             <PieChart>
                                 <Pie data={data.ingresosPorServicio} dataKey="total" nameKey="nombre" innerRadius={60} outerRadius={100} label>
                                     {data.ingresosPorServicio.map((entry, idx) => (
