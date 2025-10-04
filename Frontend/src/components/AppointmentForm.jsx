@@ -9,7 +9,7 @@ const AppointmentForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const phone = "527331169380"; // Reemplaza con tu número en formato internacional (52 para MX)
+    const phone = "527331234567"; // Reemplaza con tu número en formato internacional (52 para MX)
     const message = `Hola, soy ${form.name}. Quiero agendar una cita para el servicio: ${form.service} el día ${form.date}.`;
     const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
       message

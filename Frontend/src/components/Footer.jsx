@@ -24,7 +24,7 @@ const Footer = () => (
       {/* Derechos reservados */}
       <div className="footer-section">
         <h3>Estética Bella</h3>
-        <p>Tu belleza, nuestro arte 💖</p>
+        <p>Tu belleza, nuestro arte 🤍</p>
       </div>
     </div>
 
