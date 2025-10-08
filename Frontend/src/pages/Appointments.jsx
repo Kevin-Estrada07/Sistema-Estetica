@@ -44,7 +44,6 @@ const Appointments = () => {
       // obtener las citas para la tabla
       const citasRes = await appointmentsAPI.getInfo();
 
-      // obtener info para los selects del formulario
       const [clientesRes, serviciosRes, empleadosRes] = await Promise.all([
         clientsAPI.getAll(),
         servicesAPI.getAll(),
