@@ -61,13 +61,22 @@
 /* SECCIONES */
 /* ============================================ */
 
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
 .client-section,
 .service-section {
     background: white;
     padding: 24px;
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    display: flex;
+    /* margin-bottom: 20px; */
+    flex-direction: column;
     animation: fadeIn 0.5s ease;
 }
 
@@ -305,8 +314,7 @@
     flex-wrap: wrap;
 }
 
-.btn-pay,
-.btn-cancel {
+.btn-pay {
     flex: 1;
     min-width: 150px;
     padding: 14px 28px;
@@ -334,20 +342,8 @@
     background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
 }
 
-.btn-cancel {
-    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
-}
 
-.btn-cancel:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
-    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
-}
-
-.btn-pay:active,
-.btn-cancel:active {
+.btn-pay:active {
     transform: translateY(0);
 }
 
@@ -360,6 +356,7 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

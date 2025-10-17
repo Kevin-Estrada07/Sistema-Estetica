@@ -134,9 +134,9 @@ export default function ReportPage() {
                         <button onClick={exportCSV} className="btn btn-green">
                             <Download size={16} /> Exportar CSV
                         </button>
-                        <button onClick={imprimir} className="btn btn-blue">
+                        {/* <button onClick={imprimir} className="btn btn-blue">
                             <Printer size={16} /> Imprimir
-                        </button>
+                        </button> */}
                         <button onClick={() => ReportPDF(data, { inicio, fin })} className="btn btn-blue">
                             <Download size={16} /> Exportar PDF
                         </button>

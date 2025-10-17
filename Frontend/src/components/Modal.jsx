@@ -9,7 +9,7 @@ const Modal = ({
   children, 
   actions, 
   hideCloseButton = false, 
-  onAttend // nueva prop para manejar "Atender"
+  onAttend
 }) => {
   if (!isOpen) return null;
 

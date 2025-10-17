@@ -1,16 +1,18 @@
-/* Variables globales */
 :root {
-  --primary: #e91e63;
-  --primary-light: #f8bbd9;
-  --accent: #ad1457;
-  --text-dark: #1f1f1f;
-  --text-gray: #555;
-  --text-light: #fff;
-  --bg-light: #fdf2f8;
+  --primary: #C68B59;       /* Terracota suave */
+  --primary-light: #F4ECE6; /* Beige claro */
+  --accent: #8C5E3C;        /* Marrón medio */
+  --text-dark: #3E332C;
+  --text-gray: #6F625A;
+  --text-light: #3E332C;
+  --bg-light: #FAF7F3;
   --shadow: rgba(0, 0, 0, 0.1);
   --radius: 12px;
   --transition: 0.3s ease;
 }
+
+
+
 
 /* Reset base */
 * {
@@ -33,6 +35,7 @@ body {
   right: 0;
   width: 100%;
   background: #fff;
+  /* Fondo blanco para el header se mantiene limpio */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,12 +71,14 @@ body {
 
 .logo-accent {
   color: var(--primary);
+  /* Rosa empolvado */
 }
 
 .logo-underline {
   width: 40px;
   height: 3px;
   background: var(--primary);
+  /* Rosa empolvado */
   margin-top: 4px;
   border-radius: 2px;
 }
@@ -103,6 +108,7 @@ body {
   height: 2px;
   width: 0;
   background: var(--primary);
+  /* Rosa empolvado */
   transition: width var(--transition);
   position: absolute;
   bottom: -4px;
@@ -115,13 +121,16 @@ body {
 
 .nav-link:hover {
   color: var(--primary);
+  /* Rosa empolvado */
 }
 
 /* Login button */
 .login-button-header {
   position: relative;
   background: var(--primary);
+  /* Rosa empolvado */
   color: var(--text-light);
+  /* Marrón oscuro */
   padding: 0.5rem 1.1rem;
   font-size: 1.1rem;
   border-radius: 50px;
@@ -134,7 +143,8 @@ body {
 
 .login-button-header:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.3);
+  /* Sombra actualizada al color primario */
+  box-shadow: 0 6px 20px rgba(218, 184, 179, 0.3);
 }
 
 .button-glow {
@@ -169,6 +179,7 @@ body {
   height: 3px;
   margin: 5px 0;
   background: var(--text-dark);
+  /* Marrón oscuro */
   transition: all var(--transition);
 }
 
@@ -205,7 +216,6 @@ body {
 @media(max-width:768px) {
   .header {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-    /* sombra más ligera en móvil */
   }
 
   .nav-content {
@@ -214,14 +224,12 @@ body {
     right: -100%;
     width: 70%;
     height: 100%;
-    /* en lugar de 100vh */
     min-height: 100vh;
-    /* asegura que siempre ocupe toda la pantalla */
     background: #fff;
+    /* Menú móvil blanco */
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* centra los enlaces verticalmente */
     align-items: flex-start;
     gap: 2rem;
     padding-left: 2rem;
@@ -229,7 +237,6 @@ body {
     z-index: 999;
     box-shadow: -4px 0 12px rgba(0, 0, 0, 0.05);
     overflow-y: auto;
-    /* si el menú tiene muchos items, activa scroll */
   }
 
 
@@ -249,7 +256,8 @@ body {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, var(--bg-light) 0%, #f8f9fa 100%);
+  /* Fondo actualizado a un degradado cálido */
+  background: linear-gradient(135deg, var(--bg-light) 0%, #FEFDF8 100%);
   overflow: hidden;
   padding: 100px 20px;
 }
@@ -257,7 +265,8 @@ body {
 .hero-background .floating-element {
   position: absolute;
   border-radius: 50%;
-  background: rgba(233, 30, 99, 0.15);
+  /* Elementos flotantes actualizados al color primario */
+  background: rgba(218, 184, 179, 0.15);
   animation: float 15s ease-in-out infinite;
 }
 
@@ -324,8 +333,9 @@ body {
 
 .hero-badge {
   display: inline-block;
-  background: rgba(233, 30, 99, 0.1);
-  color: var(--primary);
+  /* Badge actualizado a tonos taupe */
+  background: rgba(161, 136, 127, 0.1);
+  color: var(--accent);
   padding: 6px 20px;
   border-radius: 50px;
   font-weight: 500;
@@ -339,7 +349,8 @@ body {
 }
 
 .hero-title .highlight {
-  background: linear-gradient(90deg, #f8bbd9, #e91e63);
+  /* Degradado actualizado a la nueva paleta */
+  background: linear-gradient(90deg, var(--accent), var(--primary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -347,6 +358,7 @@ body {
 .hero-subtitle {
   font-size: 1.1rem;
   color: var(--text-gray);
+  /* Marrón claro */
   line-height: 1.7;
 }
 
@@ -359,7 +371,9 @@ body {
 .cta-primary {
   position: relative;
   background: var(--primary);
+  /* Rosa empolvado */
   color: var(--text-light);
+  /* Marrón oscuro */
   padding: 14px 32px;
   border-radius: 50px;
   font-weight: 600;
@@ -370,7 +384,8 @@ body {
 
 .cta-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
+  /* Sombra actualizada */
+  box-shadow: 0 8px 25px rgba(218, 184, 179, 0.3);
 }
 
 .cta-primary .shine {
@@ -392,7 +407,9 @@ body {
 .cta-secondary {
   background: transparent;
   border: 2px solid var(--primary);
+  /* Rosa empolvado */
   color: var(--primary);
+  /* Rosa empolvado */
   padding: 14px 32px;
   border-radius: 50px;
   font-weight: 600;
@@ -402,7 +419,9 @@ body {
 
 .cta-secondary:hover {
   background: var(--primary-light);
+  /* Beige claro */
   color: var(--text-light);
+  /* Marrón oscuro */
 }
 
 .hero-features {
@@ -434,7 +453,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(233, 30, 99, 0.1);
+  /* Fondo de ícono actualizado a taupe */
+  background: rgba(161, 136, 127, 0.1);
   border-radius: 50%;
 }
 
@@ -448,14 +468,16 @@ body {
 /* ---------- SERVICES ---------- */
 .services {
   padding: 80px 20px;
-  background: #fff0f6;
+  /* Fondo actualizado a un beige muy claro */
+  background: #F7F5F0;
   text-align: center;
 }
 
 .services-title {
   font-size: 2.2rem;
   margin-bottom: 50px;
-  color: #ad1457;
+  color: var(--accent);
+  /* Taupe */
   font-weight: 700;
   position: relative;
 }
@@ -494,12 +516,13 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(173, 20, 87, 0.3);
+  /* Overlay actualizado a taupe */
+  background: rgba(161, 136, 127, 0.3);
   transition: background 0.3s ease;
 }
 
 .service-card:hover .overlay {
-  background: rgba(173, 20, 87, 0.5);
+  background: rgba(161, 136, 127, 0.5);
 }
 
 .service-content {
@@ -517,26 +540,30 @@ body {
   font-size: 1.4rem;
   font-weight: 600;
   margin-bottom: 10px;
-  color: #333;
+  color: var(--text-dark);
+  /* Marrón oscuro */
 }
 
 .service-content p {
   font-size: 1rem;
-  color: #666;
+  color: var(--text-gray);
+  /* Marrón claro */
 }
 
 
 /* ---------- TESTIMONIALS ---------- */
 .testimonials {
   padding: 80px 20px;
-  background: #fff8fb;
+  background: var(--bg-light);
+  /* Fondo crema */
   text-align: center;
 }
 
 .testimonials-title {
   font-size: 2rem;
   margin-bottom: 50px;
-  color: #ad1457;
+  color: var(--accent);
+  /* Taupe */
   font-weight: bold;
 }
 
@@ -574,23 +601,25 @@ body {
   height: 60px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #f8bbd9;
+  /* Borde de avatar actualizado */
+  border: 3px solid var(--primary);
 }
 
 .testimonial-name {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-dark);
 }
 
 .testimonial-stars {
   color: #ffb400;
+  /* Amarillo para estrellas se mantiene */
   font-size: 1rem;
 }
 
 .testimonial-comment {
   font-size: 1rem;
-  color: #555;
+  color: var(--text-gray);
   font-style: italic;
   line-height: 1.6;
 }
@@ -599,14 +628,16 @@ body {
 /* ---------- APPOINTMENT FORM ---------- */
 .appointment-section {
   padding: 80px 20px;
-  background: #fff8fb;
+  background: var(--bg-light);
+  /* Fondo crema */
   text-align: center;
 }
 
 .appointment-title {
   font-size: 2rem;
   margin-bottom: 40px;
-  color: #ad1457;
+  color: var(--accent);
+  /* Taupe */
   font-weight: bold;
 }
 
@@ -635,6 +666,7 @@ body {
 
 .btn-whatsapp {
   background: #25d366;
+  /* Verde de WhatsApp se mantiene */
   color: white;
   padding: 14px;
   border: none;
@@ -652,11 +684,12 @@ body {
 .direct-contact {
   margin-top: 10px;
   font-size: 0.9rem;
-  color: #444;
+  color: var(--text-gray);
 }
 
 .direct-contact a {
-  color: #ad1457;
+  color: var(--accent);
+  /* Taupe */
   font-weight: 600;
   text-decoration: none;
 }
@@ -683,7 +716,8 @@ body {
 
 /* ---------- FOOTER ---------- */
 .footer {
-  background: #ad1457;
+  background: var(--accent);
+  /* Fondo de footer en Taupe */
   color: #fff;
   padding: 50px 20px 20px;
   margin-top: 50px;
@@ -701,7 +735,8 @@ body {
   font-size: 1.2rem;
   margin-bottom: 15px;
   font-weight: bold;
-  color: #ffe6ef;
+  /* Texto de título en footer (beige claro) */
+  color: #F7F5F0;
 }
 
 .footer-section p {
@@ -718,39 +753,23 @@ body {
   margin-top: 10px;
 }
 
+/* Este selector estaba duplicado, lo unifico */
 .social-icons a {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
-  /* tamaño del botón */
   height: 40px;
   border-radius: 50%;
-  /* lo hace circular */
-  background-color: #333;
-  /* color de fondo, cámbialo a gusto */
-  color: #fff;
-  /* color del ícono */
-  transition: background-color 0.3s ease;
-}
-
-.social-icons a:hover {
-  background-color: #555;
-  /* efecto hover */
-}
-
-
-.social-icons a {
   color: #fff;
   background: rgba(255, 255, 255, 0.15);
-  padding: 8px;
-  border-radius: 50%;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background 0.3s ease, transform 0.2s ease, color 0.3s ease;
 }
 
 .social-icons a:hover {
   background: #fff;
-  color: #ad1457;
+  color: var(--accent);
+  /* Color Taupe al pasar el mouse */
   transform: scale(1.1);
 }
 
@@ -760,7 +779,8 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.3);
   margin-top: 30px;
   font-size: 0.9rem;
-  color: #ffe6ef;
+  color: #F7F5F0;
+  /* Texto de copyright en beige claro */
 }
 
 /* ---------- RESPONSIVE ---------- */

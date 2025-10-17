@@ -10,10 +10,10 @@ import {
   BarChart2,
   UserCog,
   LogOut,
-  Menu
-} from "lucide-react"; // Íconos de lucide-react
+  Menu,
+  ListChecks
+} from "lucide-react";
 import "../styles/Sidebar.css";
-
 const Sidebar = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -64,8 +64,13 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
+              <Link to="/Inventary" onClick={() => setIsOpen(false)}>
+                <ListChecks size={18} /> Inventario
+              </Link>
+            </li>
+            <li>
               <Link to="/products" onClick={() => setIsOpen(false)}>
-                <Package size={18} /> Inventario
+                <Package size={18} /> Productos
               </Link>
             </li>
             <li>

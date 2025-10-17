@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
-import { productsAPI } from "../api/productsAPI";
+import { inventaryAPI } from "../api/InventaryAPI";
 import { useAuth } from "../context/AuthContext";
-import "../styles/Product.css"
+import "../styles/Inventary.css"
 import Modal from "../components/Modal";
 
-
-const Products = () => {
+const Inventary = () => {
     const { user } = useAuth();
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -44,7 +43,7 @@ const Products = () => {
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const res = await productsAPI.getAll();
+            const res = await inventaryAPI.getAll();
             setProducts(res.data);
             setFilteredProducts(res.data);
         } catch {
@@ -74,10 +73,10 @@ const Products = () => {
 
         try {
             if (editProduct) {
-                await productsAPI.update(editProduct.id, { nombre, descripcion, cantidad, precio_unitario: precioUnitario });
+                await inventaryAPI.update(editProduct.id, { nombre, stock: cantidad, precio: precioUnitario });
                 showToast("✅ Producto actualizado");
             } else {
-                await productsAPI.create({ nombre, descripcion, cantidad, precio_unitario: precioUnitario });
+                await inventaryAPI.create({ nombre, stock: cantidad, precio: precioUnitario });
                 showToast("✅ Producto registrado");
             }
             fetchProducts();
@@ -89,7 +88,7 @@ const Products = () => {
 
     const handleDelete = async (id) => {
         try {
-            await productsAPI.delete(id);
+            await inventaryAPI.delete(id);
             showToast("✅ Producto eliminado");
             fetchProducts();
         } catch {
@@ -100,9 +99,8 @@ const Products = () => {
     const openEditModal = (product) => {
         setEditProduct(product);
         setName(product.nombre);
-        setDescription(product.descripcion || "");
-        setQuantity(product.cantidad || "");
-        setUnitPrice(product.precio_unitario || "");
+        setQuantity(product.stock || "");
+        setUnitPrice(product.precio || "");
         setIsModalOpen(true);
     };
 
@@ -118,7 +116,7 @@ const Products = () => {
 
             <main className="products-content">
                 <header className="products-header">
-                    <h1>📦 Productos</h1>
+                    <h1>📦 Productos en el Inventario</h1>
                     <div className="products-actions">
                         <input
                             type="text"
@@ -140,9 +138,8 @@ const Products = () => {
                                 <tr>
                                     <th>ID</th>
                                     <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio Unitario</th>
+                                    <th>Stock</th>
+                                    <th>Precio</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -151,9 +148,8 @@ const Products = () => {
                                     <tr key={p.id}>
                                         <td>{p.id}</td>
                                         <td>{p.nombre}</td>
-                                        <td>{p.descripcion}</td>
-                                        <td>{p.cantidad}</td>
-                                        <td>{p.precio_unitario}</td>
+                                        <td>{p.stock}</td>
+                                        <td>{p.precio}</td>
                                         <td>
                                             <button className="btn-edit" onClick={() => openEditModal(p)}>✏️ Editar</button>
                                             <button className="btn-delete" onClick={() => setConfirmDelete(p)}>🗑 Eliminar</button>
@@ -180,17 +176,9 @@ const Products = () => {
                                 required
                             />
                         </div>
-
-                        <div className="form-group">
-                            <label>Descripción</label>
-                            <textarea
-                                value={descripcion}
-                                onChange={e => setDescription(e.target.value)}
-                            />
-                        </div>
                         <div className="form-row">
                             <div className="form-group">
-                                <label>Cantidad</label>
+                                <label>Stock</label>
                                 <input
                                     type="number"
                                     value={cantidad}
@@ -208,6 +196,7 @@ const Products = () => {
                                     required />
                             </div>
                         </div>
+
                         <button type="submit" className="btn-submit">
                             {editProduct ? "Actualizar" : "Registrar"}
                         </button>
@@ -226,9 +215,9 @@ const Products = () => {
                             <button className="btn-cancel" onClick={() => setConfirmDelete(null)}>No</button>
                         </>
                     }>
-                    <div className="delete-client-text">{confirmDelete ? `¿Eliminar el producto ${confirmDelete.nombre}?` : ""}</div>
-                </Modal>
+                    <div className="delete-client-text">{confirmDelete ? `¿Eliminar producto ${confirmDelete.nombre}?` : ""}</div>
 
+                </Modal>
 
                 {toast && <div className="toast">{toast}</div>}
             </main>
@@ -236,4 +225,4 @@ const Products = () => {
     );
 };
 
-export default Products;
+export default Inventary;

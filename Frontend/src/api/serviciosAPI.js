@@ -15,5 +15,7 @@ export const servicesAPI = {
     getOne: (id) => api.get(`/services/${id}`, getAuthHeaders()),
     create: (data) => api.post("/services", data, getAuthHeaders()),
     update: (id, data) => api.put(`/services/${id}`, data, getAuthHeaders()),
-    delete: (id) => api.delete(`/services/${id}`, getAuthHeaders())
+    delete: (id) => api.delete(`/services/${id}`, getAuthHeaders()),
+    attachProductos: (id, data) => api.post(`/servicios/${id}/productos`, data, getAuthHeaders()),
+
 };

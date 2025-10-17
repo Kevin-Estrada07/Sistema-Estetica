@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Api\AdminUserController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\InventarioServicioController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmpleadoController;
@@ -46,7 +48,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('services', ServiceController::class);
 });
 
-// Inventario: accesibles a todos los roles autenticados
+// Productos: accesibles a todos los roles autenticados
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('products', ProductController::class);
 });
@@ -101,3 +103,25 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('ventas', SaleController::class);
 });
+
+// Ventas: accesibles a todos los roles autenticados
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResource('inventario', InventarioController::class);
+});
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/servicios/{id}/productos', [InventarioServicioController::class, 'attachProductos']);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/servicios/{id}/productos', [InventarioServicioController::class, 'getProductos']);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::delete('/servicios/{id}/productos', [InventarioServicioController::class, 'detachProducto']);
+});
+
+// Route::post('/servicios/{id}/productos', [InventarioServicioController::class, 'attachProductos']);
+// Route::get('/servicios/{id}/productos', [InventarioServicioController::class, 'getProductos']);
+// Route::delete('/servicios/{id}/productos/{inventario_id}', [InventarioServicioController::class, 'detachProducto']);

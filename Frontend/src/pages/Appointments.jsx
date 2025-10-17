@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaEdit, FaTrashAlt, FaUserCheck } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
+// import { CircleX } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { appointmentsAPI } from "../api/appointmentsAPI";
@@ -144,6 +146,14 @@ const Appointments = () => {
     }
   };
 
+  const handleCancelar = (appointment) => {
+    if (window.confirm(`¿Cancelar la cita de ${appointment.cliente}?`)) {
+      handleEstadoChange(appointment.id, "cancelada");
+      setToast("🚫 Cita cancelada");
+    }
+  };
+
+
   return (
     <div className="">
       <Sidebar />
@@ -198,32 +208,45 @@ const Appointments = () => {
                       <td>{a.fecha}</td>
                       <td>{a.hora}</td>
                       <td>
-                        <select
+                        {a.estado}
+                        {/* <select
                           value={a.estado}
                           onChange={(e) => handleEstadoChange(a.id, e.target.value)}>
                           <option value="pendiente">Pendiente</option>
                           <option value="en proceso">En Proceso</option>
                           <option value="completada">Completada</option>
                           <option value="cancelada">Cancelada</option>
-                        </select>
+                        </select> */}
                       </td>
                       <td>{a.notas}</td>
                       <td>
-                        {/* <button className="btn-attend" onClick={() => openPaymentModal(a)}>
-                          <FaUserCheck /> Pagar
-                        </button> */}
-                        <Link to={`/payment/${a.id}`} className="btn-attend">
-                          <FaUserCheck /> Pagar
-                        </Link>
+                        {a.estado === "pendiente" && (
+                          <button
+                            className="btn-attender"
+                            onClick={() => handleEstadoChange(a.id, "en proceso")}>
+                            <FaUserCheck /> Atender
+                          </button>
+                        )}
+
+                        {a.estado === "en proceso" && (
+                          <Link to={`/payment/${a.id}`} className="btn-pagar">
+                            <FaUserCheck /> Pagar
+                          </Link>
+                        )}
 
                         <button className="btn-edit" onClick={() => openEditModal(a)}>
                           <FaEdit /> Editar
+                        </button>
+
+                        <button className="btn-cancelar" onClick={() => handleCancelar(a)}>
+                          <GiCancel /> Cancelar
                         </button>
 
                         <button className="btn-delete" onClick={() => setConfirmDelete(a)}>
                           <FaTrashAlt /> Eliminar
                         </button>
                       </td>
+
                     </tr>
                   ))}
               </tbody>
@@ -237,55 +260,64 @@ const Appointments = () => {
           onClose={closeModal}
           title={editAppointment ? "Editar Cita" : "Nueva Cita"}>
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Cliente</label>
-              <select value={clienteId} onChange={(e) => setClienteId(e.target.value)} required>
-                <option value="">Selecciona cliente</option>
-                {clients.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.nombre}
-                  </option>
-                ))}
-              </select>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Cliente</label>
+                <select value={clienteId} onChange={(e) => setClienteId(e.target.value)} required>
+                  <option value="">Selecciona cliente</option>
+                  {clients.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Servicio</label>
+                <select value={servicioId} onChange={(e) => setServicioId(e.target.value)} required>
+                  <option value="">Selecciona servicio</option>
+                  {services.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="form-group">
-              <label>Servicio</label>
-              <select value={servicioId} onChange={(e) => setServicioId(e.target.value)} required>
-                <option value="">Selecciona servicio</option>
-                {services.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.nombre}
-                  </option>
-                ))}
-              </select>
+
+            <div className="form-row">
+
+              <div className="form-group">
+                <label>Fecha</label>
+                <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} required />
+              </div>
+              <div className="form-group">
+                <label>Hora</label>
+                <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} required />
+              </div>
             </div>
-            <div className="form-group">
-              <label>Empleado</label>
-              <select value={empleadoId} onChange={(e) => setEmpleadoId(e.target.value)} required>
-                <option value="">Selecciona empleado</option>
-                {users.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Fecha</label>
-              <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} required />
-            </div>
-            <div className="form-group">
-              <label>Hora</label>
-              <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} required />
-            </div>
-            <div className="form-group">
-              <label>Estado</label>
-              <select value={estado} onChange={(e) => setEstado(e.target.value)}>
-                <option value="pendiente">Pendiente</option>
-                <option value="en proceso">En Proceso</option>
-                <option value="completada">Completada</option>
-                <option value="cancelada">Cancelada</option>
-              </select>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Empleado</label>
+                <select value={empleadoId} onChange={(e) => setEmpleadoId(e.target.value)} required>
+                  <option value="">Selecciona empleado</option>
+                  {users.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Estado</label>
+                <select value={estado} onChange={(e) => setEstado(e.target.value)}>
+                  <option value="pendiente">Pendiente</option>
+                  <option value="en proceso">En Proceso</option>
+                  <option value="completada">Completada</option>
+                  <option value="cancelada">Cancelada</option>
+                </select>
+              </div>
             </div>
             <div className="form-group">
               <label>Notas</label>

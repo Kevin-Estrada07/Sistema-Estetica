@@ -16,6 +16,7 @@ import Appointments from './pages/Appointments';
 // import PaymentPage from './pages/PaymentPage';
 import SalePage from './pages/SalePage';
 import ReportPage from './pages/ReportPage';
+import Inventary from './pages/Inventary';
 
 // Componente para rutas protegidas
 const PrivateRoute = ({ children }) => {
@@ -62,6 +63,7 @@ function App() {
           <Route path="/citas" element={<PrivateRoute><Appointments/></PrivateRoute>}/>
           <Route path="/payment/:appointmentId?" element={<PrivateRoute><SalePage/></PrivateRoute>}/>
           <Route path="/reports" element={<PrivateRoute><ReportPage/></PrivateRoute>}/>
+          <Route path="/Inventary" element={<PrivateRoute><Inventary/></PrivateRoute>}/>
 
           {/* Registro solo para admin */}
           <Route

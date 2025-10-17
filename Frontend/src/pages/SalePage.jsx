@@ -11,7 +11,7 @@ import generatePDF from "../components/generatePDF";
 import "../styles/PaymentPage.css";
 
 
-const SalePage = () => { 
+const SalePage = () => {
     const { user } = useAuth();
     const { appointmentId } = useParams(); // opcional
     const navigate = useNavigate();
@@ -75,24 +75,38 @@ const SalePage = () => {
 
     // Función para registrar venta
     const handlePay = async () => {
-        if (!selectedClient) return alert("Selecciona un cliente");
+        if (!selectedClient) {
+            return alert("⚠️ Selecciona un cliente");
+        }
+
+        // Validar que haya un servicio seleccionado o productos con cantidad
+        const tieneServicio = !!selectedService;
+        const tieneProductos = selectedProducts.some(p => p.cantidad > 0);
+
+        if (!tieneServicio && !tieneProductos) {
+            return alert("⚠️ Debes seleccionar al menos un servicio o producto para realizar la venta");
+        }
 
         try {
             const detalles = [
-                ...(selectedService ? [{
-                    servicio_id: selectedService.id,
-                    producto_id: null,
-                    cantidad: 1,
-                    precio_unitario: selectedService.precio,
-                    subtotal: selectedService.precio
-                }] : []),
-                ...selectedProducts.filter(p => p.cantidad > 0).map(p => ({
-                    servicio_id: null,
-                    producto_id: p.id,
-                    cantidad: p.cantidad,
-                    precio_unitario: p.precio_unitario,
-                    subtotal: p.precio_unitario * p.cantidad
-                }))
+                ...(tieneServicio
+                    ? [{
+                        servicio_id: selectedService.id,
+                        producto_id: null,
+                        cantidad: 1,
+                        precio_unitario: selectedService.precio,
+                        subtotal: selectedService.precio
+                    }]
+                    : []),
+                ...selectedProducts
+                    .filter(p => p.cantidad > 0)
+                    .map(p => ({
+                        servicio_id: null,
+                        producto_id: p.id,
+                        cantidad: p.cantidad,
+                        precio_unitario: p.precio_unitario,
+                        subtotal: p.precio_unitario * p.cantidad
+                    }))
             ];
 
             const { data } = await salesAPI.create({
@@ -119,17 +133,18 @@ const SalePage = () => {
                 total: venta.total,
                 detalles: venta.detalles.map(d => ({
                     ...d,
-                    nombre: d.producto?.nombre || d.servicio?.nombre
+                    nombre: d.producto?.nombre || d.servicio?.nombre 
                 }))
             });
 
             alert("✅ Venta registrada correctamente");
-            navigate("/citas"); // o "/citas" si prefieres
+            navigate("/citas");
         } catch (err) {
             console.error("Error registrando venta:", err);
             alert("❌ Error al registrar la venta");
         }
     };
+
 
     return (
         <div className="dashboard">
@@ -140,44 +155,59 @@ const SalePage = () => {
                     <button className="btn-back" onClick={() => navigate("/citas")}>⬅ Volver</button>
                 </header>
 
-                <section className="client-section">
-                    <label>Cliente:</label>
-                    {appointmentId ? (
-                        <p>{selectedClient?.nombre}</p>
-                    ) : (
-                        <select
-                            value={selectedClient?.id || "invitado"}
-                            onChange={e => {
-                                const value = e.target.value;
-                                if (value === "invitado") {
-                                    setSelectedClient({ id: 2, nombre: "Invitado" });
-                                } else {
-                                    setSelectedClient(clients.find(c => c.id === parseInt(value)));
-                                }
-                            }}>
-                            <option value="2">Invitado</option> {/* Siempre aparece primero */}
-                            {clients.map(c => (
-                                <option key={c.id} value={c.id}>{c.nombre}</option>
-                            ))}
-                        </select>
-                    )}
-                </section>
+                <div className="form-grid">
+                    <section className="client-section">
+                        <label>Cliente:</label>
+                        {appointmentId ? (
+                            <p>{selectedClient?.nombre}</p>
+                        ) : (
+                            <select
+                                value={selectedClient?.id || "invitado"}
+                                onChange={e => {
+                                    const value = e.target.value;
+                                    if (value === "invitado") {
+                                        setSelectedClient({ id: 2, nombre: "Invitado" });
+                                    } else {
+                                        setSelectedClient(clients.find(c => c.id === parseInt(value)));
+                                    }
+                                }}>
+                                <option value="2">Invitado</option>
+                                {clients.map(c => (
+                                    <option key={c.id} value={c.id}>
+                                        {c.nombre}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+                    </section>
 
-
-                <section className="service-section">
-                    <label>Servicio:</label>
-                    {appointmentId ? (
-                        <p>{selectedService?.nombre} — ${selectedService?.precio}</p>
-                    ) : (
-                        <select value={selectedService?.id || ""} onChange={e => setSelectedService(services.find(s => s.id === parseInt(e.target.value)))}>
-                            <option value="">Selecciona un servicio</option>
-                            {services.map(s => <option key={s.id} value={s.id}>{s.nombre} — ${s.precio}</option>)}
-                        </select>
-                    )}
-                </section>
+                    <section className="service-section">
+                        <label>Servicio:</label>
+                        {appointmentId ? (
+                            <p>
+                                {selectedService?.nombre} — ${selectedService?.precio}
+                            </p>
+                        ) : (
+                            <select
+                                value={selectedService?.id || ""}
+                                onChange={e =>
+                                    setSelectedService(
+                                        services.find(s => s.id === parseInt(e.target.value))
+                                    )
+                                }>
+                                <option value="">Selecciona un servicio</option>
+                                {services.map(s => (
+                                    <option key={s.id} value={s.id}>
+                                        {s.nombre} — ${s.precio}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+                    </section>
+                </div>
 
                 <section className="products-section">
-                    <h3>🛒 Productos</h3>
+                    <h3>Productos</h3>
                     <table className="products-table">
                         <thead>
                             <tr>

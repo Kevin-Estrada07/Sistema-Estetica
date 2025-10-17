@@ -176,37 +176,42 @@ const Clients = () => {
                     isOpen={isModalOpen}
                     onClose={closeModal}
                     title={editClient ? "✍ Editar Cliente" : "➕ Nuevo Cliente"}>
-
                     <form onSubmit={handleSubmit} className="form-client">
                         <div className="form-grid">
-                            <div className="form-group">
-                                <label>Nombre</label>
-                                <input
-                                    type="text"
-                                    value={nombre}
-                                    onChange={e => setName(e.target.value)}
-                                    required
-                                />
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Nombre</label>
+                                    <input
+                                        type="text"
+                                        value={nombre}
+                                        onChange={e => setName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Teléfono</label>
+                                    <input
+                                        type="text"
+                                        value={telefono}
+                                        onChange={e => setPhone(e.target.value)}
+                                        required
+                                    />
+                                </div>
                             </div>
 
-                            <div className="form-group">
-                                <label>Teléfono</label>
-                                <input
-                                    type="text"
-                                    value={telefono}
-                                    onChange={e => setPhone(e.target.value)}
-                                />
-                            </div>
-
+                            {/* 🔹 Email */}
                             <div className="form-group">
                                 <label>Email</label>
                                 <input
                                     type="email"
                                     value={email}
                                     onChange={e => setEmail(e.target.value)}
+                                    required
                                 />
                             </div>
 
+                            {/* 🔹 Dirección */}
                             <div className="form-group form-full">
                                 <label>Dirección</label>
                                 <textarea
@@ -217,9 +222,6 @@ const Clients = () => {
                         </div>
 
                         <div className="modal-actions">
-                            <button type="button" className="btn-cancel" onClick={closeModal}>
-                                Cancelar
-                            </button>
                             <button type="submit" className="btn-submit">
                                 {editClient ? "Actualizar" : "Registrar"}
                             </button>
@@ -227,11 +229,12 @@ const Clients = () => {
                     </form>
                 </Modal>
 
+
                 {/* Modal de confirmación de eliminación */}
                 <Modal
                     isOpen={confirmDelete !== null}
-                    onClose={() => setConfirmDelete(null)}
-                    title={`¿Eliminar cliente ${confirmDelete?.nombre}?`}
+                    onClose={() => setConfirmDelete(null)} 
+                    // title="¿Eliminar cliente?"
                     hideCloseButton={true}
                     actions={
                         <>
@@ -246,8 +249,10 @@ const Clients = () => {
                                 No
                             </button>
                         </>
-                    }
-                />
+                    }>
+                    <div className="delete-client-text">{confirmDelete ? `¿Eliminar al Cliente ${confirmDelete.nombre}?` : ""}</div>
+                </Modal>
+
 
                 {toast && <div className="toast">{toast}</div>}
             </main>

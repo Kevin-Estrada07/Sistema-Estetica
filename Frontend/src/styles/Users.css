@@ -284,7 +284,7 @@
 /* BOTONES DEL MODAL */
 /* ============================================ */
 
-.btn-submit,
+/* .btn-submit,
 .btn-cancel,
 .btn-confirm {
     padding: 12px 28px;
@@ -299,7 +299,7 @@
     justify-content: center;
     gap: 8px;
     margin-top: 8px;
-}
+} */
 
 .btn-submit {
     background: linear-gradient(135deg, #f48fb1 0%, #f06292 100%);
@@ -313,18 +313,18 @@
     box-shadow: 0 6px 20px rgba(244, 143, 177, 0.5);
     background: linear-gradient(135deg, #f06292 0%, #ec407a 100%);
 }
-
+/* 
 .btn-cancel {
     background: #e0e0e0;
     color: #555;
-}
-
+} */
+/* 
 .btn-cancel:hover {
     background: #d0d0d0;
     transform: translateY(-2px);
-}
+} */
 
-.btn-confirm {
+/* .btn-confirm {
     background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
     color: white;
     box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
@@ -334,7 +334,7 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
     background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
-}
+} */
 
 /* ============================================ */
 /* ESTADOS Y MENSAJES */

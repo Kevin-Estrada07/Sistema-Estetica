@@ -13,7 +13,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $Products = Product::orderBy('id', 'asc')->get();
+        $Products = Product::orderBy('id', 'asc')->get(); 
         return response()->json($Products);
     }
 
@@ -24,7 +24,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'descripcion' => 'required|string',
+            'descripcion' => 'nullable|string',
             'cantidad' => 'required|integer',
             'precio_unitario' => 'required|numeric',
         ]);

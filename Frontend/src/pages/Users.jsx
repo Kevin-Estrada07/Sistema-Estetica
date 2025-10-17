@@ -121,41 +121,45 @@ const Users = () => {
           {formError && <p className="alert error">{formError}</p>}
           {formSuccess && <p className="alert success">{formSuccess}</p>}
           <form onSubmit={handleRegister} className="form-user">
-            <div className="form-group">
-              <label>Nombre</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required/>
-            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Nombre</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required />
+              </div>
 
-            <div className="form-group">
-              <label>Correo</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required/>
+              <div className="form-group">
+                <label>Correo</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required />
+              </div>
             </div>
+            <div className="form-row">
 
-            <div className="form-group">
-              <label>Contraseña</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required/>
-            </div>
+              <div className="form-group">
+                <label>Contraseña</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required />
+              </div>
 
-            <div className="form-group">
-              <label>Rol</label>
-              <select
-                value={roleId}
-                onChange={(e) => setRoleId(Number(e.target.value))}>
-                <option value={2}>Recepcionista</option>
-                <option value={3}>Estilista</option>
-              </select>
+              <div className="form-group">
+                <label>Rol</label>
+                <select
+                  value={roleId}
+                  onChange={(e) => setRoleId(Number(e.target.value))}>
+                  <option value={2}>Recepcionista</option>
+                  <option value={3}>Estilista</option>
+                </select>
+              </div>
             </div>
 
             <button type="submit" className="btn-submit">Registrar</button>
