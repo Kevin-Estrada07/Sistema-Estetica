@@ -171,15 +171,17 @@ const Users = () => {
         <Modal
           isOpen={confirmDelete !== null}
           onClose={() => setConfirmDelete(null)}
-          title={`¿Eliminar usuario ${confirmDelete?.name}?`}
+          // title={`¿Eliminar usuario ${confirmDelete?.name}?`}
           hideCloseButton={true} // Oculta el botón de cerrar automático
           actions={
             <>
               <button className="btn-confirm" onClick={() => { handleDelete(confirmDelete.id); setConfirmDelete(null); }}>Sí</button>
               <button className="btn-cancel" onClick={() => setConfirmDelete(null)}>No</button>
             </>
-          }
-        />
+          }>
+          <div className="delete-client-text">{confirmDelete ? `¿Eliminar usuario ${confirmDelete.name}?` : ""}</div>
+        </Modal>
+
 
       </main>
 
