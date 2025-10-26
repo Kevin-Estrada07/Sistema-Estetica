@@ -40,7 +40,11 @@ const Dashboard = () => {
   const fetchAppointments = async () => {
     try {
       const res = await appointmentsAPI.getAll();
-      const citas = res.data.map((a) => ({
+
+      // Extraer array de citas (ahora viene en res.data.data con paginación)
+      const citasArray = Array.isArray(res.data.data) ? res.data.data : [];
+
+      const citas = citasArray.map((a) => ({
         id: a.id,
         title: `${a.cliente?.nombre} - ${a.servicio?.nombre}`,
         start: `${a.fecha}T${a.hora}`,

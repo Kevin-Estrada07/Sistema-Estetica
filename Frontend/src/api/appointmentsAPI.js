@@ -11,11 +11,25 @@ const getAuthHeaders = () => ({
 });
 
 export const appointmentsAPI = {
-  getAll: () => api.get("/citas", getAuthHeaders()),
+  // Obtener todas las citas con paginación
+  getAll: (page = 1) => api.get(`/citas?page=${page}`, getAuthHeaders()),
+
+  // Obtener una cita específica
   getOne: (id) => api.get(`/citas/${id}`, getAuthHeaders()),
+
+  // Crear nueva cita
   create: (data) => api.post("/citas", data, getAuthHeaders()),
+
+  // Actualizar cita completa
   update: (id, data) => api.put(`/citas/${id}`, data, getAuthHeaders()),
+
+  // Actualizar solo el estado de la cita
   updateEstado: (id, data) => api.put(`/citas/${id}/estado`, data, getAuthHeaders()),
-  getInfo: () => api.get("/info", getAuthHeaders()),
+
+  // DEPRECATED: Usar getAll() en su lugar
+  // Mantener por compatibilidad hacia atrás
+  getInfo: (page = 1) => api.get(`/info?page=${page}`, getAuthHeaders()),
+
+  // Eliminar cita
   delete: (id) => api.delete(`/citas/${id}`, getAuthHeaders())
 };

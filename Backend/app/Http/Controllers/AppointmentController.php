@@ -7,17 +7,24 @@ use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class AppointmentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource with pagination and optimized queries
      */
     public function index()
     {
-        $appointments = Appointment::with(['cliente:id,nombre', 'servicio:id,nombre,precio', 'empleado:id,name'])
-            ->orderBy('id', 'asc')
-            ->get(); // 20 por página
+        $appointments = Appointment::with([
+            'cliente:id,nombre',
+            'servicio:id,nombre,precio,duracion',
+            'empleado:id,name'
+        ])
+            ->select('id', 'cliente_id', 'servicio_id', 'empleado_id', 'fecha', 'hora', 'estado', 'notas')
+            ->orderBy('fecha', 'desc')
+            ->orderBy('hora', 'desc')
+            ->paginate(20);
 
         return response()->json($appointments);
     }
@@ -153,30 +160,32 @@ class AppointmentController extends Controller
         return response()->json(['message' => 'Cita eliminada']);
     }
 
+    /**
+     * Get appointments table data with pagination (DEPRECATED - use index() instead)
+     * Kept for backward compatibility
+     */
     public function InfTabla()
     {
         try {
-            $appointments = Appointment::with(['cliente', 'servicio', 'empleado'])->orderBy('id', 'asc')->get();
-
-            $data = $appointments->map(function ($a) {
-                return [
-                    'id' => $a->id,
-                    'cliente_id' => $a->cliente_id,
-                    'servicio_id' => $a->servicio_id,
-                    'empleado_id' => $a->empleado_id,
-                    'cliente' => $a->cliente->nombre ?? null,
-                    'servicio' => $a->servicio->nombre ?? null,
-                    'empleado' => $a->empleado->name ?? null,
-                    'fecha' => $a->fecha,
-                    'hora' => $a->hora,
-                    'estado' => $a->estado,
-                    'notas' => $a->notas,
-                ];
-            });
+            $appointments = Appointment::with([
+                'cliente:id,nombre',
+                'servicio:id,nombre,duracion',
+                'empleado:id,name'
+            ])
+                ->select('id', 'cliente_id', 'servicio_id', 'empleado_id', 'fecha', 'hora', 'estado', 'notas')
+                ->orderBy('fecha', 'desc')
+                ->orderBy('hora', 'desc')
+                ->paginate(50);
 
             return response()->json([
                 'success' => true,
-                'data' => $data
+                'data' => $appointments->items(),
+                'pagination' => [
+                    'current_page' => $appointments->currentPage(),
+                    'per_page' => $appointments->perPage(),
+                    'total' => $appointments->total(),
+                    'last_page' => $appointments->lastPage(),
+                ]
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -187,18 +196,22 @@ class AppointmentController extends Controller
         }
     }
 
-    // Verificar si ahi traslapes de horarios
+    /**
+     * Verificar si hay traslapes de horarios (optimizado con caché)
+     */
     private function verificarTraslapes($fecha, $hora, $empleadoId, $clienteId, $servicioId, $citaIdExcluir = null)
     {
-        // Obtener duración del servicio
-        $servicio = Service::find($servicioId);
+        // Obtener duración del servicio con caché (1 hora)
+        $servicio = Cache::remember("servicio.{$servicioId}", 3600, function () use ($servicioId) {
+            return Service::find($servicioId);
+        });
 
         if (!$servicio || !$servicio->duracion) {
             return 'El servicio no tiene una duración definida';
         }
 
         // Calcular inicio y fin de la nueva/actualizada cita
-        $nuevaInicio = Carbon::parse($fecha . ' ' . $hora);
+        $nuevaInicio = Carbon::parse("{$fecha} {$hora}");
         $nuevaFin = $nuevaInicio->copy()->addMinutes($servicio->duracion);
 
         // Verificar traslape con citas del empleado
@@ -233,16 +246,17 @@ class AppointmentController extends Controller
     }
 
 
-    // verificar si existe traslape con citas existentes
+    /**
+     * Verificar si existe traslape con citas existentes (optimizado)
+     */
     private function existeTraslape($fecha, $personaId, $campo, Carbon $nuevaInicio, Carbon $nuevaFin, $citaIdExcluir = null)
     {
         $citas = Appointment::where('fecha', $fecha)
             ->where($campo, $personaId)
             ->whereIn('estado', ['pendiente', 'en proceso'])
-            ->when($citaIdExcluir, function ($query) use ($citaIdExcluir) {
-                $query->where('id', '!=', $citaIdExcluir);
-            })
-            ->with('servicio')
+            ->when($citaIdExcluir, fn($query) => $query->where('id', '!=', $citaIdExcluir))
+            ->with('servicio:id,duracion')
+            ->select('id', 'fecha', 'hora')
             ->get();
 
         foreach ($citas as $cita) {
@@ -250,7 +264,7 @@ class AppointmentController extends Controller
                 continue;
             }
 
-            $citaInicio = Carbon::parse($cita->fecha . ' ' . $cita->hora);
+            $citaInicio = Carbon::parse("{$cita->fecha} {$cita->hora}");
             $citaFin = $citaInicio->copy()->addMinutes($cita->servicio->duracion);
 
             if ($nuevaInicio->lt($citaFin) && $nuevaFin->gt($citaInicio)) {
