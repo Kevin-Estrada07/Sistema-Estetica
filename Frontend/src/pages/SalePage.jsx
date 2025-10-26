@@ -93,7 +93,7 @@ const SalePage = () => {
                     ? [{
                         servicio_id: selectedService.id,
                         producto_id: null,
-                        cantidad: 1,
+                        cantidad: 1, 
                         precio_unitario: selectedService.precio,
                         subtotal: selectedService.precio
                     }]

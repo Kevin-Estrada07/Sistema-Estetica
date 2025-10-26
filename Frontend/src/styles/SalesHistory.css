@@ -1,0 +1,100 @@
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+    background: #f5f7fa;
+}
+
+.ventas-content {
+    flex: 1;
+    padding: 24px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    margin-left: 220px;
+}
+
+.ventas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+    background: white;
+    padding: 20px 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.ventas-header h1 {
+    font-size: 1.8rem;
+}
+
+.search-input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.table-wrapper {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.ventas-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ventas-table th,
+.ventas-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.btn-view {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-view:hover {
+    background: #0056b3;
+}
+
+.detalle-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.detalle-table th,
+.detalle-table td {
+    border-bottom: 1px solid #eee;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.btn-print {
+    background-color: #2ecc71;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    margin-right: 8px;
+}
+
+.btn-print:hover {
+    background-color: #27ae60;
+}

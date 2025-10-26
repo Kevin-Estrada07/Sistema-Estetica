@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaEdit, FaTrashAlt, FaUserCheck } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
-// import { CircleX } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { appointmentsAPI } from "../api/appointmentsAPI";
@@ -10,7 +9,6 @@ import { clientsAPI } from "../api/clientesAPI";
 import { servicesAPI } from "../api/serviciosAPI";
 import { empleadosAPI } from "../api/empleadosAPI";
 import "../styles/Appointments.css";
-
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -34,8 +32,14 @@ const Appointments = () => {
   const [notas, setNotas] = useState("");
 
   const [toast, setToast] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   useEffect(() => {
     fetchData();
@@ -43,9 +47,7 @@ const Appointments = () => {
 
   const fetchData = async () => {
     try {
-      // obtener las citas para la tabla
       const citasRes = await appointmentsAPI.getInfo();
-
       const [clientesRes, serviciosRes, empleadosRes] = await Promise.all([
         clientsAPI.getAll(),
         servicesAPI.getAll(),
@@ -57,10 +59,7 @@ const Appointments = () => {
       console.log("Services:", serviciosRes.data);
       console.log("Empleados:", empleadosRes.data);
 
-      // tabla
       setAppointments(Array.isArray(citasRes.data.data) ? citasRes.data.data : []);
-
-      // selects
       setClients(Array.isArray(clientesRes.data) ? clientesRes.data : []);
       setServices(Array.isArray(serviciosRes.data) ? serviciosRes.data : []);
       setUsers(Array.isArray(empleadosRes.data) ? empleadosRes.data : []);
@@ -73,8 +72,42 @@ const Appointments = () => {
     }
   };
 
+  // Función para formatear hora a HH:mm
+  const formatHora = (hora) => {
+    if (!hora) return "";
+
+    if (/^\d{2}:\d{2}$/.test(hora)) {
+      return hora;
+    }
+
+    if (/^\d{2}:\d{2}:\d{2}$/.test(hora)) {
+      return hora.substring(0, 5);
+    }
+
+    return hora;
+  };
+
+  // Validar que la fecha/hora no sea en el pasado
+  const validarFechaHora = (fecha, hora) => {
+    if (!fecha || !hora) return true;
+
+    const fechaHoraCita = new Date(`${fecha}T${hora}`);
+    const ahora = new Date();
+
+    return fechaHoraCita > ahora;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
+    // Validar fecha/hora no sea pasada
+    if (!validarFechaHora(fecha, hora)) {
+      setToast("❌ No puedes registrar una cita en una fecha u hora que ya pasó");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const data = {
         cliente_id: clienteId,
@@ -85,17 +118,40 @@ const Appointments = () => {
         estado,
         notas,
       };
+
       if (editAppointment) {
         await appointmentsAPI.update(editAppointment.id, data);
-        setToast("✅ Cita actualizada");
+        setToast("✅ Cita actualizada exitosamente");
       } else {
         await appointmentsAPI.create(data);
-        setToast("✅ Cita registrada");
+        setToast("✅ Cita registrada exitosamente");
       }
+
       fetchData();
       closeModal();
-    } catch {
-      setToast("❌ Error al guardar cita");
+
+    } catch (err) {
+      console.error("Error completo:", err);
+
+      if (err.response) {
+        const errorMessage = err.response.data?.message || err.response.data?.error;
+
+        if (err.response.status === 422) {
+          setToast(`❌ ${errorMessage}`);
+        } else if (err.response.status === 404) {
+          setToast("❌ Recurso no encontrado");
+        } else if (err.response.status === 500) {
+          setToast("❌ Error del servidor. Intenta más tarde");
+        } else {
+          setToast(`❌ ${errorMessage || "Error al guardar cita"}`);
+        }
+      } else if (err.request) {
+        setToast("❌ Sin respuesta del servidor. Verifica tu conexión");
+      } else {
+        setToast("❌ Error al procesar la solicitud");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -104,8 +160,9 @@ const Appointments = () => {
       await appointmentsAPI.delete(id);
       setToast("✅ Cita eliminada");
       fetchData();
-    } catch {
-      setToast("❌ Error al eliminar cita");
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Error al eliminar cita";
+      setToast(`❌ ${errorMessage}`);
     }
   };
 
@@ -115,7 +172,7 @@ const Appointments = () => {
     setServicioId(appointment.servicio_id);
     setEmpleadoId(appointment.empleado_id);
     setFecha(appointment.fecha);
-    setHora(appointment.hora);
+    setHora(formatHora(appointment.hora));
     setEstado(appointment.estado);
     setNotas(appointment.notas || "");
     setIsModalOpen(true);
@@ -133,16 +190,16 @@ const Appointments = () => {
     setNotas("");
   };
 
-
-
   const handleEstadoChange = async (id, newEstado) => {
     try {
-      await appointmentsAPI.updateEstado(id, { estado: newEstado }); // enviar solo estado
+      await appointmentsAPI.updateEstado(id, { estado: newEstado });
       setAppointments((prev) =>
         prev.map((a) => (a.id === id ? { ...a, estado: newEstado } : a))
       );
-    } catch {
-      setToast("❌ Error al actualizar estado");
+      setToast("✅ Estado actualizado");
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Error al actualizar estado";
+      setToast(`❌ ${errorMessage}`);
     }
   };
 
@@ -152,7 +209,6 @@ const Appointments = () => {
       setToast("🚫 Cita cancelada");
     }
   };
-
 
   return (
     <div className="">
@@ -166,8 +222,7 @@ const Appointments = () => {
               className="search-input"
               placeholder="Buscar cita..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+              onChange={(e) => setSearch(e.target.value)} />
             <button className="btn-register" onClick={() => setIsModalOpen(true)}>
               ➕ Nueva Cita
             </button>
@@ -196,9 +251,17 @@ const Appointments = () => {
               </thead>
               <tbody>
                 {appointments
-                  .filter((a) =>
-                    search ? a.cliente.toLowerCase().includes(search.toLowerCase()) : true
-                  )
+                  .filter((a) => {
+                    if (!search) return true;
+                    const term = search.toLowerCase();
+                    return (
+                      a.cliente.toLowerCase().includes(term) ||
+                      a.servicio.toLowerCase().includes(term) ||
+                      a.empleado.toLowerCase().includes(term) ||
+                      a.fecha.toLowerCase().includes(term) 
+                    );
+                  })
+
                   .map((a) => (
                     <tr key={a.id}>
                       <td>{a.id}</td>
@@ -207,17 +270,7 @@ const Appointments = () => {
                       <td>{a.empleado}</td>
                       <td>{a.fecha}</td>
                       <td>{a.hora}</td>
-                      <td>
-                        {a.estado}
-                        {/* <select
-                          value={a.estado}
-                          onChange={(e) => handleEstadoChange(a.id, e.target.value)}>
-                          <option value="pendiente">Pendiente</option>
-                          <option value="en proceso">En Proceso</option>
-                          <option value="completada">Completada</option>
-                          <option value="cancelada">Cancelada</option>
-                        </select> */}
-                      </td>
+                      <td>{a.estado}</td>
                       <td>{a.notas}</td>
                       <td>
                         {a.estado === "pendiente" && (
@@ -246,7 +299,6 @@ const Appointments = () => {
                           <FaTrashAlt /> Eliminar
                         </button>
                       </td>
-
                     </tr>
                   ))}
               </tbody>
@@ -263,7 +315,12 @@ const Appointments = () => {
             <div className="form-row">
               <div className="form-group">
                 <label>Cliente</label>
-                <select value={clienteId} onChange={(e) => setClienteId(e.target.value)} required>
+                <select
+                  value={clienteId}
+                  onChange={(e) => setClienteId(e.target.value)}
+                  required
+                  disabled={isSubmitting}
+                >
                   <option value="">Selecciona cliente</option>
                   {clients.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -274,7 +331,12 @@ const Appointments = () => {
               </div>
               <div className="form-group">
                 <label>Servicio</label>
-                <select value={servicioId} onChange={(e) => setServicioId(e.target.value)} required>
+                <select
+                  value={servicioId}
+                  onChange={(e) => setServicioId(e.target.value)}
+                  required
+                  disabled={isSubmitting}
+                >
                   <option value="">Selecciona servicio</option>
                   {services.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -286,20 +348,38 @@ const Appointments = () => {
             </div>
 
             <div className="form-row">
-
               <div className="form-group">
                 <label>Fecha</label>
-                <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} required />
+                <input
+                  type="date"
+                  value={fecha}
+                  onChange={(e) => setFecha(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                  required
+                  disabled={isSubmitting}
+                />
               </div>
               <div className="form-group">
                 <label>Hora</label>
-                <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} required />
+                <input
+                  type="time"
+                  value={hora}
+                  onChange={(e) => setHora(e.target.value)}
+                  required
+                  disabled={isSubmitting}
+                />
               </div>
             </div>
+
             <div className="form-row">
               <div className="form-group">
                 <label>Empleado</label>
-                <select value={empleadoId} onChange={(e) => setEmpleadoId(e.target.value)} required>
+                <select
+                  value={empleadoId}
+                  onChange={(e) => setEmpleadoId(e.target.value)}
+                  required
+                  disabled={isSubmitting}
+                >
                   <option value="">Selecciona empleado</option>
                   {users.map((u) => (
                     <option key={u.id} value={u.id}>
@@ -311,20 +391,38 @@ const Appointments = () => {
 
               <div className="form-group">
                 <label>Estado</label>
-                <select value={estado} onChange={(e) => setEstado(e.target.value)}>
+                <select
+                  value={estado}
+                  onChange={(e) => setEstado(e.target.value)}
+                  disabled={isSubmitting}
+                >
                   <option value="pendiente">Pendiente</option>
-                  <option value="en proceso">En Proceso</option>
-                  <option value="completada">Completada</option>
-                  <option value="cancelada">Cancelada</option>
                 </select>
               </div>
             </div>
+
             <div className="form-group">
               <label>Notas</label>
-              <textarea value={notas} onChange={(e) => setNotas(e.target.value)} />
+              <textarea
+                value={notas}
+                onChange={(e) => setNotas(e.target.value)}
+                disabled={isSubmitting}
+              />
             </div>
-            <button type="submit" className="btn-register">
-              {editAppointment ? "Actualizar" : "Registrar"}
+
+            <button
+              type="submit"
+              className="btn-register"
+              disabled={isSubmitting}
+              style={{
+                opacity: isSubmitting ? 0.6 : 1,
+                cursor: isSubmitting ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {isSubmitting
+                ? "Procesando..."
+                : (editAppointment ? "Actualizar" : "Registrar")
+              }
             </button>
           </form>
         </Modal>
@@ -333,24 +431,34 @@ const Appointments = () => {
           <Modal
             isOpen={!!confirmDelete}
             onClose={() => setConfirmDelete(null)}
-            title={`¿Eliminar cita de ${confirmDelete.cliente}?`}
             hideCloseButton
             actions={
               <>
                 <button
-                  className="btn-confirm "
+                  className="btn-confirm"
                   onClick={() => {
                     handleDelete(confirmDelete.id);
                     setConfirmDelete(null);
                   }}>
                   Sí
                 </button>
-                <button className="btn-cancel " onClick={() => setConfirmDelete(null)}>No</button>
+                <button className="btn-cancel" onClick={() => setConfirmDelete(null)}>
+                  No
+                </button>
               </>
-            }
-          />
+            }>
+            <div className="delete-client-text">
+              {confirmDelete ? `¿Eliminar cita de ${confirmDelete.cliente}?` : ""}
+            </div>
+          </Modal>
         )}
-        {toast && <div className="toast">{toast}</div>}
+
+        {/* ⭐ TOAST MEJORADO */}
+        {toast && (
+          <div className={`toast ${toast.startsWith('❌') ? 'toast-error' : 'toast-success'}`}>
+            {toast}
+          </div>
+        )}
       </main>
     </div>
   );

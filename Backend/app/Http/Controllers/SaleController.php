@@ -17,14 +17,24 @@ class SaleController extends Controller
     public function index()
     {
         $ventas = Venta::with([
-            'cliente',
-            'usuario',
-            'detalles.servicio',
-            'detalles.producto'
-        ])->orderBy('fecha', 'desc')->get();
+            'cliente:id,nombre',
+            'usuario:id,name',
+            'detalles' => function ($query) {
+                $query->select('id', 'venta_id', 'servicio_id', 'producto_id', 'cantidad', 'precio_unitario', 'subtotal')
+                    ->with([
+                        'servicio:id,nombre,precio',
+                        'producto:id,nombre,precio_unitario'
+                    ]);
+            }
+        ])
+            ->orderBy('fecha', 'desc')
+            ->get(['id', 'cliente_id', 'usuario_id', 'total', 'metodo_pago', 'fecha']);
 
-        return response()->json($ventas);
+        return response()->json([
+            'ventas' => $ventas,
+        ]);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -109,7 +119,23 @@ class SaleController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $venta = Venta::with([
+            'cliente:id,nombre',
+            'usuario:id,name',
+            'detalles' => function ($query) {
+                $query->select('id', 'venta_id', 'servicio_id', 'producto_id', 'cantidad', 'precio_unitario', 'subtotal')
+                    ->with([
+                        'servicio:id,nombre,precio',
+                        'producto:id,nombre,precio_unitario'
+                    ]);
+            }
+        ])
+            ->select('id', 'cliente_id', 'usuario_id', 'total', 'metodo_pago', 'fecha')
+            ->findOrFail($id);
+
+        return response()->json([
+            'venta' => $venta,
+        ]);
     }
 
     /**

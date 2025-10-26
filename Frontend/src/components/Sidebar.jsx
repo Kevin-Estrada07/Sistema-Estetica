@@ -79,6 +79,11 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
+              <Link to="/SalesHistory" onClick={() => setIsOpen(false)}>
+                <BarChart2 size={18} /> Historial de Ventas
+              </Link>
+            </li>
+            <li>
               <Link to="/users" onClick={() => setIsOpen(false)}>
                 <UserCog size={18} /> Usuarios
               </Link>

@@ -12,7 +12,6 @@ import Modal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
 import { adminAPI } from "../api/adminAPI";
 
-
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -24,6 +23,19 @@ const Dashboard = () => {
     clientes: 0,
     servicios: 0,
   });
+
+  // ⭐ Nuevos estados para drag & drop
+  const [draggedEvent, setDraggedEvent] = useState(null);
+  const [toast, setToast] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // ⭐ Auto-ocultar toast
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   const fetchAppointments = async () => {
     try {
@@ -38,6 +50,10 @@ const Dashboard = () => {
           empleado: a.empleado?.name,
           estado: a.estado,
           notas: a.notas,
+          // ⭐ Guardar IDs necesarios para la actualización
+          cliente_id: a.cliente_id,
+          servicio_id: a.servicio_id,
+          empleado_id: a.empleado_id,
         },
       }));
       setEvents(citas);
@@ -55,9 +71,99 @@ const Dashboard = () => {
       } catch (err) {
         console.error("❌ Error cargando estadísticas:", err);
       }
-    }; 
+    };
     fetchStats();
   }, []);
+
+  // ⭐ Manejar cuando se suelta el evento (drop)
+  const handleEventDrop = (info) => {
+    const event = info.event;
+    const newDate = info.event.start;
+
+    // ⭐ Validar que no sea una fecha/hora pasada
+    const ahora = new Date();
+    if (newDate < ahora) {
+      setToast("❌ No puedes mover una cita a una fecha u hora que ya pasó");
+      info.revert(); // Revertir inmediatamente
+      return;
+    }
+
+    // Extraer nueva fecha y hora
+    const fecha = newDate.toISOString().split("T")[0];
+    const hora = newDate.toTimeString().split(" ")[0].substring(0, 5);
+
+    // Guardar información para el modal de confirmación
+    setDraggedEvent({
+      id: event.id,
+      title: event.title,
+      oldDate: info.oldEvent.start,
+      newDate: newDate,
+      fecha: fecha,
+      hora: hora,
+      cliente_id: event.extendedProps.cliente_id,
+      servicio_id: event.extendedProps.servicio_id,
+      empleado_id: event.extendedProps.empleado_id,
+      estado: event.extendedProps.estado,
+      notas: event.extendedProps.notas,
+      revertFunc: info.revert, // Función para revertir si hay error
+    });
+  };
+
+  // ⭐ Confirmar cambio de fecha/hora
+  const confirmEventUpdate = async () => {
+    if (!draggedEvent) return;
+
+    setIsUpdating(true);
+
+    try {
+      const data = {
+        cliente_id: draggedEvent.cliente_id,
+        servicio_id: draggedEvent.servicio_id,
+        empleado_id: draggedEvent.empleado_id,
+        fecha: draggedEvent.fecha,
+        hora: draggedEvent.hora,
+        estado: draggedEvent.estado,
+        notas: draggedEvent.notas,
+      };
+
+      await appointmentsAPI.update(draggedEvent.id, data);
+      setToast("✅ Cita actualizada exitosamente");
+      fetchAppointments(); // Recargar eventos
+      setDraggedEvent(null);
+    } catch (err) {
+      console.error("Error al actualizar cita:", err);
+
+      // ⭐ Capturar error del backend (traslapes)
+      if (err.response) {
+        const errorMessage = err.response.data?.message || err.response.data?.error;
+
+        if (err.response.status === 422) {
+          setToast(`❌ ${errorMessage}`);
+        } else {
+          setToast(`❌ ${errorMessage || "Error al actualizar cita"}`);
+        }
+      } else {
+        setToast("❌ Error de conexión");
+      }
+
+      // ⭐ Revertir el cambio visual en el calendario
+      if (draggedEvent.revertFunc) {
+        draggedEvent.revertFunc();
+      }
+
+      setDraggedEvent(null);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // ⭐ Cancelar cambio de fecha/hora
+  const cancelEventUpdate = () => {
+    if (draggedEvent && draggedEvent.revertFunc) {
+      draggedEvent.revertFunc();
+    }
+    setDraggedEvent(null);
+  };
 
   return (
     <div className="dashboard">
@@ -76,20 +182,14 @@ const Dashboard = () => {
           </div>
 
           <div className="header-buttons">
-            <button
-              className="btn-register"
-              onClick={() => navigate("/payment")}>
+            <button className="btn-register" onClick={() => navigate("/payment")}>
               ➕ Nueva Venta
             </button>
-            <button
-              className="btn-register"
-              onClick={() => navigate("/citas")}>
+            <button className="btn-register" onClick={() => navigate("/citas")}>
               ➕ Registrar Cita
             </button>
           </div>
         </header>
-
-
 
         <section className="cards">
           <div className="card">
@@ -109,12 +209,11 @@ const Dashboard = () => {
         <section className="panel">
           <div className="panel-header">
             <h2>📅 Agenda de Citas</h2>
-
           </div>
           <div className="calendar-wrapper">
             <FullCalendar
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth" // 👈 vista inicial semana
+              initialView="dayGridMonth"
               headerToolbar={{
                 left: "prev,next today",
                 center: "title",
@@ -135,11 +234,22 @@ const Dashboard = () => {
               slotMinTime="08:00:00"
               slotMaxTime="24:00:00"
               eventClick={(info) => setSelectedEvent(info.event)}
+              // ⭐ Habilitar drag & drop
+              editable={true}
+              droppable={true}
+              eventDrop={handleEventDrop}
+              // ⭐ Opcional: cambiar cursor al arrastrar
+              eventDragStart={(info) => {
+                info.el.style.cursor = "grabbing";
+              }}
+              eventDragStop={(info) => {
+                info.el.style.cursor = "grab";
+              }}
             />
           </div>
         </section>
 
-        {/* Modal solo detalles */}
+        {/* Modal de detalles de cita */}
         {selectedEvent && (
           <Modal
             isOpen={!!selectedEvent}
@@ -169,6 +279,57 @@ const Dashboard = () => {
               )}
             </div>
           </Modal>
+        )}
+
+        {/* ⭐ Modal de confirmación de cambio de fecha/hora */}
+        {draggedEvent && (
+          <Modal
+            isOpen={!!draggedEvent}
+            onClose={cancelEventUpdate}
+            title="Confirmar cambio de horario"
+            hideCloseButton>
+            <div className="event-details">
+              <p style={{ marginBottom: "16px", fontWeight: "500" }}>
+                ¿Deseas mover la siguiente cita?
+              </p>
+              <p>
+                <strong>Cita:</strong> {draggedEvent.title}
+              </p>
+              <p>
+                <strong>Fecha/hora anterior:</strong>{" "}
+                {new Date(draggedEvent.oldDate).toLocaleString("es-MX")}
+              </p>
+              <p style={{ color: "#7C3AED", fontWeight: "600" }}>
+                <strong>Nueva fecha/hora:</strong>{" "}
+                {new Date(draggedEvent.newDate).toLocaleString("es-MX")}
+              </p>
+
+              <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+                <button
+                  className="btn-confirm"
+                  onClick={confirmEventUpdate}
+                  disabled={isUpdating}>
+                  {isUpdating ? "Actualizando..." : "Confirmar"}
+                </button>
+                <button
+                  className="btn-cancel"
+                  onClick={cancelEventUpdate}
+                  disabled={isUpdating}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+
+        {/* ⭐ Toast para notificaciones */}
+        {toast && (
+          <div
+            className={`toast ${
+              toast.startsWith("❌") ? "toast-error" : "toast-success"
+            }`}>
+            {toast}
+          </div>
         )}
       </main>
     </div>

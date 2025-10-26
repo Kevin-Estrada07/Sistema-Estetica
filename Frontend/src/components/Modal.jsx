@@ -9,7 +9,6 @@ const Modal = ({
   children, 
   actions, 
   hideCloseButton = false, 
-  onAttend
 }) => {
   if (!isOpen) return null;
 

@@ -11,7 +11,7 @@ const getAuthHeaders = () => ({
 });
 
 export const salesAPI = {
-    // getAll: () => api.get("/products", getAuthHeaders()),
+    getAll: () => api.get("/ventas", getAuthHeaders()),
     // getOne: (id) => api.get(`/products/${id}`, getAuthHeaders()),
     create: (data) => api.post("/ventas", data, getAuthHeaders()),
     // update: (id, data) => api.put(`/products/${id}`, data, getAuthHeaders()),

@@ -64,7 +64,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/info', [AppointmentController::class, 'InfTabla']);
-});
+}); 
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/empleados', [EmpleadoController::class, 'index']);

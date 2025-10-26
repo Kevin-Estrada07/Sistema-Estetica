@@ -24,11 +24,17 @@ const HeroSection = () => (
         </p>
 
         <div className="hero-buttons">
-          <button className="cta-primary">
+          {/* <button href="#appointment" className="cta-primary">
             Reservar Cita
             <span className="shine"></span>
-          </button>
-          <button className="cta-secondary">Ver Servicios</button>
+          </button> */}
+          <a href="#appointment" className="cta-primary" >
+            <span>Reservar Cita</span>
+          </a>
+          {/* <button href="#services" className="cta-secondary">Ver Servicios</button> */}
+          <a href="#services" className="cta-secondary" >
+            <span>Servicios</span>
+          </a>
         </div>
 
         {/* Features */}
