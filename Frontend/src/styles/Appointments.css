@@ -46,6 +46,68 @@
     align-items: center;
 }
 
+/* Botones de filtro por fecha */
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-right: 10px;
+}
+
+.btn-filter {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-filter:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-1px);
+}
+
+.btn-filter.active {
+    background-color: #7C3AED;
+    color: white;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.btn-filter.active:hover {
+    background-color: #6d28d9;
+}
+
+/* Contador de resultados */
+.results-counter {
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.results-counter-text {
+    font-weight: 500;
+    color: #555;
+}
+
+.results-counter-number {
+    color: #7C3AED;
+    margin-left: 8px;
+    font-weight: 700;
+}
+
+.results-counter-date {
+    font-size: 14px;
+    color: #666;
+}
+
 .search-input {
     padding: 12px 16px;
     border: 2px solid #e1e8ed;

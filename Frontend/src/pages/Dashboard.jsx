@@ -354,7 +354,50 @@ const Dashboard = () => {
           <Modal
             isOpen={!!selectedEvent}
             onClose={() => setSelectedEvent(null)}
-            title={`Cita #${selectedEvent.id}`}>
+            title={`Cita #${selectedEvent.id}`}
+            actions={
+              <>
+                {/* Botón Atender - Solo para citas pendientes */}
+                {selectedEvent.extendedProps.estado === "pendiente" && (
+                  <button
+                    className="btn-attend"
+                    onClick={async () => {
+                      try {
+                        await appointmentsAPI.updateEstado(selectedEvent.id, { estado: "en proceso" });
+                        setSelectedEvent(null);
+                        fetchAppointments(); // Recargar citas
+                        setToast("✅ Cita En proceso");
+                      } catch (err) {
+                        console.error("Error al atender cita:", err);
+                        setToast("❌ Error al atender la cita");
+                      }
+                    }}>
+                    ✅ Atender
+                  </button>
+                )}
+
+                {/* Botón Enviar WhatsApp - Solo para citas futuras */}
+                {(() => {
+                  const citaFecha = new Date(selectedEvent.start);
+                  const ahora = new Date();
+                  const esFutura = citaFecha > ahora;
+                  const esPendienteOEnProceso = selectedEvent.extendedProps.estado === 'pendiente' ||
+                                                selectedEvent.extendedProps.estado === 'en proceso';
+
+                  return esFutura && esPendienteOEnProceso && selectedEvent.extendedProps.cliente_telefono ? (
+                    <button
+                      className="btn-whatsapp"
+                      onClick={() => enviarRecordatorioWhatsApp(selectedEvent)}>
+                      📱 Enviar WhatsApp
+                    </button>
+                  ) : null;
+                })()}
+
+                <button className="btn-cancel" onClick={() => setSelectedEvent(null)}>
+                  ❌ Cerrar
+                </button>
+              </>
+            }>
             <div className="event-details">
               <p>
                 <strong>Cliente:</strong> {selectedEvent.extendedProps.cliente}
@@ -370,32 +413,13 @@ const Dashboard = () => {
                 {new Date(selectedEvent.start).toLocaleString("es-MX")}
               </p>
               <p>
-                <strong>Estado:</strong> {selectedEvent.extendedProps.estado}
+                <strong>Estado:</strong> <span className={`estado-badge estado-${selectedEvent.extendedProps.estado.replace(' ', '-')}`}>{selectedEvent.extendedProps.estado}</span>
               </p>
               {selectedEvent.extendedProps.notas && (
                 <p>
                   <strong>Notas:</strong> {selectedEvent.extendedProps.notas}
                 </p>
               )}
-
-              {/* Botón de WhatsApp - Solo para citas futuras pendientes/en proceso */}
-              {(() => {
-                const citaFecha = new Date(selectedEvent.start);
-                const ahora = new Date();
-                const esFutura = citaFecha > ahora;
-                const esPendienteOEnProceso = selectedEvent.extendedProps.estado === 'pendiente' ||
-                                              selectedEvent.extendedProps.estado === 'en proceso';
-
-                return esFutura && esPendienteOEnProceso && selectedEvent.extendedProps.cliente_telefono ? (
-                  <button
-                    className="btn-whatsapp-modal"
-                    onClick={() => enviarRecordatorioWhatsApp(selectedEvent)}
-                    style={{ marginTop: '16px', width: '100%' }}
-                  >
-                    💬 Enviar Recordatorio por WhatsApp
-                  </button>
-                ) : null;
-              })()}
             </div>
           </Modal>
         )}

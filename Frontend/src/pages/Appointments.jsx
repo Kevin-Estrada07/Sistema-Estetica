@@ -63,6 +63,9 @@ const Appointments = () => {
   const [toast, setToast] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Estado para filtro de citas (hoy / todas)
+  const [filtroFecha, setFiltroFecha] = useState("todas"); // "hoy" o "todas"
+
   useEffect(() => {
     if (toast) {
       const timer = setTimeout(() => setToast(""), 3000);
@@ -343,16 +346,33 @@ const Appointments = () => {
   };
 
   const filteredAppointments = useMemo(() => {
-    if (!search) return appointments;
+    let filtered = appointments;
 
-    const term = search.toLowerCase();
-    return appointments.filter((a) =>
-      a.cliente?.toLowerCase().includes(term) ||
-      a.servicio?.toLowerCase().includes(term) ||
-      a.empleado?.toLowerCase().includes(term) ||
-      a.fecha?.toLowerCase().includes(term)
-    );
-  }, [appointments, search]);
+    // Filtrar por fecha (hoy / todas)
+    if (filtroFecha === "hoy") {
+      // Obtener fecha local en formato YYYY-MM-DD (sin problemas de zona horaria)
+      const ahora = new Date();
+      const año = ahora.getFullYear();
+      const mes = String(ahora.getMonth() + 1).padStart(2, '0');
+      const dia = String(ahora.getDate()).padStart(2, '0');
+      const hoy = `${año}-${mes}-${dia}`;
+
+      filtered = filtered.filter((a) => a.fecha === hoy);
+    }
+
+    // Filtrar por búsqueda
+    if (search) {
+      const term = search.toLowerCase();
+      filtered = filtered.filter((a) =>
+        a.cliente?.toLowerCase().includes(term) ||
+        a.servicio?.toLowerCase().includes(term) ||
+        a.empleado?.toLowerCase().includes(term) ||
+        a.fecha?.toLowerCase().includes(term)
+      );
+    }
+
+    return filtered;
+  }, [appointments, search, filtroFecha]);
 
   return (
     <div className="">
@@ -361,6 +381,20 @@ const Appointments = () => {
         <header className="appointments-header">
           <h1>📅 Citas</h1>
           <div className="appointments-actions">
+            {/* Botones de filtro por fecha */}
+            <div className="filter-buttons">
+              <button
+                className={`btn-filter ${filtroFecha === "hoy" ? "active" : ""}`}
+                onClick={() => setFiltroFecha("hoy")}>
+                📅 Citas de Hoy
+              </button>
+              <button
+                className={`btn-filter ${filtroFecha === "todas" ? "active" : ""}`}
+                onClick={() => setFiltroFecha("todas")}>
+                📋 Todas las Citas
+              </button>
+            </div>
+
             <input
               type="text"
               className="search-input"
@@ -378,7 +412,23 @@ const Appointments = () => {
         ) : error ? (
           <p className="error">{error}</p>
         ) : (
-          <div className="table-wrapper">
+          <>
+            {/* Contador de resultados */}
+            <div className="results-counter">
+              <span className="results-counter-text">
+                {filtroFecha === "hoy" ? "📅 Citas de hoy" : "📋 Todas las citas"}:
+                <strong className="results-counter-number">
+                  {filteredAppointments.length}
+                </strong>
+              </span>
+              {filtroFecha === "hoy" && (
+                <span className="results-counter-date">
+                  {new Date().toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                </span>
+              )}
+            </div>
+
+            <div className="table-wrapper">
             <table className="appointments-table">
               <thead>
                 <tr>
@@ -478,6 +528,7 @@ const Appointments = () => {
               </div>
             )}
           </div>
+          </>
         )}
 
         {/* Modal form */}
