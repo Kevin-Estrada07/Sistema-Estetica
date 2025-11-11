@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -11,13 +11,15 @@ import {
   UserCog,
   LogOut,
   Menu,
-  ListChecks
+  MessageSquare
 } from "lucide-react";
 import "../styles/Sidebar.css";
 const Sidebar = () => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+
+  const isAdmin = user?.role?.name === 'admin';
 
   const handleLogout = async () => {
     try {
@@ -65,12 +67,7 @@ const Sidebar = () => {
             </li>
             <li>
               <Link to="/Inventary" onClick={() => setIsOpen(false)}>
-                <ListChecks size={18} /> Inventario
-              </Link>
-            </li>
-            <li>
-              <Link to="/products" onClick={() => setIsOpen(false)}>
-                <Package size={18} /> Productos
+                <Package size={18} /> Inventario
               </Link>
             </li>
             <li>
@@ -83,11 +80,25 @@ const Sidebar = () => {
                 <BarChart2 size={18} /> Historial de Ventas
               </Link>
             </li>
-            <li>
-              <Link to="/users" onClick={() => setIsOpen(false)}>
-                <UserCog size={18} /> Usuarios
-              </Link>
-            </li>
+            {isAdmin && (
+              <>
+                <li>
+                  <Link to="/reembolsos" onClick={() => setIsOpen(false)}>
+                    <BarChart2 size={18} /> Reembolsos
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/testimonios-admin" onClick={() => setIsOpen(false)}>
+                    <MessageSquare size={18} /> Testimonios
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/users" onClick={() => setIsOpen(false)}>
+                    <UserCog size={18} /> Usuarios
+                  </Link>
+                </li>
+              </>
+            )}
             <li>
               <button className="logout-btn" onClick={handleLogout}>
                 <LogOut size={18} /> Cerrar Sesión

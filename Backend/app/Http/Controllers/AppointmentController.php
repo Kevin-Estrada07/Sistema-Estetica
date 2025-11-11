@@ -17,7 +17,7 @@ class AppointmentController extends Controller
     public function index()
     {
         $appointments = Appointment::with([
-            'cliente:id,nombre',
+            'cliente:id,nombre,telefono',
             'servicio:id,nombre,precio,duracion',
             'empleado:id,name'
         ])
@@ -75,6 +75,22 @@ class AppointmentController extends Controller
             'message' => 'Cita creada exitosamente',
             'data' => $appointment
         ], 201);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        $appointment = Appointment::with([
+            'cliente:id,nombre',
+            'servicio:id,nombre,precio,duracion',
+            'empleado:id,name'
+        ])
+            ->select('id', 'cliente_id', 'servicio_id', 'empleado_id', 'fecha', 'hora', 'estado', 'notas')
+            ->findOrFail($id);
+
+        return response()->json($appointment);
     }
 
     /**
@@ -168,7 +184,7 @@ class AppointmentController extends Controller
     {
         try {
             $appointments = Appointment::with([
-                'cliente:id,nombre',
+                'cliente:id,nombre,telefono',
                 'servicio:id,nombre,duracion',
                 'empleado:id,name'
             ])
@@ -225,7 +241,7 @@ class AppointmentController extends Controller
         );
 
         if ($traslapeEmpleado) {
-            return 'El empleado ya tiene una cita programada que se traslapa con este horario.';
+            return 'El empleado ya tiene una cita programada con este horario.';
         }
 
         // Verificar traslape con citas del cliente
@@ -239,15 +255,15 @@ class AppointmentController extends Controller
         );
 
         if ($traslapeCliente) {
-            return 'El cliente ya tiene una cita programada que se traslapa con este horario.';
+            return 'El cliente ya tiene una cita programada con este horario.';
         }
 
-        return null; // Sin traslapes
+        return null;
     }
 
 
     /**
-     * Verificar si existe traslape con citas existentes (optimizado)
+     * Verificar si existe traslape con citas existentes
      */
     private function existeTraslape($fecha, $personaId, $campo, Carbon $nuevaInicio, Carbon $nuevaFin, $citaIdExcluir = null)
     {
@@ -256,7 +272,7 @@ class AppointmentController extends Controller
             ->whereIn('estado', ['pendiente', 'en proceso'])
             ->when($citaIdExcluir, fn($query) => $query->where('id', '!=', $citaIdExcluir))
             ->with('servicio:id,duracion')
-            ->select('id', 'fecha', 'hora')
+            ->select('id', 'fecha', 'hora', 'servicio_id')
             ->get();
 
         foreach ($citas as $cita) {

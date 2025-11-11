@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
     baseURL: "http://127.0.0.1:8000/api",
-    timeout: 5000
+    timeout: 30000  // Aumentado a 30 segundos para reportes complejos
 });
 
 // Interceptor para añadir token automáticamente a cada request
@@ -41,7 +41,24 @@ export const dashboard = {
     // Detalle de las citas
     getDetalleCitas: (inicio, fin) =>
         api.get("/dashboard/detalle-citas-dia", { params: { inicio, fin } }),
+
+    // Top servicios
+    getTopServicios: (inicio, fin, limit = 10) =>
+        api.get("/dashboard/top-servicios", { params: { inicio, fin, limit } }),
+
+    // Top estilistas
+    getTopEstilistas: (inicio, fin, limit = 10) =>
+        api.get("/dashboard/top-estilistas", { params: { inicio, fin, limit } }),
+
+    // Ranking servicios
+    getRankingServicios: (inicio, fin) =>
+        api.get("/dashboard/ranking-servicios", { params: { inicio, fin } }),
+
+    // Productos con rotación
+    getProductosRotacion: () =>
+        api.get("/dashboard/productos-rotacion"),
+
+    // Productos bajo stock
+    getProductosBajoStock: (umbral = 10) =>
+        api.get("/dashboard/productos-bajo-stock", { params: { umbral } }),
 };
-
-
- 

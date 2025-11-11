@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Model
 {
     protected $table = 'servicios';
-    protected $fillable = ['nombre', 'descripcion', 'duracion', 'precio'];
+    protected $fillable = ['nombre', 'descripcion', 'duracion', 'precio', 'activo'];
+
+    protected $casts = [
+        'activo' => 'boolean',
+    ];
 
     public function inventario()
     {

@@ -15,5 +15,6 @@ export const inventaryAPI = {
     getOne: (id) => api.get(`/inventario/${id}`, getAuthHeaders()),
     create: (data) => api.post("/inventario", data, getAuthHeaders()),
     update: (id, data) => api.put(`/inventario/${id}`, data, getAuthHeaders()),
-    delete: (id) => api.delete(`/inventario/${id}`, getAuthHeaders())
+    delete: (id) => api.delete(`/inventario/${id}`, getAuthHeaders()),
+    bajoStock: (umbral = 10) => api.get(`/inventario-bajo-stock?umbral=${umbral}`, getAuthHeaders())
 };

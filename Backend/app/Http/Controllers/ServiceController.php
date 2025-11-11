@@ -12,20 +12,24 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::orderBy('id', 'asc')->get();
+        $services = Service::with('inventario')->orderBy('id', 'asc')->get();
         return response()->json($services);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) 
+    public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|String',
-            'duracion' => 'required|integer',
-            'precio' => 'required|numeric',
+            'duracion' => 'required|integer|min:1',
+            'precio' => 'required|numeric|min:0.01',
+            'activo' => 'boolean',
+        ], [
+            'duracion.min' => 'La duración debe ser al menos 1 minuto',
+            'precio.min' => 'El precio debe ser mayor a 0',
         ]);
         $service = Service::create($request->all());
         return response()->json($service, 201);
@@ -48,8 +52,12 @@ class ServiceController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
-            'duracion' => 'required|integer',
-            'precio' => 'required|numeric',
+            'duracion' => 'required|integer|min:1',
+            'precio' => 'required|numeric|min:0.01',
+            'activo' => 'boolean',
+        ], [
+            'duracion.min' => 'La duración debe ser al menos 1 minuto',
+            'precio.min' => 'El precio debe ser mayor a 0',
         ]);
         $service->update($request->all());
         return response()->json($service, 200);

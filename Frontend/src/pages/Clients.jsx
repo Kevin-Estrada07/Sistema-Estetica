@@ -17,12 +17,21 @@ const Clients = () => {
     const [editClient, setEditClient] = useState(null);
     const [confirmDelete, setConfirmDelete] = useState(null);
 
+    // Estados para historial
+    const [historyModal, setHistoryModal] = useState(false);
+    const [selectedClientHistory, setSelectedClientHistory] = useState(null);
+    const [historyLoading, setHistoryLoading] = useState(false);
+
     // Formulario modal
     const [nombre, setName] = useState("");
     const [telefono, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [direccion, setAddress] = useState("");
     const [toast, setToast] = useState("");
+
+    // Estados para validación en tiempo real
+    const [errors, setErrors] = useState({});
+    const [touched, setTouched] = useState({});
 
     useEffect(() => {
         fetchClients();
@@ -65,15 +74,6 @@ const Clients = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const emailExists = clients.some(
-            c => c.email?.toLowerCase() === email.toLowerCase() && (!editClient || c.id !== editClient.id)
-        );
-
-        if (emailExists) {
-            showToast("❌ Este correo ya está registrado");
-            return;
-        }
-
         try {
             if (editClient) {
                 await clientsAPI.update(editClient.id, { nombre, telefono, email, direccion });
@@ -85,7 +85,30 @@ const Clients = () => {
             fetchClients();
             closeModal();
         } catch (err) {
-            showToast("❌ Error al guardar cliente");
+            // Capturar errores del backend
+            if (err.response?.status === 422) {
+                // Errores de validación
+                const errors = err.response.data?.errors || {};
+                let errorMessage = "";
+
+                if (errors.email) {
+                    errorMessage = errors.email[0]; // "The email has already been taken."
+                } else if (errors.telefono) {
+                    errorMessage = errors.telefono[0]; // "The telefono has already been taken."
+                } else if (errors.nombre) {
+                    errorMessage = errors.nombre[0];
+                } else if (errors.direccion) {
+                    errorMessage = errors.direccion[0];
+                } else {
+                    errorMessage = err.response.data?.message || "Error de validación";
+                }
+
+                showToast(`❌ ${errorMessage}`);
+            } else if (err.response?.status === 500) {
+                showToast(`❌ ${err.response.data?.message || "Error del servidor"}`);
+            } else {
+                showToast("❌ Error al guardar cliente");
+            }
         }
     };
 
@@ -112,6 +135,120 @@ const Clients = () => {
         setIsModalOpen(false);
         setEditClient(null);
         setName(""); setEmail(""); setPhone(""); setAddress("");
+        setErrors({});
+        setTouched({});
+    };
+
+    // Validar campos en tiempo real
+    const validateField = (fieldName, value) => {
+        const newErrors = { ...errors };
+
+        switch (fieldName) {
+            case "nombre":
+                if (!value.trim()) {
+                    newErrors.nombre = "El nombre es requerido";
+                } else if (value.length < 3) {
+                    newErrors.nombre = "El nombre debe tener al menos 3 caracteres";
+                } else {
+                    delete newErrors.nombre;
+                }
+                break;
+
+            case "email":
+                if (!value.trim()) {
+                    newErrors.email = "El email es requerido";
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                    newErrors.email = "Email inválido";
+                } else if (clients.some(c => c.email?.toLowerCase() === value.toLowerCase() && (!editClient || c.id !== editClient.id))) {
+                    newErrors.email = "Este email ya está registrado";
+                } else {
+                    delete newErrors.email;
+                }
+                break;
+
+            case "telefono":
+                if (value && !/^\d+$/.test(value)) {
+                    newErrors.telefono = "El teléfono solo debe contener números";
+                } else if (value && value.length < 7) {
+                    newErrors.telefono = "El teléfono debe tener al menos 7 dígitos";
+                } else if (value && clients.some(c => c.telefono === value && (!editClient || c.id !== editClient.id))) {
+                    newErrors.telefono = "Este teléfono ya está registrado";
+                } else {
+                    delete newErrors.telefono;
+                }
+                break;
+
+            case "direccion":
+                if (!value.trim()) {
+                    newErrors.direccion = "La dirección es requerida";
+                } else if (value.length < 5) {
+                    newErrors.direccion = "La dirección debe tener al menos 5 caracteres";
+                } else {
+                    delete newErrors.direccion;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        setErrors(newErrors);
+    };
+
+    // Manejar cambio en inputs con validación
+    const handleFieldChange = (fieldName, value) => {
+        switch (fieldName) {
+            case "nombre":
+                setName(value);
+                break;
+            case "email":
+                setEmail(value);
+                break;
+            case "telefono":
+                // Solo permitir números
+                const onlyNumbers = value.replace(/\D/g, "");
+                setPhone(onlyNumbers);
+                validateField("telefono", onlyNumbers);
+                return;
+            case "direccion":
+                setAddress(value);
+                break;
+            default:
+                break;
+        }
+
+        // Validar si el campo ha sido tocado
+        if (touched[fieldName]) {
+            validateField(fieldName, value);
+        }
+    };
+
+    // Marcar campo como tocado
+    const handleFieldBlur = (fieldName) => {
+        setTouched({ ...touched, [fieldName]: true });
+        validateField(fieldName, fieldName === "nombre" ? nombre : fieldName === "email" ? email : fieldName === "telefono" ? telefono : direccion);
+    };
+
+
+
+    // Obtener historial del cliente
+    const fetchClientHistory = async (clientId) => {
+        setHistoryLoading(true);
+        try {
+            const res = await clientsAPI.getHistory(clientId);
+            setSelectedClientHistory(res.data);
+            setHistoryModal(true);
+        } catch (err) {
+            console.error("Error al cargar historial:", err);
+            showToast("❌ Error al cargar historial del cliente");
+        } finally {
+            setHistoryLoading(false);
+        }
+    };
+
+    const closeHistoryModal = () => {
+        setHistoryModal(false);
+        setSelectedClientHistory(null);
     };
 
     return (
@@ -162,6 +299,7 @@ const Clients = () => {
                                         <td>{c.direccion}</td>
                                         <td>
                                             <button className="btn-edit" onClick={() => openEditModal(c)}>✏️ Editar</button>
+                                            <button className="btn-history" onClick={() => fetchClientHistory(c.id)}>📋 Historial</button>
                                             <button className="btn-delete" onClick={() => setConfirmDelete(c)}>🗑 Eliminar</button>
                                         </td>
                                     </tr>
@@ -184,9 +322,12 @@ const Clients = () => {
                                     <input
                                         type="text"
                                         value={nombre}
-                                        onChange={e => setName(e.target.value)}
+                                        onChange={e => handleFieldChange("nombre", e.target.value)}
+                                        onBlur={() => handleFieldBlur("nombre")}
+                                        className={errors.nombre && touched.nombre ? "input-error" : ""}
                                         required
                                     />
+                                    {errors.nombre && touched.nombre && <span className="error-text">⚠️ {errors.nombre}</span>}
                                 </div>
 
                                 <div className="form-group">
@@ -194,9 +335,12 @@ const Clients = () => {
                                     <input
                                         type="text"
                                         value={telefono}
-                                        onChange={e => setPhone(e.target.value)}
-                                        required
+                                        onChange={e => handleFieldChange("telefono", e.target.value)}
+                                        onBlur={() => handleFieldBlur("telefono")}
+                                        placeholder="Ej: 1234567890"
+                                        className={errors.telefono && touched.telefono ? "input-error" : ""}
                                     />
+                                    {errors.telefono && touched.telefono && <span className="error-text">⚠️ {errors.telefono}</span>}
                                 </div>
                             </div>
 
@@ -206,9 +350,12 @@ const Clients = () => {
                                 <input
                                     type="email"
                                     value={email}
-                                    onChange={e => setEmail(e.target.value)}
+                                    onChange={e => handleFieldChange("email", e.target.value)}
+                                    onBlur={() => handleFieldBlur("email")}
+                                    className={errors.email && touched.email ? "input-error" : ""}
                                     required
                                 />
+                                {errors.email && touched.email && <span className="error-text">⚠️ {errors.email}</span>}
                             </div>
 
                             {/* 🔹 Dirección */}
@@ -216,8 +363,11 @@ const Clients = () => {
                                 <label>Dirección</label>
                                 <textarea
                                     value={direccion}
-                                    onChange={e => setAddress(e.target.value)}
+                                    onChange={e => handleFieldChange("direccion", e.target.value)}
+                                    onBlur={() => handleFieldBlur("direccion")}
+                                    className={errors.direccion && touched.direccion ? "input-error" : ""}
                                 />
+                                {errors.direccion && touched.direccion && <span className="error-text">⚠️ {errors.direccion}</span>}
                             </div>
                         </div>
 
@@ -247,12 +397,101 @@ const Clients = () => {
                                 className="btn-cancel"
                                 onClick={() => setConfirmDelete(null)}>
                                 No
-                            </button>
+                            </button> 
                         </>
                     }>
                     <div className="delete-client-text">{confirmDelete ? `¿Eliminar al Cliente ${confirmDelete.nombre}?` : ""}</div>
                 </Modal>
 
+
+                {/* Modal de Historial */}
+                <Modal
+                    isOpen={historyModal}
+                    onClose={closeHistoryModal}
+                    title={selectedClientHistory ? `Historial - ${selectedClientHistory.cliente.nombre}` : "Historial"}
+                    size="large">
+                    {historyLoading ? (
+                        <p>Cargando historial...</p>
+                    ) : selectedClientHistory ? (
+                        <div className="history-container">
+                            {/* Resumen */}
+                            <div className="history-summary">
+                                <div className="summary-item">
+                                    <span className="label">Total Citas:</span>
+                                    <span className="value">{selectedClientHistory.total_citas}</span>
+                                </div>
+                                <div className="summary-item">
+                                    <span className="label">Total Ventas:</span>
+                                    <span className="value">{selectedClientHistory.total_ventas}</span>
+                                </div>
+                                <div className="summary-item">
+                                    <span className="label">Monto Total:</span>
+                                    <span className="value">${parseFloat(selectedClientHistory.monto_total || 0).toFixed(2)}</span>
+                                </div>
+                            </div>
+
+                            {/* Citas */}
+                            <div className="history-section">
+                                <h3>📅 Citas</h3>
+                                {selectedClientHistory.citas.length > 0 ? (
+                                    <table className="history-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                                                <th>Servicio</th>
+                                                <th>Empleado</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {selectedClientHistory.citas.map(cita => (
+                                                <tr key={cita.id}>
+                                                    <td>{cita.fecha}</td>
+                                                    <td>{cita.hora}</td>
+                                                    <td>{cita.servicio?.nombre}</td>
+                                                    <td>{cita.empleado?.name}</td>
+                                                    <td><span className={`status-${cita.estado}`}>{cita.estado}</span></td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <p className="no-data">No hay citas registradas</p>
+                                )}
+                            </div>
+
+                            {/* Ventas */}
+                            <div className="history-section">
+                                <h3>💰 Ventas</h3>
+                                {selectedClientHistory.ventas.length > 0 ? (
+                                    <table className="history-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Total</th>
+                                                <th>Método Pago</th>
+                                                <th>Vendedor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {selectedClientHistory.ventas.map(venta => (
+                                                <tr key={venta.id}>
+                                                    <td>{venta.fecha}</td>
+                                                    <td>${parseFloat(venta.total).toFixed(2)}</td>
+                                                    <td>{venta.metodo_pago}</td>
+                                                    <td>{venta.usuario?.name}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <p className="no-data">No hay ventas registradas</p>
+                                )}
+                            </div>
+                        </div>
+                    ) : null}
+                </Modal>
 
                 {toast && <div className="toast">{toast}</div>}
             </main>

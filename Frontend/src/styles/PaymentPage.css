@@ -147,18 +147,153 @@
     animation: fadeIn 0.5s ease 0.1s backwards;
 }
 
+.products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
 .products-section h3 {
-    margin: 0 0 20px;
+    margin: 0;
     font-size: 20px;
     color: #2c3e50;
     font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
-.products-section h3::before {
-    content: "🛒";
+/* Búsqueda de productos */
+.search-product-container {
+    position: relative;
+    flex: 1;
+    max-width: 500px;
+}
+
+.search-product-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e1e8ed;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.search-product-input:focus {
+    outline: none;
+    border-color: #f48fb1;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(244, 143, 177, 0.1);
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid #f48fb1;
+    border-radius: 12px;
+    margin-top: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background: linear-gradient(135deg, #fff5f8 0%, #ffe0ec 100%);
+}
+
+.result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.result-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+.result-details {
+    font-size: 12px;
+    color: #666;
+}
+
+.btn-add-product {
+    background: linear-gradient(135deg, #f48fb1 0%, #f06292 100%);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(244, 143, 177, 0.3);
+}
+
+.btn-add-product:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(244, 143, 177, 0.5);
+}
+
+.no-results {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+}
+
+.no-products-selected {
+    padding: 40px;
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px dashed #e1e8ed;
+}
+
+/* Contenedor responsive para tabla */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .products-table {
@@ -222,6 +357,52 @@
     border-color: #f8bbd0;
 }
 
+.quantity-input {
+    width: 80px;
+    padding: 8px 12px;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.quantity-input:focus {
+    outline: none;
+    border-color: #f48fb1;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(244, 143, 177, 0.1);
+}
+
+.btn-remove-product {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+}
+
+.btn-remove-product:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.5);
+}
+
+.btn-remove-product:active {
+    transform: translateY(0);
+}
+
+.subtotal {
+    font-weight: 700;
+    color: #f48fb1;
+    font-size: 15px;
+}
+
 /* ============================================ */
 /* RESUMEN DE PAGO */
 /* ============================================ */
@@ -269,6 +450,89 @@
     box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.1);
 }
 
+/* Sección de descuento */
+.discount-section {
+    margin-bottom: 24px;
+}
+
+.discount-section label {
+    display: block;
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.discount-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.discount-type {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e1e8ed;
+    border-radius: 10px;
+    font-size: 15px;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.discount-type:focus {
+    outline: none;
+    border-color: #f48fb1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.1);
+}
+
+.discount-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e1e8ed;
+    border-radius: 10px;
+    font-size: 15px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.discount-input:focus {
+    outline: none;
+    border-color: #f48fb1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.1);
+}
+
+/* Sección de impuesto */
+.tax-section {
+    margin-bottom: 24px;
+}
+
+.tax-section label {
+    display: block;
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.tax-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e1e8ed;
+    border-radius: 10px;
+    font-size: 15px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.tax-input:focus {
+    outline: none;
+    border-color: #f48fb1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.1);
+}
+
 .summary-box {
     background: linear-gradient(135deg, #fff5f8 0%, #ffe0ec 100%);
     padding: 20px;
@@ -302,6 +566,24 @@
     font-weight: 700;
     color: #f48fb1;
     margin-top: 16px;
+}
+
+.discount-line {
+    color: #4CAF50 !important;
+}
+
+.discount-amount {
+    color: #4CAF50;
+    font-weight: 700;
+}
+
+.tax-line {
+    color: #ff9800 !important;
+}
+
+.tax-amount {
+    color: #ff9800;
+    font-weight: 700;
 }
 
 /* ============================================ */
@@ -484,6 +766,75 @@
 
     .products-section h3 {
         font-size: 18px;
+    }
+
+    /* Tabla responsive en móviles */
+    .products-table {
+        min-width: 100%;
+    }
+
+    .products-table thead {
+        display: none;
+    }
+
+    .products-table tbody tr {
+        display: block;
+        margin-bottom: 16px;
+        border: 2px solid #f48fb1;
+        border-radius: 12px;
+        padding: 12px;
+        background: white;
+    }
+
+    .products-table tbody tr:hover {
+        transform: none;
+    }
+
+    .products-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 8px;
+        border-bottom: 1px solid #f0f0f0;
+        text-align: left;
+    }
+
+    .products-table td:last-child {
+        border-bottom: none;
+        justify-content: center;
+    }
+
+    .products-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #f48fb1;
+        margin-right: 12px;
+        min-width: 100px;
+    }
+
+    .products-table td:last-child::before {
+        content: "";
+        margin: 0;
+        min-width: 0;
+    }
+
+    .quantity-input {
+        width: 100px !important;
+    }
+
+    .btn-remove-product {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    /* Búsqueda responsive */
+    .products-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-product-container {
+        max-width: 100%;
     }
 }
 

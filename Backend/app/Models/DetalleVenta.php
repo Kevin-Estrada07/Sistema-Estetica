@@ -21,6 +21,6 @@ class DetalleVenta extends Model
 
     public function producto()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Inventory::class, 'producto_id');
     }
 }

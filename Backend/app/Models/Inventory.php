@@ -8,7 +8,7 @@ class Inventory extends Model
 {
 
     protected $table = 'inventario';
-    protected $fillable = ['nombre', 'stock', 'precio'];
+    protected $fillable = ['nombre', 'descripcion', 'stock', 'precio', 'tipo'];
 
     public function servicios()
     {

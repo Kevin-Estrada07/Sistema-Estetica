@@ -11,7 +11,7 @@ const Footer = () => (
         <p><Mail size={16} /> estetica.bella@email.com</p>
         <p><MapPin size={16} /> Calle Ejemplo #123, Ciudad Bella</p>
       </div>
-
+ 
       {/* Redes sociales */}
       <div className="footer-section">
         <h3>Síguenos</h3>

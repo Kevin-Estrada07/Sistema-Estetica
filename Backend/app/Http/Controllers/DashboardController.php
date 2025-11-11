@@ -8,6 +8,7 @@ use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
@@ -173,6 +174,171 @@ class DashboardController extends Controller
         return response()->json([
             'success' => true,
             'ultimasCitas' => $ultimas
+        ]);
+    }
+
+    // ============================================
+    // NUEVOS REPORTES MEJORADOS
+    // ============================================
+
+    public function topServicios(Request $request)
+    {
+        $inicio = $request->input('inicio') ?? Carbon::today()->startOfMonth()->toDateString();
+        $fin = $request->input('fin') ?? Carbon::today()->toDateString();
+        $limit = $request->input('limit', 10);
+
+        // Cache key basado en parámetros
+        $cacheKey = "top_servicios_{$inicio}_{$fin}_{$limit}";
+
+        $topServicios = Cache::remember($cacheKey, 3600, function () use ($inicio, $fin, $limit) {
+            return DB::table('citas')
+                ->join('servicios', 'citas.servicio_id', '=', 'servicios.id')
+                ->select(
+                    'servicios.nombre',
+                    DB::raw('COUNT(citas.id) as total_citas'),
+                    DB::raw('SUM(servicios.precio) as monto_total'),
+                    'servicios.precio'
+                )
+                ->whereDate('citas.fecha', '>=', $inicio)
+                ->whereDate('citas.fecha', '<=', $fin)
+                ->where('citas.estado', 'completada')
+                ->groupBy('servicios.id', 'servicios.nombre', 'servicios.precio')
+                ->orderBy('total_citas', 'desc')
+                ->limit($limit)
+                ->get();
+        });
+
+        return response()->json([
+            'success' => true,
+            'topServicios' => $topServicios
+        ]);
+    }
+
+    public function topEstilistas(Request $request)
+    {
+        $inicio = $request->input('inicio') ?? Carbon::today()->startOfMonth()->toDateString();
+        $fin = $request->input('fin') ?? Carbon::today()->toDateString();
+        $limit = $request->input('limit', 10);
+
+        // Cache key basado en parámetros
+        $cacheKey = "top_estilistas_{$inicio}_{$fin}_{$limit}";
+
+        $topEstilistas = Cache::remember($cacheKey, 3600, function () use ($inicio, $fin, $limit) {
+            return DB::table('citas')
+                ->join('users', 'citas.empleado_id', '=', 'users.id')
+                ->join('servicios', 'citas.servicio_id', '=', 'servicios.id')
+                ->select(
+                    'users.name',
+                    'users.id',
+                    DB::raw('COUNT(citas.id) as total_citas'),
+                    DB::raw('SUM(servicios.precio) as monto_total')
+                )
+                ->whereDate('citas.fecha', '>=', $inicio)
+                ->whereDate('citas.fecha', '<=', $fin)
+                ->where('citas.estado', 'completada')
+                ->groupBy('users.id', 'users.name')
+                ->orderBy('total_citas', 'desc')
+                ->limit($limit)
+                ->get();
+        });
+
+        return response()->json([
+            'success' => true,
+            'topEstilistas' => $topEstilistas
+        ]);
+    }
+
+    public function rankingServicios(Request $request)
+    {
+        $inicio = $request->input('inicio') ?? Carbon::today()->startOfMonth()->toDateString();
+        $fin = $request->input('fin') ?? Carbon::today()->toDateString();
+
+        // Ranking por conteo
+        $rankingConteo = DB::table('citas')
+            ->join('servicios', 'citas.servicio_id', '=', 'servicios.id')
+            ->select(
+                'servicios.nombre',
+                DB::raw('COUNT(citas.id) as total_citas'),
+                DB::raw('SUM(servicios.precio) as monto_total')
+            )
+            ->whereDate('citas.fecha', '>=', $inicio)
+            ->whereDate('citas.fecha', '<=', $fin)
+            ->where('citas.estado', 'completada')
+            ->groupBy('servicios.id', 'servicios.nombre')
+            ->orderBy('total_citas', 'desc')
+            ->get();
+
+        // Ranking por monto
+        $rankingMonto = DB::table('citas')
+            ->join('servicios', 'citas.servicio_id', '=', 'servicios.id')
+            ->select(
+                'servicios.nombre',
+                DB::raw('COUNT(citas.id) as total_citas'),
+                DB::raw('SUM(servicios.precio) as monto_total')
+            )
+            ->whereDate('citas.fecha', '>=', $inicio)
+            ->whereDate('citas.fecha', '<=', $fin)
+            ->where('citas.estado', 'completada')
+            ->groupBy('servicios.id', 'servicios.nombre')
+            ->orderBy('monto_total', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'rankingConteo' => $rankingConteo,
+            'rankingMonto' => $rankingMonto
+        ]);
+    }
+
+    public function productosRotacion(Request $request)
+    {
+        // Productos con rotación (usados en servicios)
+        $productosRotacion = DB::table('prod_servicio')
+            ->join('inventario', 'prod_servicio.inventario_id', '=', 'inventario.id')
+            ->select(
+                'inventario.id',
+                'inventario.nombre',
+                'inventario.stock',
+                'inventario.precio',
+                DB::raw('SUM(prod_servicio.cant_usada) as cantidad_usada'),
+                DB::raw('COUNT(DISTINCT prod_servicio.servicio_id) as servicios_asociados')
+            )
+            ->groupBy('inventario.id', 'inventario.nombre', 'inventario.stock', 'inventario.precio')
+            ->orderBy('cantidad_usada', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'productosRotacion' => $productosRotacion
+        ]);
+    }
+
+    public function productosBajoStock(Request $request)
+    {
+        $umbral = $request->input('umbral', 10);
+
+        // Cache key basado en umbral
+        $cacheKey = "productos_bajo_stock_{$umbral}";
+
+        // Reducido a 5 minutos (300 segundos) para actualizaciones más rápidas
+        $productosBajoStock = Cache::remember($cacheKey, 300, function () use ($umbral) {
+            return DB::table('inventario')
+                ->select(
+                    'id',
+                    'nombre',
+                    'stock',
+                    'precio',
+                    DB::raw('(stock * precio) as valor_total')
+                )
+                ->where('stock', '<=', $umbral)
+                ->orderBy('stock', 'asc')
+                ->get();
+        });
+
+        return response()->json([
+            'success' => true,
+            'productosBajoStock' => $productosBajoStock,
+            'umbral' => $umbral
         ]);
     }
 }

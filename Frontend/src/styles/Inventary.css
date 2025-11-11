@@ -352,6 +352,110 @@
 } */
 
 /* ============================================ */
+/* BADGES DE TIPO */
+/* ============================================ */
+
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.badge-venta {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.badge-servicio {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.badge-ambos {
+    background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+/* ============================================ */
+/* ALERTAS DE STOCK */
+/* ============================================ */
+
+/* Filas con alerta de stock */
+.row-stock-zero {
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+    border-left: 4px solid #f44336;
+}
+
+.row-stock-low {
+    background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+    border-left: 4px solid #ff9800;
+}
+
+.row-stock-zero:hover,
+.row-stock-low:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Badges de alerta en nombre */
+.stock-alert {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 4px 8px;
+    background: #f44336;
+    color: white;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    animation: pulse 2s infinite;
+}
+
+.stock-warning {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 4px 8px;
+    background: #ff9800;
+    color: white;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Valor de stock con color */
+.stock-value {
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.stock-value.stock-zero {
+    background: #f44336;
+    color: white;
+}
+
+.stock-value.stock-low {
+    background: #ff9800;
+    color: white;
+}
+
+/* ============================================ */
 /* ESTADOS Y MENSAJES */
 /* ============================================ */
 

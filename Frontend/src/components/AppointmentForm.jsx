@@ -57,7 +57,7 @@ const AppointmentForm = () => {
             <a href="tel:+527331169380">📞 Llamar: 73331234567</a> {" "} <br />
             <a href="estetica.bella@email.com">✉️ Correo: estetica.bella@email.com</a>
           </p>
-        </form>
+        </form> 
 
         {/* Mapa */}
         <div className="appointment-map">

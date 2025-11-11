@@ -7,7 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Venta extends Model
 {
     protected $table = 'ventas';
-    protected $fillable = ['cliente_id', 'usuario_id', 'total', 'metodo_pago', 'fecha'];
+    protected $fillable = [
+        'cliente_id',
+        'usuario_id',
+        'subtotal',
+        'descuento_porcentaje',
+        'descuento_monto',
+        'impuesto_porcentaje',
+        'impuesto_monto',
+        'total',
+        'metodo_pago',
+        'fecha'
+    ];
 
     public function cliente()
     {
@@ -22,5 +33,10 @@ class Venta extends Model
     public function detalles()
     {
         return $this->hasMany(DetalleVenta::class);
+    }
+
+    public function reembolsos()
+    {
+        return $this->hasMany(Reembolso::class);
     }
 }

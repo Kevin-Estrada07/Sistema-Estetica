@@ -15,5 +15,7 @@ export const clientsAPI = {
   getOne: (id) => api.get(`/clients/${id}`, getAuthHeaders()),
   create: (data) => api.post("/clients", data, getAuthHeaders()),
   update: (id, data) => api.put(`/clients/${id}`, data, getAuthHeaders()),
-  delete: (id) => api.delete(`/clients/${id}`, getAuthHeaders())
+  delete: (id) => api.delete(`/clients/${id}`, getAuthHeaders()),
+  // Obtener historial del cliente (citas y ventas)
+  getHistory: (id) => api.get(`/clients/${id}/history`, getAuthHeaders())
 };

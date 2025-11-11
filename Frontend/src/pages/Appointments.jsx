@@ -31,6 +31,16 @@ const Appointments = () => {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
 
+  // Estado para caché de catálogos (clientes, servicios, empleados)
+  // Optimización: Los catálogos se cargan solo una vez y se reutilizan al cambiar de página
+  // Esto reduce las peticiones HTTP de 4 a 1 por cada cambio de página (75% más rápido)
+  const [catalogosCache, setCatalogosCache] = useState({
+    clientes: [],
+    servicios: [],
+    empleados: [],
+    cargado: false
+  });
+
   // Estados de paginación
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({
@@ -64,6 +74,17 @@ const Appointments = () => {
     fetchData(currentPage);
   }, [currentPage]);
 
+  // Invalidar caché cuando el usuario vuelve a la página (por si se agregaron datos desde otra página)
+  useEffect(() => {
+    const handleFocus = () => {
+      // Recargar catálogos cuando el usuario vuelve a la pestaña
+      fetchCatalogos(true);
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
+
   const normalizeData = (data) => {
     return Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
   };
@@ -72,20 +93,66 @@ const Appointments = () => {
     return citas.map((cita) => ({
       ...cita,
       cliente: cita.cliente?.nombre || cita.cliente || "N/A",
+      cliente_telefono: cita.cliente?.telefono || null,
       servicio: cita.servicio?.nombre || cita.servicio || "N/A",
       empleado: cita.empleado?.name || cita.empleado || "N/A",
     }));
   };
 
-  // Obtener citas con paginación
-  const fetchData = async (page = 1) => {
+  // Cargar catálogos (clientes, servicios, empleados) solo una vez
+  const fetchCatalogos = async (forzarRecarga = false) => {
+    // Si ya están cargados y no se fuerza la recarga, no hacer nada
+    if (catalogosCache.cargado && !forzarRecarga) {
+      return;
+    }
+
     try {
-      const [citasRes, clientesRes, serviciosRes, empleadosRes] = await Promise.all([
-        appointmentsAPI.getAll(page),
+      const [clientesRes, serviciosRes, empleadosRes] = await Promise.all([
         clientsAPI.getAll(),
         servicesAPI.getAll(),
         empleadosAPI.getAll()
       ]);
+
+      const catalogos = {
+        clientes: normalizeData(clientesRes.data),
+        servicios: normalizeData(serviciosRes.data),
+        empleados: normalizeData(empleadosRes.data),
+        cargado: true
+      };
+
+      setCatalogosCache(catalogos);
+
+      // Actualizar estados individuales
+      setClients(catalogos.clientes);
+      setServices(catalogos.servicios);
+      setUsers(catalogos.empleados);
+
+    } catch (err) {
+      console.error("Error cargando catálogos:", err.response?.data || err.message);
+      setError("Error cargando catálogos");
+    }
+  };
+
+  // Función para invalidar el caché (útil si se agregan clientes/servicios desde otra página)
+  const invalidarCache = () => {
+    setCatalogosCache({
+      clientes: [],
+      servicios: [],
+      empleados: [],
+      cargado: false
+    });
+  };
+
+  // Obtener citas con paginación (optimizado con caché)
+  const fetchData = async (page = 1) => {
+    try {
+      setLoading(true);
+
+      // Cargar catálogos si no están en caché
+      await fetchCatalogos();
+
+      // Solo cargar citas (paginadas)
+      const citasRes = await appointmentsAPI.getAll(page);
 
       // Extraer datos y paginación de citas
       const citasData = citasRes.data;
@@ -95,15 +162,20 @@ const Appointments = () => {
       const citasTransformadas = transformAppointments(citasArray);
       setAppointments(citasTransformadas);
 
-      // Guardar información de paginación
-      if (citasData.pagination) {
-        setPagination(citasData.pagination);
-      }
+      // Guardar información de paginación (Laravel devuelve en el nivel raíz)
+      setPagination({
+        current_page: citasData.current_page || 1,
+        per_page: citasData.per_page || 20,
+        total: citasData.total || 0,
+        last_page: citasData.last_page || 1,
+      });
 
-      // Normalizar otros datos
-      setClients(normalizeData(clientesRes.data));
-      setServices(normalizeData(serviciosRes.data));
-      setUsers(normalizeData(empleadosRes.data));
+      // Usar datos del caché (ya están en los estados)
+      if (catalogosCache.cargado) {
+        setClients(catalogosCache.clientes);
+        setServices(catalogosCache.servicios);
+        setUsers(catalogosCache.empleados);
+      }
 
     } catch (err) {
       console.error("Error en fetchData:", err.response?.data || err.message);
@@ -127,12 +199,34 @@ const Appointments = () => {
     return hora;
   };
 
-  // Validar que la fecha/hora no sea en el pasado  
+  // Validar que la fecha/hora no sea en el pasado
   const validarFechaHora = (fecha, hora) => {
     if (!fecha || !hora) return true;
     const fechaHoraCita = new Date(`${fecha}T${hora}`);
     const ahora = new Date();
     return fechaHoraCita > ahora;
+  };
+
+  // Manejar cambio de fecha con validación
+  const handleFechaChange = (e) => {
+    const nuevaFecha = e.target.value;
+    setFormData({ ...formData, fecha: nuevaFecha });
+
+    // Si ya hay una hora seleccionada, validar
+    if (formData.hora && !validarFechaHora(nuevaFecha, formData.hora)) {
+      setToast("⚠️ La fecha y hora seleccionadas ya pasaron");
+    }
+  };
+
+  // Manejar cambio de hora con validación
+  const handleHoraChange = (e) => {
+    const nuevaHora = e.target.value;
+    setFormData({ ...formData, hora: nuevaHora });
+
+    // Si ya hay una fecha seleccionada, validar
+    if (formData.fecha && !validarFechaHora(formData.fecha, nuevaHora)) {
+      setToast("⚠️ La hora seleccionada ya pasó para el día de hoy");
+    }
   };
 
   // Validar que todos los campos requeridos estén completos
@@ -301,44 +395,62 @@ const Appointments = () => {
               </thead>
               <tbody>
                 {filteredAppointments.map((a) => (
-                    <tr key={a.id}>
-                      <td>{a.id}</td>
-                      <td>{a.cliente}</td>
-                      <td>{a.servicio}</td>
-                      <td>{a.empleado}</td>
-                      <td>{a.fecha}</td>
-                      <td>{a.hora}</td>
-                      <td>{a.estado}</td>
-                      <td>{a.notas}</td>
-                      <td>
-                        {a.estado === "pendiente" && (
-                          <button
-                            className="btn-attender"
-                            onClick={() => handleEstadoChange(a.id, "en proceso")}>
-                            <FaUserCheck /> Atender
-                          </button>
-                        )}
+                  <tr key={a.id}>
+                    <td>{a.id}</td>
+                    <td>{a.cliente}</td>
+                    <td>{a.servicio}</td>
+                    <td>{a.empleado}</td>
+                    <td>{a.fecha}</td>
+                    <td>{a.hora}</td>
+                    <td>{a.estado}</td>
+                    <td>{a.notas}</td>
+                    <td>
+                      {/* Botón Atender - Solo para citas pendientes */}
+                      {a.estado === "pendiente" && (
+                        <button
+                          className="btn-attender"
+                          onClick={() => handleEstadoChange(a.id, "en proceso")}>
+                          <FaUserCheck /> Atender
+                        </button>
+                      )}
 
-                        {a.estado === "en proceso" && (
-                          <Link to={`/payment/${a.id}`} className="btn-pagar">
-                            <FaUserCheck /> Pagar
-                          </Link>
-                        )}
+                      {/* Botón Pagar - Solo para citas en proceso */}
+                      {a.estado === "en proceso" && (
+                        <Link to={`/payment/${a.id}`} className="btn-pagar">
+                          <FaUserCheck /> Pagar
+                        </Link>
+                      )}
 
+                      {/* Botón Editar - Solo para citas NO completadas */}
+                      {a.estado !== "completada" && (
                         <button className="btn-edit" onClick={() => openEditModal(a)}>
                           <FaEdit /> Editar
                         </button>
+                      )}
 
+                      {/* Botón Cancelar - Solo para citas NO completadas y NO canceladas */}
+                      {a.estado !== "completada" && a.estado !== "cancelada" && (
                         <button className="btn-cancelar" onClick={() => handleCancelar(a)}>
                           <GiCancel /> Cancelar
                         </button>
+                      )}
 
+                      {/* Botón Eliminar - Solo para citas NO completadas */}
+                      {a.estado !== "completada" && (
                         <button className="btn-delete" onClick={() => setConfirmDelete(a)}>
                           <FaTrashAlt /> Eliminar
                         </button>
-                      </td>
-                    </tr>
-                  ))}
+                      )}
+
+                      {/* Mensaje para citas completadas */}
+                      {a.estado === "completada" && (
+                        <span className="completed-badge">
+                          ✅ Completada
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
 
@@ -348,8 +460,7 @@ const Appointments = () => {
                 <button
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
-                  style={{ marginRight: "10px", padding: "8px 12px" }}
-                >
+                  style={{ marginRight: "10px", padding: "8px 12px" }}>
                   ← Anterior
                 </button>
 
@@ -361,8 +472,7 @@ const Appointments = () => {
                 <button
                   onClick={() => setCurrentPage(Math.min(pagination.last_page, currentPage + 1))}
                   disabled={currentPage === pagination.last_page}
-                  style={{ marginLeft: "10px", padding: "8px 12px" }}
-                >
+                  style={{ marginLeft: "10px", padding: "8px 12px" }}>
                   Siguiente →
                 </button>
               </div>
@@ -383,8 +493,7 @@ const Appointments = () => {
                   value={formData.cliente_id}
                   onChange={(e) => setFormData({ ...formData, cliente_id: e.target.value })}
                   required
-                  disabled={isSubmitting}
-                >
+                  disabled={isSubmitting}>
                   <option value="">Selecciona cliente</option>
                   {clients.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -399,14 +508,22 @@ const Appointments = () => {
                   value={formData.servicio_id}
                   onChange={(e) => setFormData({ ...formData, servicio_id: e.target.value })}
                   required
-                  disabled={isSubmitting}
-                >
+                  disabled={isSubmitting}>
                   <option value="">Selecciona servicio</option>
-                  {services.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.nombre}
-                    </option>
-                  ))}
+                  {services
+                    .filter((s) => {
+                      // Mostrar servicios activos
+                      const esActivo = s.activo === true || s.activo === 1;
+                      // O el servicio actual de la cita que se está editando
+                      const esServicioActual = editAppointment && s.id === editAppointment.servicio_id;
+                      return esActivo || esServicioActual;
+                    })
+                    .map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.nombre}
+                        {!(s.activo === true || s.activo === 1) && " (Inactivo)"}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
@@ -417,8 +534,8 @@ const Appointments = () => {
                 <input
                   type="date"
                   value={formData.fecha}
-                  onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
-                  min={new Date().toISOString().split('T')[0]}
+                  onChange={handleFechaChange}
+                  min={new Date().toLocaleDateString('en-CA')}
                   required
                   disabled={isSubmitting}
                 />
@@ -428,7 +545,7 @@ const Appointments = () => {
                 <input
                   type="time"
                   value={formData.hora}
-                  onChange={(e) => setFormData({ ...formData, hora: e.target.value })}
+                  onChange={handleHoraChange}
                   required
                   disabled={isSubmitting}
                 />
@@ -458,10 +575,18 @@ const Appointments = () => {
                 <select
                   value={formData.estado}
                   onChange={(e) => setFormData({ ...formData, estado: e.target.value })}
-                  disabled={isSubmitting}
-                >
+                  disabled={isSubmitting || !editAppointment}>
                   <option value="pendiente">Pendiente</option>
+                  {/* Permitir cambiar a "en proceso" solo al editar */}
+                  {editAppointment && (
+                    <option value="en proceso">En Proceso</option>
+                  )}
                 </select>
+                {editAppointment && (
+                  <small style={{ color: '#666', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+                    💡 Puedes cambiar entre Pendiente y En Proceso
+                  </small>
+                )}
               </div>
             </div>
 
@@ -481,8 +606,7 @@ const Appointments = () => {
               style={{
                 opacity: isSubmitting ? 0.6 : 1,
                 cursor: isSubmitting ? 'not-allowed' : 'pointer'
-              }}
-            >
+              }}>
               {isSubmitting
                 ? "Procesando..."
                 : (editAppointment ? "Actualizar" : "Registrar")

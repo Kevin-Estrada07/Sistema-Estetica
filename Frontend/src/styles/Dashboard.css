@@ -113,6 +113,7 @@
   text-align: center;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
 }
 
 .card:hover {
@@ -132,6 +133,55 @@
   font-size: 1.8rem;
   font-weight: 700;
   color: #000;
+  margin-bottom: 0.5rem;
+}
+
+/* Tarjetas clickeables */
+.card-clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.card-clickable:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(124, 58, 237, 0.2);
+}
+
+.card-clickable:active {
+  transform: translateY(-2px) scale(1);
+}
+
+.card-hint {
+  display: block;
+  font-size: 11px;
+  color: #7C3AED;
+  font-weight: 500;
+  margin-top: 8px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.card-clickable:hover .card-hint {
+  opacity: 1;
+}
+
+/* Card de advertencia */
+.card-warning {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+  border: 2px solid #ff6b6b;
+}
+
+.card-warning h3 {
+  color: #ff6b6b;
+}
+
+.card-warning:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(255, 107, 107, 0.3);
+}
+
+.card-warning .card-hint {
+  color: #ff6b6b;
 }
 
 /* ===== PANEL DE CALENDARIO ===== */
@@ -202,6 +252,141 @@
 
 .event-details strong {
   color: #7C3AED;
+}
+
+/* Botón WhatsApp en modal */
+.btn-whatsapp-modal {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-whatsapp-modal:hover {
+  background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+}
+
+.btn-whatsapp-modal:active {
+  transform: translateY(0);
+}
+
+/* ===== ALERT SECTION ===== */
+.alert-section {
+  margin-bottom: 2rem;
+}
+
+.alert-box {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+  border: 2px solid #ff6b6b;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.15);
+}
+
+.alert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.alert-header h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ff6b6b;
+  margin: 0;
+}
+
+.btn-view-all {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-view-all:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.alert-content p {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.alert-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.alert-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.alert-list li:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.stock-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.stock-low {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.stock-zero {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.more-products {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
 }
 
 /* ===== RESPONSIVE ===== */

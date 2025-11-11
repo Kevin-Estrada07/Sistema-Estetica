@@ -40,7 +40,7 @@ const Header = () => {
               {/* <a href="#services" className="nav-link" onClick={() => setIsOpen(false)}>
                 <span>Conexión</span>
               </a> */}
-              <a href="#services" className="nav-link" onClick={() => setIsOpen(false)}>
+               <a href="#services" className="nav-link" onClick={() => setIsOpen(false)}>
                 <span>Servicios</span>
               </a>
               <a href="#appointment" className="nav-link" onClick={() => setIsOpen(false)}>

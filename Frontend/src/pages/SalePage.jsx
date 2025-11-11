@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { appointmentsAPI } from "../api/appointmentsAPI";
-import { productsAPI } from "../api/productsAPI";
+import { inventaryAPI } from "../api/InventaryAPI";
 import { servicesAPI } from "../api/serviciosAPI"; // si tienes API de servicios
 import { clientsAPI } from "../api/clientesAPI";   // para seleccionar clientes
 import { salesAPI } from "../api/salesAPI";
@@ -25,13 +25,26 @@ const SalePage = () => {
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState("efectivo");
 
+    // Estados para búsqueda de productos
+    const [searchProduct, setSearchProduct] = useState("");
+    const [filteredProducts, setFilteredProducts] = useState([]);
+
+    // Estados para impuestos y descuentos
+    const [discountType, setDiscountType] = useState("percentage"); // "percentage" o "fixed"
+    const [discountValue, setDiscountValue] = useState(0);
+    const [taxPercentage, setTaxPercentage] = useState(0);
+
 
     // Cargar datos
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { data: dataProducts } = await productsAPI.getAll();
-                setProducts(dataProducts);
+                const { data: dataProducts } = await inventaryAPI.getAll();
+                // Filtrar solo productos de tipo 'venta' o 'ambos'
+                const productosParaVenta = dataProducts.filter(
+                    p => p.tipo === 'venta' || p.tipo === 'ambos'
+                );
+                setProducts(productosParaVenta);
 
                 const { data: dataServices } = await servicesAPI.getAll();
                 setServices(dataServices);
@@ -52,26 +65,76 @@ const SalePage = () => {
         fetchData();
     }, [appointmentId]);
 
+    // Filtrar productos por búsqueda
+    useEffect(() => {
+        if (searchProduct.trim() === "") {
+            setFilteredProducts([]);
+        } else {
+            const lower = searchProduct.toLowerCase();
+            const filtered = products.filter(p =>
+                p.nombre.toLowerCase().includes(lower) ||
+                p.id.toString().includes(lower)
+            );
+            setFilteredProducts(filtered);
+        }
+    }, [searchProduct, products]);
+
     if (appointmentId && !appointment) return <p>Cargando cita...</p>;
+
+    // Función para agregar producto a la venta
+    const handleAddProduct = (prod) => {
+        const exists = selectedProducts.find(p => p.id === prod.id);
+        if (exists) {
+            // Si ya existe, incrementar cantidad
+            handleQuantityChange(prod, exists.cantidad + 1);
+        } else {
+            // Si no existe, agregar con cantidad 1
+            setSelectedProducts(prev => [...prev, { ...prod, cantidad: 1 }]);
+        }
+        // Limpiar búsqueda
+        setSearchProduct("");
+    };
 
     // Función para manejar cantidades de productos
     const handleQuantityChange = (prod, cantidad) => {
         if (cantidad < 0) cantidad = 0;
-        if (cantidad > prod.cantidad) cantidad = prod.cantidad;
+        if (cantidad > prod.stock) cantidad = prod.stock;
 
         setSelectedProducts(prev => {
             const exists = prev.find(p => p.id === prod.id);
             if (exists) {
+                if (cantidad === 0) {
+                    // Si la cantidad es 0, eliminar el producto
+                    return prev.filter(p => p.id !== prod.id);
+                }
                 return prev.map(p => p.id === prod.id ? { ...p, cantidad } : p);
             }
             return [...prev, { ...prod, cantidad }];
         });
     };
 
-    // Totales
+    // Función para eliminar producto de la venta
+    const handleRemoveProduct = (prodId) => {
+        setSelectedProducts(prev => prev.filter(p => p.id !== prodId));
+    };
+
+    // Cálculos de totales
     const totalServicio = Number(selectedService?.precio || 0);
-    const totalProductos = selectedProducts.reduce((acc, p) => acc + Number(p.precio_unitario) * p.cantidad, 0);
-    const total = totalServicio + totalProductos;
+    const totalProductos = selectedProducts.reduce((acc, p) => acc + Number(p.precio) * p.cantidad, 0);
+    const subtotal = totalServicio + totalProductos;
+
+    // Calcular descuento
+    const discountAmount = discountType === "percentage"
+        ? (subtotal * discountValue) / 100
+        : discountValue;
+
+    const subtotalAfterDiscount = subtotal - discountAmount;
+
+    // Calcular impuesto
+    const taxAmount = (subtotalAfterDiscount * taxPercentage) / 100;
+
+    // Total final
+    const total = subtotalAfterDiscount + taxAmount;
 
     // Función para registrar venta
     const handlePay = async () => {
@@ -104,14 +167,19 @@ const SalePage = () => {
                         servicio_id: null,
                         producto_id: p.id,
                         cantidad: p.cantidad,
-                        precio_unitario: p.precio_unitario,
-                        subtotal: p.precio_unitario * p.cantidad
+                        precio_unitario: p.precio,
+                        subtotal: p.precio * p.cantidad
                     }))
             ];
 
             const { data } = await salesAPI.create({
                 cliente_id: selectedClient.id,
                 usuario_id: user.id,
+                subtotal,
+                descuento_porcentaje: discountType === "percentage" ? discountValue : 0,
+                descuento_monto: discountAmount,
+                impuesto_porcentaje: taxPercentage,
+                impuesto_monto: taxAmount,
                 total,
                 metodo_pago: paymentMethod,
                 detalles
@@ -130,10 +198,15 @@ const SalePage = () => {
                 usuario: venta.usuario,
                 metodo_pago: venta.metodo_pago,
                 fecha: venta.fecha,
+                subtotal: venta.subtotal,
+                descuento_porcentaje: venta.descuento_porcentaje,
+                descuento_monto: venta.descuento_monto,
+                impuesto_porcentaje: venta.impuesto_porcentaje,
+                impuesto_monto: venta.impuesto_monto,
                 total: venta.total,
                 detalles: venta.detalles.map(d => ({
                     ...d,
-                    nombre: d.producto?.nombre || d.servicio?.nombre 
+                    nombre: d.producto?.nombre || d.servicio?.nombre
                 }))
             });
 
@@ -196,46 +269,104 @@ const SalePage = () => {
                                     )
                                 }>
                                 <option value="">Selecciona un servicio</option>
-                                {services.map(s => (
-                                    <option key={s.id} value={s.id}>
-                                        {s.nombre} — ${s.precio}
-                                    </option>
-                                ))}
+                                {services
+                                    .filter(s => s.activo === true || s.activo === 1)
+                                    .map(s => (
+                                        <option key={s.id} value={s.id}>
+                                            {s.nombre} — ${s.precio}
+                                        </option>
+                                    ))}
                             </select>
                         )}
                     </section>
                 </div>
 
                 <section className="products-section">
-                    <h3>Productos</h3>
-                    <table className="products-table">
-                        <thead>
-                            <tr>
-                                <th>Producto</th>
-                                <th>Precio</th>
-                                <th>Stock</th>
-                                <th>Cantidad</th>
-                                <th>Subtotal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {products.map(prod => {
-                                const cantidad = selectedProducts.find(p => p.id === prod.id)?.cantidad || 0;
-                                return (
-                                    <tr key={prod.id}>
-                                        <td>{prod.nombre}</td>
-                                        <td>${prod.precio_unitario}</td>
-                                        <td>{prod.cantidad}</td>
-                                        <td>
-                                            <input type="number" min="0" max={prod.cantidad} value={cantidad}
-                                                onChange={e => handleQuantityChange(prod, parseInt(e.target.value) || 0)} />
-                                        </td>
-                                        <td>${(cantidad * prod.precio_unitario).toFixed(2)}</td>
+                    <div className="products-header">
+                        <h3>🛒 Productos</h3>
+                        <div className="search-product-container">
+                            <input
+                                type="text"
+                                className="search-product-input"
+                                placeholder="🔍 Buscar producto por nombre o ID..."
+                                value={searchProduct}
+                                onChange={(e) => setSearchProduct(e.target.value)}
+                            />
+                            {searchProduct && filteredProducts.length > 0 && (
+                                <div className="search-results">
+                                    {filteredProducts.map(prod => (
+                                        <div
+                                            key={prod.id}
+                                            className="search-result-item"
+                                            onClick={() => handleAddProduct(prod)}>
+                                            <div className="result-info">
+                                                <span className="result-name">{prod.nombre}</span>
+                                                <span className="result-details">
+                                                    ${parseFloat(prod.precio).toFixed(2)} | Stock: {prod.stock}
+                                                </span>
+                                            </div>
+                                            <button className="btn-add-product">➕</button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {searchProduct && filteredProducts.length === 0 && (
+                                <div className="search-results">
+                                    <div className="no-results">
+                                        No se encontraron productos
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {selectedProducts.length > 0 ? (
+                        <div className="table-responsive">
+                            <table className="products-table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Cantidad</th>
+                                        <th>Subtotal</th>
+                                        <th>Acciones</th>
                                     </tr>
-                                )
-                            })}
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
+                                    {selectedProducts.map(prod => (
+                                        <tr key={prod.id}>
+                                            <td data-label="Producto">{prod.nombre}</td>
+                                            <td data-label="Precio">${parseFloat(prod.precio).toFixed(2)}</td>
+                                            <td data-label="Stock">{prod.stock}</td>
+                                            <td data-label="Cantidad">
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    max={prod.stock}
+                                                    value={prod.cantidad}
+                                                    onChange={e => handleQuantityChange(prod, parseInt(e.target.value) || 0)}
+                                                    className="quantity-input"
+                                                />
+                                            </td>
+                                            <td data-label="Subtotal" className="subtotal">${(prod.cantidad * parseFloat(prod.precio)).toFixed(2)}</td>
+                                            <td data-label="Acciones">
+                                                <button
+                                                    className="btn-remove-product"
+                                                    onClick={() => handleRemoveProduct(prod.id)}>
+                                                    🗑️
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <div className="no-products-selected">
+                            <p>🔍 Busca y agrega productos a la venta</p>
+                        </div>
+                    )}
                 </section>
 
                 <section className="payment-summary">
@@ -247,9 +378,63 @@ const SalePage = () => {
                             <option value="transferencia">Transferencia</option>
                         </select>
                     </div>
+
+                    {/* Descuento */}
+                    <div className="discount-section">
+                        <label>💰 Descuento:</label>
+                        <div className="discount-controls">
+                            <select
+                                value={discountType}
+                                onChange={e => setDiscountType(e.target.value)}
+                                className="discount-type">
+                                <option value="percentage">Porcentaje (%)</option>
+                                <option value="fixed">Monto Fijo ($)</option>
+                            </select>
+                            <input
+                                type="number"
+                                min="0"
+                                max={discountType === "percentage" ? 100 : subtotal}
+                                step="0.01"
+                                value={discountValue}
+                                onChange={e => setDiscountValue(parseFloat(e.target.value) || 0)}
+                                className="discount-input"
+                                placeholder="0"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Impuesto */}
+                    <div className="tax-section">
+                        <label>📊 Impuesto (%):</label>
+                        <input
+                            type="number"
+                            min="0"
+                            max="100"
+                            step="0.01"
+                            value={taxPercentage}
+                            onChange={e => setTaxPercentage(parseFloat(e.target.value) || 0)}
+                            className="tax-input"
+                            placeholder="0"
+                        />
+                    </div>
+
                     <div className="summary-box">
                         <p><strong>Servicio:</strong> ${totalServicio.toFixed(2)}</p>
                         <p><strong>Productos:</strong> ${totalProductos.toFixed(2)}</p>
+                        <hr />
+                        <p><strong>Subtotal:</strong> ${subtotal.toFixed(2)}</p>
+                        {discountAmount > 0 && (
+                            <p className="discount-line">
+                                <strong>Descuento:</strong>
+                                <span className="discount-amount">-${discountAmount.toFixed(2)}</span>
+                            </p>
+                        )}
+                        {taxAmount > 0 && (
+                            <p className="tax-line">
+                                <strong>Impuesto ({taxPercentage}%):</strong>
+                                <span className="tax-amount">+${taxAmount.toFixed(2)}</span>
+                            </p>
+                        )}
                         <hr />
                         <p className="total"><strong>Total a pagar:</strong> ${total.toFixed(2)}</p>
                     </div>

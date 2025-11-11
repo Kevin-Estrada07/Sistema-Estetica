@@ -23,10 +23,12 @@ const Services = () => {
     const [descripcion, setDescription] = useState("");
     const [duracion, setDuration] = useState("");
     const [precio, setPrice] = useState("");
+    const [activo, setActivo] = useState(true);
     const [toast, setToast] = useState("");
 
     const [productos, setProductos] = useState([]);
     const [productosSeleccionados, setProductosSeleccionados] = useState([]);
+    const [showProductosId, setShowProductosId] = useState(null);
 
 
     useEffect(() => {
@@ -66,7 +68,11 @@ const Services = () => {
     const fetchProductos = async () => {
         try {
             const res = await inventaryAPI.getAll();
-            setProductos(res.data);
+            // Filtrar solo productos de tipo 'servicio' o 'ambos'
+            const productosParaServicios = res.data.filter(
+                p => p.tipo === 'servicio' || p.tipo === 'ambos'
+            );
+            setProductos(productosParaServicios);
         } catch {
             console.error("Error al cargar productos");
         }
@@ -82,6 +88,17 @@ const Services = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Validaciones del frontend
+        if (parseInt(duracion) < 1) {
+            showToast("❌ La duración debe ser al menos 1 minuto");
+            return;
+        }
+
+        if (parseFloat(precio) <= 0) {
+            showToast("❌ El precio debe ser mayor a 0");
+            return;
+        }
+
         const nameExists = services.some(
             s => s.nombre?.toLowerCase() === nombre.toLowerCase() && (!editService || s.id !== editService.id)
         );
@@ -94,10 +111,14 @@ const Services = () => {
         try {
             let res;
             if (editService) {
-                res = await servicesAPI.update(editService.id, { nombre, descripcion, duracion, precio });
+                res = await servicesAPI.update(editService.id, { nombre, descripcion, duracion, precio, activo });
+
+                // 🔗 Actualizar productos del servicio
+                await servicesAPI.attachProductos(editService.id, { productos: productosSeleccionados });
+
                 showToast("✅ Servicio actualizado");
             } else {
-                res = await servicesAPI.create({ nombre, descripcion, duracion, precio });
+                res = await servicesAPI.create({ nombre, descripcion, duracion, precio, activo });
                 showToast("✅ Servicio registrado");
 
                 // 🔗 Enlazar productos al nuevo servicio
@@ -130,13 +151,31 @@ const Services = () => {
         setDescription(service.descripcion || "");
         setDuration(service.duracion || "");
         setPrice(service.precio || "");
+        setActivo(service.activo !== undefined ? service.activo : true);
+
+        // Cargar productos del servicio
+        if (service.inventario && service.inventario.length > 0) {
+            const productosDelServicio = service.inventario.map(prod => ({
+                inventario_id: prod.id,
+                cant_usada: prod.pivot.cant_usada
+            }));
+            setProductosSeleccionados(productosDelServicio);
+        } else {
+            setProductosSeleccionados([]);
+        }
+
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
         setEditService(null);
-        setName(""); setDescription(""); setDuration(""); setPrice(""); setProductosSeleccionados([]);
+        setName("");
+        setDescription("");
+        setDuration("");
+        setPrice("");
+        setActivo(true);
+        setProductosSeleccionados([]);
     };
 
     return (
@@ -170,22 +209,60 @@ const Services = () => {
                                     <th>Descripción</th>
                                     <th>Duración</th>
                                     <th>Precio</th>
+                                    <th>Estado</th>
+                                    <th>Productos Usados</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredServices.map(s => (
-                                    <tr key={s.id}>
-                                        <td>{s.id}</td>
-                                        <td>{s.nombre}</td>
-                                        <td>{s.descripcion}</td>
-                                        <td>{s.duracion}</td>
-                                        <td>{s.precio}</td>
-                                        <td>
-                                            <button className="btn-edit" onClick={() => openEditModal(s)}>✏️ Editar</button>
-                                            <button className="btn-delete" onClick={() => setConfirmDelete(s)}>🗑 Eliminar</button>
-                                        </td>
-                                    </tr>
+                                    <React.Fragment key={s.id}>
+                                        <tr>
+                                            <td>{s.id}</td>
+                                            <td>{s.nombre}</td>
+                                            <td>{s.descripcion}</td>
+                                            <td>{s.duracion} min</td>
+                                            <td>${parseFloat(s.precio).toFixed(2)}</td>
+                                            <td>
+                                                <span className={`badge-estado ${s.activo ? 'activo' : 'inactivo'}`}>
+                                                    {s.activo ? '✓ Activo' : '✗ Inactivo'}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {s.inventario && s.inventario.length > 0 ? (
+                                                    <button
+                                                        className="btn-show-productos"
+                                                        onClick={() => setShowProductosId(showProductosId === s.id ? null : s.id)}
+                                                    >
+                                                        {showProductosId === s.id ? '▼' : '▶'} {s.inventario.length} producto(s)
+                                                    </button>
+                                                ) : (
+                                                    <span className="no-productos">Sin productos</span>
+                                                )}
+                                            </td>
+                                            <td>
+                                                <button className="btn-edit" onClick={() => openEditModal(s)}>✏️ Editar</button>
+                                                <button className="btn-delete" onClick={() => setConfirmDelete(s)}>🗑 Eliminar</button>
+                                            </td>
+                                        </tr>
+                                        {showProductosId === s.id && s.inventario && s.inventario.length > 0 && (
+                                            <tr className="productos-row">
+                                                <td colSpan="8">
+                                                    <div className="productos-expanded">
+                                                        <strong>Productos usados:</strong>
+                                                        <div className="productos-list-expanded">
+                                                            {s.inventario.map((prod, idx) => (
+                                                                <div key={idx} className="producto-item-expanded">
+                                                                    <span className="producto-nombre">{prod.nombre}</span>
+                                                                    <span className="producto-cantidad">Cantidad: {prod.pivot.cant_usada}</span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
                                 ))}
                             </tbody>
                         </table>
@@ -227,6 +304,7 @@ const Services = () => {
                                     type="number"
                                     value={duracion}
                                     onChange={(e) => setDuration(e.target.value)}
+                                    min="1"
                                     required
                                 />
                             </div>
@@ -235,11 +313,28 @@ const Services = () => {
                                 <label>Precio ($)</label>
                                 <input
                                     type="number"
+                                    step="0.01"
                                     value={precio}
                                     onChange={(e) => setPrice(e.target.value)}
+                                    min="0.01"
                                     required
                                 />
                             </div>
+                        </div>
+
+                        {/* Estado Activo/Inactivo */}
+                        <div className="form-group">
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={activo}
+                                    onChange={(e) => setActivo(e.target.checked)}
+                                />
+                                <span>Servicio activo</span>
+                            </label>
+                            <small className="help-text">
+                                Los servicios inactivos no estarán disponibles para nuevas citas
+                            </small>
                         </div>
 
                         {/* Productos requeridos */}

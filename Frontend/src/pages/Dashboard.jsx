@@ -11,6 +11,7 @@ import { appointmentsAPI } from "../api/appointmentsAPI";
 import Modal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
 import { adminAPI } from "../api/adminAPI";
+import { inventaryAPI } from "../api/InventaryAPI";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -28,6 +29,9 @@ const Dashboard = () => {
   const [draggedEvent, setDraggedEvent] = useState(null);
   const [toast, setToast] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
+
+  // ⭐ Estado para productos bajo stock
+  const [productosBajoStock, setProductosBajoStock] = useState([]);
 
   // ⭐ Auto-ocultar toast
   useEffect(() => {
@@ -50,10 +54,13 @@ const Dashboard = () => {
         start: `${a.fecha}T${a.hora}`,
         extendedProps: {
           cliente: a.cliente?.nombre,
+          cliente_telefono: a.cliente?.telefono,
           servicio: a.servicio?.nombre,
           empleado: a.empleado?.name,
           estado: a.estado,
           notas: a.notas,
+          fecha: a.fecha,
+          hora: a.hora,
           // ⭐ Guardar IDs necesarios para la actualización
           cliente_id: a.cliente_id,
           servicio_id: a.servicio_id,
@@ -77,6 +84,17 @@ const Dashboard = () => {
       }
     };
     fetchStats();
+
+    // Cargar productos bajo stock
+    const fetchProductosBajoStock = async () => {
+      try {
+        const res = await inventaryAPI.bajoStock(10);
+        setProductosBajoStock(res.data.productos);
+      } catch (err) {
+        console.error("❌ Error cargando productos bajo stock:", err);
+      }
+    };
+    fetchProductosBajoStock();
   }, []);
 
   // ⭐ Manejar cuando se suelta el evento (drop)
@@ -169,6 +187,45 @@ const Dashboard = () => {
     setDraggedEvent(null);
   };
 
+  // Enviar recordatorio por WhatsApp
+  const enviarRecordatorioWhatsApp = (event) => {
+    if (!event.extendedProps.cliente_telefono) {
+      setToast("❌ El cliente no tiene teléfono registrado");
+      return;
+    }
+
+    // Formatear fecha y hora
+    const fechaCita = new Date(event.start);
+    const opciones = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    const fechaFormateada = fechaCita.toLocaleDateString('es-MX', opciones);
+
+    // Crear mensaje personalizado
+    const mensaje = `¡Hola ${event.extendedProps.cliente}! 👋\n\n` +
+      `Te recordamos tu cita en nuestra estética:\n\n` +
+      `📅 *Fecha y hora:* ${fechaFormateada}\n` +
+      `💆 *Servicio:* ${event.extendedProps.servicio}\n` +
+      `👤 *Atendido por:* ${event.extendedProps.empleado}\n\n` +
+      `¡Te esperamos! Si necesitas reagendar, contáctanos. 💕`;
+
+    // Limpiar número de teléfono (solo dígitos)
+    const telefonoLimpio = event.extendedProps.cliente_telefono.replace(/\D/g, '');
+
+    // Crear URL de WhatsApp
+    const urlWhatsApp = `https://wa.me/52${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+
+    // Abrir WhatsApp en nueva ventana
+    window.open(urlWhatsApp, '_blank');
+
+    setToast("✅ Abriendo WhatsApp...");
+  };
+
   return (
     <div className="dashboard">
       <Sidebar />
@@ -196,19 +253,58 @@ const Dashboard = () => {
         </header>
 
         <section className="cards">
-          <div className="card">
-            <h3>Citas de Hoy</h3>
+          <div className="card card-clickable" onClick={() => navigate("/citas")}>
+            <h3>📅 Citas de Hoy</h3>
             <p>{stats.citasHoy}</p>
+            <small className="card-hint">Click para ver citas</small>
           </div>
-          <div className="card">
-            <h3>Clientes</h3>
+          <div className="card card-clickable" onClick={() => navigate("/clientes")}>
+            <h3>👥 Clientes</h3>
             <p>{stats.clientes}</p>
+            <small className="card-hint">Click para ver clientes</small>
           </div>
-          <div className="card">
-            <h3>Servicios Activos</h3>
+          <div className="card card-clickable" onClick={() => navigate("/services")}>
+            <h3>💅 Servicios Activos</h3>
             <p>{stats.servicios}</p>
+            <small className="card-hint">Click para ver servicios</small>
+          </div>
+          <div className={`card card-clickable ${productosBajoStock.length > 0 ? 'card-warning' : ''}`} onClick={() => navigate("/inventary")}>
+            <h3>⚠️ Productos Bajo Stock</h3>
+            <p>{productosBajoStock.length}</p>
+            <small className="card-hint">{productosBajoStock.length > 0 ? 'Click para ver detalles' : 'Click para ver inventario'}</small>
           </div>
         </section>
+
+        {productosBajoStock.length > 0 && (
+          <section className="alert-section">
+            <div className="alert-box">
+              <div className="alert-header">
+                <h3>⚠️ Alerta de Inventario</h3>
+                <button className="btn-view-all" onClick={() => navigate("/inventary")}>
+                  Ver Inventario
+                </button>
+              </div>
+              <div className="alert-content">
+                <p>Los siguientes productos están por debajo del umbral de stock:</p>
+                <ul className="alert-list">
+                  {productosBajoStock.slice(0, 5).map(p => (
+                    <li key={p.id}>
+                      <span className="product-name">{p.nombre}</span>
+                      <span className={`stock-badge ${p.stock === 0 ? 'stock-zero' : 'stock-low'}`}>
+                        Stock: {p.stock}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                {productosBajoStock.length > 5 && (
+                  <p className="more-products">
+                    ... y {productosBajoStock.length - 5} producto(s) más
+                  </p>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="panel">
           <div className="panel-header">
@@ -281,6 +377,25 @@ const Dashboard = () => {
                   <strong>Notas:</strong> {selectedEvent.extendedProps.notas}
                 </p>
               )}
+
+              {/* Botón de WhatsApp - Solo para citas futuras pendientes/en proceso */}
+              {(() => {
+                const citaFecha = new Date(selectedEvent.start);
+                const ahora = new Date();
+                const esFutura = citaFecha > ahora;
+                const esPendienteOEnProceso = selectedEvent.extendedProps.estado === 'pendiente' ||
+                                              selectedEvent.extendedProps.estado === 'en proceso';
+
+                return esFutura && esPendienteOEnProceso && selectedEvent.extendedProps.cliente_telefono ? (
+                  <button
+                    className="btn-whatsapp-modal"
+                    onClick={() => enviarRecordatorioWhatsApp(selectedEvent)}
+                    style={{ marginTop: '16px', width: '100%' }}
+                  >
+                    💬 Enviar Recordatorio por WhatsApp
+                  </button>
+                ) : null;
+              })()}
             </div>
           </Modal>
         )}

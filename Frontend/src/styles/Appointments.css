@@ -282,13 +282,52 @@
     box-shadow: 0 4px 12px rgba(97, 97, 97, 0.35);
 }
 
-
-
 .btn-attender:active,
 .btn-edit:active,
 .btn-delete:active,
 .btn-pagar:active,
 .btn-cancelar:active {
+    transform: translateY(0);
+}
+
+/* Badge para citas completadas */
+.completed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+    color: white;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+    letter-spacing: 0.3px;
+}
+
+/* Botón WhatsApp pequeño para tabla */
+.btn-whatsapp-small {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-whatsapp-small:hover {
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+}
+
+.btn-whatsapp-small:active {
     transform: translateY(0);
 }
 

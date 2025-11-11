@@ -154,7 +154,9 @@
 /* ============================================ */
 
 .btn-edit,
-.btn-delete {
+.btn-delete,
+.btn-history,
+.btn-whatsapp {
     padding: 8px 14px;
     margin: 0 2px;
     border: none;
@@ -180,6 +182,18 @@
     box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
 }
 
+.btn-history {
+    background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+    color: white;
+    box-shadow: 0 3px 10px rgba(255, 152, 0, 0.3);
+}
+
+.btn-history:hover {
+    background: linear-gradient(135deg, #F57C00 0%, #E65100 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+}
+
 .btn-delete {
     background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
     color: white;
@@ -192,8 +206,24 @@
     box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
 }
 
+.btn-whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+    font-size: 12px;
+    padding: 6px 12px;
+}
+
+.btn-whatsapp:hover {
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+}
+
 .btn-edit:active,
-.btn-delete:active {
+.btn-delete:active,
+.btn-history:active,
+.btn-whatsapp:active {
     transform: translateY(0);
 }
 
@@ -315,6 +345,39 @@
 .form-group textarea::placeholder {
     color: #95a5a6;
     font-style: italic;
+}
+
+/* ============================================ */
+/* VALIDACIÓN EN TIEMPO REAL */
+/* ============================================ */
+
+.input-error {
+    border-color: #ff5252 !important;
+    background: #ffebee !important;
+}
+
+.input-error:focus {
+    box-shadow: 0 0 0 4px rgba(255, 82, 82, 0.1) !important;
+}
+
+.error-text {
+    display: block;
+    color: #ff5252;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 4px;
+    animation: slideInError 0.3s ease;
+}
+
+@keyframes slideInError {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ============================================ */
@@ -444,6 +507,153 @@
 }
 
 /* ============================================ */
+/* MODAL DE HISTORIAL */
+/* ============================================ */
+
+.history-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 8px;
+}
+
+.history-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 12px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+}
+
+.summary-item .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-item .value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.history-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.history-section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f48fb1;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow-x: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: block;
+}
+
+.history-table thead,
+.history-table tbody,
+.history-table tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.history-table th {
+    background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
+    color: #2c3e50;
+    padding: 12px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.history-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #555;
+    font-size: 13px;
+}
+
+.history-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.history-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+.history-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.status-pendiente {
+    background: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.status-en\ proceso {
+    background: #cfe2ff;
+    color: #084298;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.status-completada {
+    background: #d1e7dd;
+    color: #0f5132;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.status-cancelada {
+    background: #f8d7da;
+    color: #842029;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.no-data {
+    text-align: center;
+    color: #999;
+    padding: 24px;
+    font-style: italic;
+}
+
+/* ============================================ */
 /* SCROLLBAR PERSONALIZADO */
 /* ============================================ */
 
@@ -560,6 +770,31 @@
     .form-group select,
     .form-group textarea {
         padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    /* Hacer tabla de historial responsive */
+    .history-table {
+        font-size: 12px;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 8px 6px;
+        font-size: 11px;
+    }
+
+    .btn-whatsapp {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+
+    /* Ajustar modal de historial */
+    .history-modal-content {
+        padding: 16px;
+    }
+
+    .history-section h3 {
         font-size: 14px;
     }
 }

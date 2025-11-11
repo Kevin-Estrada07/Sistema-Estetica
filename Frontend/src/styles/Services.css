@@ -222,6 +222,35 @@
     flex: 1;
 }
 
+/* Checkbox personalizado */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #4CAF50;
+}
+
+.checkbox-label span {
+    user-select: none;
+}
+
+.help-text {
+    display: block;
+    margin-top: 6px;
+    color: #6c757d;
+    font-size: 12px;
+    font-style: italic;
+}
+
 .productos-container {
     margin-top: 0.5rem;
 }
@@ -547,6 +576,132 @@
     .services-header h1 {
         font-size: 20px;
     }
+}
+
+/* ============================================ */
+/* BADGE DE ESTADO */
+/* ============================================ */
+
+.badge-estado {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.badge-estado.activo {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    border: 1px solid #28a745;
+}
+
+.badge-estado.inactivo {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    border: 1px solid #dc3545;
+}
+
+/* ============================================ */
+/* PRODUCTOS USADOS EN SERVICIOS */
+/* ============================================ */
+
+.btn-show-productos {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    color: #1976d2;
+    border: 1px solid #90caf9;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.15);
+}
+
+.btn-show-productos:hover {
+    background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(25, 118, 210, 0.25);
+}
+
+.btn-show-productos:active {
+    transform: translateY(0);
+}
+
+.productos-row {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-left: 4px solid #1976d2;
+}
+
+.productos-expanded {
+    padding: 16px 20px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.productos-expanded strong {
+    display: block;
+    margin-bottom: 12px;
+    color: #1976d2;
+    font-size: 14px;
+}
+
+.productos-list-expanded {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+}
+
+.producto-item-expanded {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid #1976d2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.producto-item-expanded:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.producto-nombre {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 13px;
+}
+
+.producto-cantidad {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    color: #1976d2;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.no-productos {
+    color: #999;
+    font-style: italic;
+    font-size: 13px;
 }
 
 /* ============================================ */

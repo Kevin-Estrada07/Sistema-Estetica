@@ -11,13 +11,14 @@ import Users from './pages/Users';
 import Unauthorized from './pages/Unauthorized';
 import Clients from './pages/Clients';
 import Services from './pages/Services';
-import Products from './pages/Product';
 import Appointments from './pages/Appointments';
 // import PaymentPage from './pages/PaymentPage';
 import SalePage from './pages/SalePage';
 import ReportPage from './pages/ReportPage';
 import Inventary from './pages/Inventary';
 import SalesHistory from './pages/SalesHistory';
+import Reembolsos from './pages/Reembolsos';
+import TestimoniosAdmin from './pages/TestimoniosAdmin';
 
 // Componente para rutas protegidas
 const PrivateRoute = ({ children }) => {
@@ -57,27 +58,22 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
 
           {/* Dashboard protegido */}
-          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>}/>
-          <Route path="/clients" element={<PrivateRoute><Clients/></PrivateRoute>}/>
-          <Route path="/services" element={<PrivateRoute><Services/></PrivateRoute>}/>
-          <Route path="/products" element={<PrivateRoute><Products/></PrivateRoute>}/>
-          <Route path="/citas" element={<PrivateRoute><Appointments/></PrivateRoute>}/>
-          <Route path="/payment/:appointmentId?" element={<PrivateRoute><SalePage/></PrivateRoute>}/>
-          <Route path="/reports" element={<PrivateRoute><ReportPage/></PrivateRoute>}/>
-          <Route path="/Inventary" element={<PrivateRoute><Inventary/></PrivateRoute>}/>
-          <Route path="/SalesHistory" element={<PrivateRoute><SalesHistory/></PrivateRoute>}/>
+          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/clients" element={<PrivateRoute><Clients /></PrivateRoute>} />
+          <Route path="/services" element={<PrivateRoute><Services /></PrivateRoute>} />
+          <Route path="/citas" element={<PrivateRoute><Appointments /></PrivateRoute>} />
+          <Route path="/payment/:appointmentId?" element={<PrivateRoute><SalePage /></PrivateRoute>} />
+          <Route path="/reports" element={<PrivateRoute><ReportPage /></PrivateRoute>} />
+          <Route path="/Inventary" element={<PrivateRoute><Inventary /></PrivateRoute>} />
+          <Route path="/SalesHistory" element={<PrivateRoute><SalesHistory /></PrivateRoute>} />
 
           {/* Registro solo para admin */}
-          <Route
-            path="/users"
-            element={
-              <AdminRoute>
-                <Users />
-              </AdminRoute>
-            } />
+          <Route path="/users" element={<AdminRoute><Users /></AdminRoute>} />
+          <Route path="/reembolsos" element={<AdminRoute><Reembolsos /></AdminRoute>} />
+          <Route path="/testimonios-admin" element={<AdminRoute><TestimoniosAdmin /></AdminRoute>} />
           {/* Redirección */}
           <Route path="*" element={<Navigate to="/" />} />
-          
+
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -16,7 +16,7 @@ const services = [
     image: "/images/Manicure.png",
     icon: "💅"
   },
-  {
+  { 
     id: 3,
     title: "Tratamientos faciales",
     description: "Renueva tu piel.",

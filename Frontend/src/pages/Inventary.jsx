@@ -21,6 +21,7 @@ const Inventary = () => {
     const [descripcion, setDescription] = useState("");
     const [cantidad, setQuantity] = useState("");
     const [precioUnitario, setUnitPrice] = useState("");
+    const [tipo, setTipo] = useState("ambos");
     const [toast, setToast] = useState("");
 
     useEffect(() => {
@@ -73,16 +74,29 @@ const Inventary = () => {
 
         try {
             if (editProduct) {
-                await inventaryAPI.update(editProduct.id, { nombre, stock: cantidad, precio: precioUnitario });
+                await inventaryAPI.update(editProduct.id, {
+                    nombre,
+                    descripcion,
+                    stock: cantidad,
+                    precio: precioUnitario,
+                    tipo
+                });
                 showToast("✅ Producto actualizado");
             } else {
-                await inventaryAPI.create({ nombre, stock: cantidad, precio: precioUnitario });
+                await inventaryAPI.create({
+                    nombre,
+                    descripcion,
+                    stock: cantidad,
+                    precio: precioUnitario,
+                    tipo
+                });
                 showToast("✅ Producto registrado");
             }
             fetchProducts();
             closeModal();
-        } catch {
-            showToast("❌ Error al crear el producto");
+        } catch (error) {
+            const errorMsg = error.response?.data?.message || "Error al guardar el producto";
+            showToast(`❌ ${errorMsg}`);
         }
     };
 
@@ -99,15 +113,21 @@ const Inventary = () => {
     const openEditModal = (product) => {
         setEditProduct(product);
         setName(product.nombre);
+        setDescription(product.descripcion || "");
         setQuantity(product.stock || "");
         setUnitPrice(product.precio || "");
+        setTipo(product.tipo || "ambos");
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
         setEditProduct(null);
-        setName(""); setDescription(""); setQuantity(""); setUnitPrice("");
+        setName("");
+        setDescription("");
+        setQuantity("");
+        setUnitPrice("");
+        setTipo("ambos");
     };
 
     return (
@@ -138,6 +158,8 @@ const Inventary = () => {
                                 <tr>
                                     <th>ID</th>
                                     <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Tipo</th>
                                     <th>Stock</th>
                                     <th>Precio</th>
                                     <th>Acciones</th>
@@ -145,11 +167,27 @@ const Inventary = () => {
                             </thead>
                             <tbody>
                                 {filteredProducts.map(p => (
-                                    <tr key={p.id}>
+                                    <tr key={p.id} className={p.stock === 0 ? 'row-stock-zero' : p.stock <= 10 ? 'row-stock-low' : ''}>
                                         <td>{p.id}</td>
-                                        <td>{p.nombre}</td>
-                                        <td>{p.stock}</td>
-                                        <td>{p.precio}</td>
+                                        <td>
+                                            {p.nombre}
+                                            {p.stock === 0 && <span className="stock-alert">⚠️ SIN STOCK</span>}
+                                            {p.stock > 0 && p.stock <= 10 && <span className="stock-warning">⚠️ BAJO STOCK</span>}
+                                        </td>
+                                        <td>{p.descripcion || '-'}</td>
+                                        <td>
+                                            <span className={`badge badge-${p.tipo}`}>
+                                                {p.tipo === 'venta' ? '🛒 Venta' :
+                                                 p.tipo === 'servicio' ? '💅 Servicio' :
+                                                 '🔄 Ambos'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className={`stock-value ${p.stock === 0 ? 'stock-zero' : p.stock <= 10 ? 'stock-low' : ''}`}>
+                                                {p.stock}
+                                            </span>
+                                        </td>
+                                        <td>${parseFloat(p.precio).toFixed(2)}</td>
                                         <td>
                                             <button className="btn-edit" onClick={() => openEditModal(p)}>✏️ Editar</button>
                                             <button className="btn-delete" onClick={() => setConfirmDelete(p)}>🗑 Eliminar</button>
@@ -176,6 +214,30 @@ const Inventary = () => {
                                 required
                             />
                         </div>
+
+                        <div className="form-group">
+                            <label>Descripción</label>
+                            <textarea
+                                value={descripcion}
+                                onChange={e => setDescription(e.target.value)}
+                                rows="3"
+                                placeholder="Descripción del producto (opcional)"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Tipo de Producto</label>
+                            <select
+                                value={tipo}
+                                onChange={e => setTipo(e.target.value)}
+                                required
+                            >
+                                <option value="ambos">🔄 Ambos (Venta y Servicio)</option>
+                                <option value="venta">🛒 Solo Venta</option>
+                                <option value="servicio">💅 Solo Servicio</option>
+                            </select>
+                        </div>
+
                         <div className="form-row">
                             <div className="form-group">
                                 <label>Stock</label>
@@ -183,6 +245,7 @@ const Inventary = () => {
                                     type="number"
                                     value={cantidad}
                                     onChange={e => setQuantity(e.target.value)}
+                                    min="0"
                                     required
                                 />
                             </div>
@@ -191,8 +254,10 @@ const Inventary = () => {
                                 <label>Precio Unitario</label>
                                 <input
                                     type="number"
+                                    step="0.01"
                                     value={precioUnitario}
                                     onChange={e => setUnitPrice(e.target.value)}
+                                    min="0"
                                     required />
                             </div>
                         </div>

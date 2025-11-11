@@ -22,12 +22,23 @@ class InventarioController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nombre' => 'required|string|max:255',
-            'stock' => 'required|integer',
-            'precio' => 'required|numeric',
+            'descripcion' => 'nullable|string',
+            'stock' => 'required|integer|min:0',
+            'precio' => 'required|numeric|min:0',
+            'tipo' => 'required|in:venta,servicio,ambos',
+        ], [
+            'nombre.required' => 'El nombre es requerido',
+            'stock.required' => 'El stock es requerido',
+            'stock.min' => 'El stock no puede ser negativo',
+            'precio.required' => 'El precio es requerido',
+            'precio.min' => 'El precio no puede ser negativo',
+            'tipo.required' => 'El tipo es requerido',
+            'tipo.in' => 'El tipo debe ser: venta, servicio o ambos',
         ]);
-        $Inventory = Inventory::create($request->all());
+
+        $Inventory = Inventory::create($validated);
         return response()->json($Inventory, 201);
     }
 
@@ -45,14 +56,24 @@ class InventarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nombre' => 'required|string|max:255',
-            'stock' => 'required|integer',
-            'precio' => 'required|numeric',
+            'descripcion' => 'nullable|string',
+            'stock' => 'required|integer|min:0',
+            'precio' => 'required|numeric|min:0',
+            'tipo' => 'required|in:venta,servicio,ambos',
+        ], [
+            'nombre.required' => 'El nombre es requerido',
+            'stock.required' => 'El stock es requerido',
+            'stock.min' => 'El stock no puede ser negativo',
+            'precio.required' => 'El precio es requerido',
+            'precio.min' => 'El precio no puede ser negativo',
+            'tipo.required' => 'El tipo es requerido',
+            'tipo.in' => 'El tipo debe ser: venta, servicio o ambos',
         ]);
 
         $inventory = Inventory::findOrFail($id);
-        $inventory->update($request->all());
+        $inventory->update($validated);
 
         return response()->json($inventory, 200);
     }
@@ -66,5 +87,23 @@ class InventarioController extends Controller
         $inventory->delete();
 
         return response()->json(['message' => 'Producto eliminado del inventario'], 200);
+    }
+
+    /**
+     * Get products below stock threshold
+     */
+    public function bajoStock(Request $request)
+    {
+        $umbral = $request->query('umbral', 10); // Umbral por defecto: 10
+
+        $productosBajoStock = Inventory::where('stock', '<=', $umbral)
+            ->orderBy('stock', 'asc')
+            ->get();
+
+        return response()->json([
+            'productos' => $productosBajoStock,
+            'total' => $productosBajoStock->count(),
+            'umbral' => $umbral
+        ]);
     }
 }

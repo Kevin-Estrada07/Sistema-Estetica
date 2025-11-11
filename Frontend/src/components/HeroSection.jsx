@@ -35,7 +35,7 @@ const HeroSection = () => (
           <a href="#services" className="cta-secondary" >
             <span>Servicios</span>
           </a>
-        </div>
+        </div> 
 
         {/* Features */}
         <div className="hero-features">

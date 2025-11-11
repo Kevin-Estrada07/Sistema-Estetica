@@ -9,16 +9,30 @@ use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmpleadoController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReembolsoController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TestimonioController;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 // Conexión de prueba
 Route::get('/conexion', function () {
     return response()->json([
         'status' => 'ok',
         'message' => 'Conexión exitosa con el backend'
+    ]);
+});
+
+// Endpoint para verificar fecha y hora del servidor
+Route::get('/server-time', function () {
+    $now = Carbon::now();
+    return response()->json([
+        'server_time' => $now->toDateTimeString(),
+        'server_date' => $now->toDateString(),
+        'server_hour' => $now->format('H:i:s'),
+        'timezone' => config('app.timezone'),
+        'timestamp' => $now->timestamp,
     ]);
 });
 
@@ -41,6 +55,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 // Clientes: accesibles a todos los roles autenticados
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('clients', ClientController::class);
+    // Obtener historial del cliente (citas y ventas)
+    Route::get('/clients/{id}/history', [ClientController::class, 'getHistory']);
 });
 
 // Servicios: accesibles a todos los roles autenticados
@@ -48,10 +64,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('services', ServiceController::class);
 });
 
-// Productos: accesibles a todos los roles autenticados
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::apiResource('products', ProductController::class);
-});
+// Productos eliminados - ahora se usa inventario
 
 // citas: accesibles a todos los roles autenticados
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -99,14 +112,30 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/dashboard/detalle-citas-dia', [DashboardController::class, 'DetalleCitasPorDia']);
 });
 
+// Nuevos reportes mejorados
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/dashboard/top-servicios', [DashboardController::class, 'topServicios']);
+    Route::get('/dashboard/top-estilistas', [DashboardController::class, 'topEstilistas']);
+    Route::get('/dashboard/ranking-servicios', [DashboardController::class, 'rankingServicios']);
+    Route::get('/dashboard/productos-rotacion', [DashboardController::class, 'productosRotacion']);
+    Route::get('/dashboard/productos-bajo-stock', [DashboardController::class, 'productosBajoStock']);
+});
+
 // Ventas: accesibles a todos los roles autenticados
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('ventas', SaleController::class);
 });
 
-// Ventas: accesibles a todos los roles autenticados
+// Reembolsos: accesibles a todos los roles autenticados
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResource('reembolsos', ReembolsoController::class);
+    Route::patch('/reembolsos/{id}/estado', [ReembolsoController::class, 'updateEstado']);
+});
+
+// Inventario: accesibles a todos los roles autenticados
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('inventario', InventarioController::class);
+    Route::get('/inventario-bajo-stock', [InventarioController::class, 'bajoStock']);
 });
 
 
@@ -122,6 +151,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/servicios/{id}/productos', [InventarioServicioController::class, 'detachProducto']);
 });
 
-// Route::post('/servicios/{id}/productos', [InventarioServicioController::class, 'attachProductos']);
-// Route::get('/servicios/{id}/productos', [InventarioServicioController::class, 'getProductos']);
-// Route::delete('/servicios/{id}/productos/{inventario_id}', [InventarioServicioController::class, 'detachProducto']);
+// Testimonios - Rutas públicas
+Route::get('/testimonios', [TestimonioController::class, 'index']); // Todos los aprobados
+Route::get('/testimonios/destacados', [TestimonioController::class, 'destacados']); // Solo destacados
+Route::post('/testimonios', [TestimonioController::class, 'store']); // Crear nuevo (público)
+
+// Testimonios - Rutas protegidas (admin)
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::get('/testimonios/todos', [TestimonioController::class, 'todos']); // Todos incluyendo no aprobados
+    Route::patch('/testimonios/{id}/aprobar', [TestimonioController::class, 'aprobar']);
+    Route::patch('/testimonios/{id}/destacar', [TestimonioController::class, 'destacar']);
+    Route::delete('/testimonios/{id}', [TestimonioController::class, 'destroy']);
+});
