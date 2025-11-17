@@ -2,12 +2,13 @@
 /* CONTENEDOR PRINCIPAL - CLIENTES */
 /* ============================================ */
 
+@import './variables.css';
 
- 
 .clients-content {
     flex: 1;
     padding: 24px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: var(--gradient-light);
+    /* Gradiente claro - paleta HOME */
     min-height: 100vh;
     overflow-x: hidden;
     margin-left: 220px;
@@ -57,22 +58,22 @@
 
 .search-input:focus {
     outline: none;
-    border-color: #4CAF50;
+    border-color: var(--primary);
     background: white;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    box-shadow: 0 0 0 3px var(--primary-10);
 }
 
 .btn-primary {
     padding: 12px 24px;
-    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    background: var(--gradient-primary);
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: var(--radius);
     cursor: pointer;
     font-weight: 600;
     font-size: 15px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    transition: all var(--transition);
+    box-shadow: 0 4px 12px var(--shadow-primary);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -80,7 +81,7 @@
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+    box-shadow: 0 6px 16px var(--shadow-primary-hover);
 }
 
 .btn-primary:active {
@@ -117,8 +118,9 @@
 }
 
 .clients-table th {
-    background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
-    color: #2c3e50;
+    background: var(--gradient-header);
+    /* Gradiente beige a terracota - paleta HOME */
+    color: var(--text-dark);
     padding: 16px 12px;
     text-align: center;
     font-weight: 700;
@@ -144,9 +146,10 @@
 }
 
 .clients-table tbody tr:hover {
-    background: linear-gradient(135deg, #fff5f8 0%, #ffe0ec 100%);
+    background: var(--gradient-light);
+    /* Gradiente claro - paleta HOME */
     transform: scale(1.01);
-    box-shadow: 0 4px 12px rgba(244, 143, 177, 0.2);
+    box-shadow: 0 4px 12px var(--primary-20);
 }
 
 /* ============================================ */
@@ -277,7 +280,7 @@
 
 .form-group label::before {
     content: "●";
-    color: #f48fb1;
+    color: var(--primary);
     font-size: 10px;
 }
 
@@ -290,17 +293,17 @@
     font-size: 15px;
     font-family: inherit;
     background: #f8f9fa;
-    transition: all 0.3s ease;
-    color: #2c3e50;
+    transition: all var(--transition);
+    color: var(--text-dark);
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #f48fb1;
+    border-color: var(--primary);
     background: white;
-    box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.1);
+    box-shadow: 0 0 0 4px var(--primary-10);
     transform: translateY(-2px);
 }
 
@@ -581,8 +584,9 @@
 }
 
 .history-table th {
-    background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
-    color: #2c3e50;
+    background: var(--gradient-header);
+    /* Gradiente beige a terracota - paleta HOME */
+    color: var(--text-dark);
     padding: 12px;
     text-align: left;
     font-weight: 700;
@@ -667,12 +671,12 @@
 }
 
 .table-wrapper::-webkit-scrollbar-thumb {
-    background: #f48fb1;
+    background: var(--primary);
     border-radius: 10px;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #f06292;
+    background: var(--accent);
 }
 
 /* ============================================ */

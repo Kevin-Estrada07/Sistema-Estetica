@@ -23,7 +23,6 @@ const SalesHistory = () => {
     const [isReembolsoModalOpen, setIsReembolsoModalOpen] = useState(false);
     const [motivoReembolso, setMotivoReembolso] = useState("");
     const [toast, setToast] = useState("");
-    const [showAccessDenied, setShowAccessDenied] = useState(false);
 
     const isAdmin = user?.role?.name === 'admin';
 
@@ -79,12 +78,8 @@ const SalesHistory = () => {
     };
 
     const handleOpenReembolsoModal = (venta) => {
-        // Verificar si es administrador
-        if (!isAdmin) {
-            setShowAccessDenied(true);
-            setTimeout(() => setShowAccessDenied(false), 3000);
-            return;
-        }
+        // ✅ Permitir a todos los usuarios autenticados solicitar reembolsos
+        // Solo el admin puede aprobar/rechazar (en la página de Reembolsos)
 
         // Verificar si ya tiene un reembolso (aprobado, pendiente o rechazado)
         const tieneReembolso = venta.reembolsos && venta.reembolsos.length > 0;
@@ -675,17 +670,6 @@ const SalesHistory = () => {
 
                 {/* Toast de notificaciones */}
                 {toast && <div className="toast">{toast}</div>}
-
-                {/* Modal de Acceso Denegado */}
-                {showAccessDenied && (
-                    <div className="access-denied-overlay">
-                        <div className="access-denied-modal">
-                            <div className="access-denied-icon">🚫</div>
-                            <h2>Acceso Denegado</h2>
-                            <p>Solo los administradores pueden solicitar reembolsos</p>
-                        </div>
-                    </div>
-                )}
             </main>
         </div>
     );

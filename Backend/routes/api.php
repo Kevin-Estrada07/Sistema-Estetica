@@ -126,9 +126,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('ventas', SaleController::class);
 });
 
-// Reembolsos: accesibles a todos los roles autenticados
+// Reembolsos: todos pueden crear y ver, solo admin puede aprobar/rechazar
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('reembolsos', ReembolsoController::class);
+});
+
+// Aprobar/Rechazar reembolsos: solo admin
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::patch('/reembolsos/{id}/estado', [ReembolsoController::class, 'updateEstado']);
 });
 

@@ -53,20 +53,22 @@
 }
 
 .user-name {
-  color: #7C3AED;
-  /* resalta el nombre en morado */
+  color: #C68B59;
+  /* Terracota suave - paleta HOME */
 }
 
 .user-role {
   font-size: 0.95rem;
-  color: #444;
+  color: #6F625A;
+  /* Texto gris - paleta HOME */
   margin-top: 0.3rem;
 }
 
 .role-badge {
-  background: #f3e8ff;
-  /* morado muy suave */
-  color: #7C3AED;
+  background: rgba(198, 139, 89, 0.1);
+  /* Terracota muy suave */
+  color: #8C5E3C;
+  /* Marrón medio - paleta HOME */
   padding: 2px 8px;
   border-radius: 12px;
   font-weight: 600;
@@ -82,11 +84,12 @@
 }
 
 .btn-register {
-  background: #7C3AED;
+  background: #C68B59;
+  /* Terracota suave - paleta HOME */
   color: #fff;
   border: none;
   padding: 0.7rem 1.4rem;
-  border-radius: 10px; 
+  border-radius: 10px;
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
@@ -94,7 +97,8 @@
 }
 
 .btn-register:hover {
-  background: #5b21b6;
+  background: #8C5E3C;
+  /* Marrón medio - paleta HOME */
   transform: translateY(-2px);
 }
 
@@ -124,15 +128,16 @@
 .card h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #7C3AED;
-  /* morado para título */
+  color: #C68B59;
+  /* Terracota suave - paleta HOME */
   margin-bottom: 0.5rem;
 }
 
 .card p {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #000;
+  color: #3E332C;
+  /* Texto oscuro - paleta HOME */
   margin-bottom: 0.5rem;
 }
 
@@ -144,7 +149,8 @@
 
 .card-clickable:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 15px 35px rgba(124, 58, 237, 0.2);
+  box-shadow: 0 15px 35px rgba(198, 139, 89, 0.2);
+  /* Terracota suave con transparencia */
 }
 
 .card-clickable:active {
@@ -154,7 +160,8 @@
 .card-hint {
   display: block;
   font-size: 11px;
-  color: #7C3AED;
+  color: #C68B59;
+  /* Terracota suave - paleta HOME */
   font-weight: 500;
   margin-top: 8px;
   opacity: 0.7;
