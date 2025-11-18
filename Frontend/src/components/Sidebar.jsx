@@ -11,7 +11,9 @@ import {
   UserCog,
   LogOut,
   Menu,
-  MessageSquare
+  MessageSquare,
+  History,
+  BanknoteArrowDown
 } from "lucide-react";
 import "../styles/Sidebar.css";
 const Sidebar = () => {
@@ -20,7 +22,6 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const isAdmin = user?.role?.name === 'admin';
-
   const handleLogout = async () => {
     try {
       await logout();
@@ -42,7 +43,11 @@ const Sidebar = () => {
       </button>
 
       <aside className={`sidebar ${isOpen ? "open" : ""}`}>
-        <h2 className="sidebar-logo">✨ ESTÉTICA</h2>
+        <Link to="/dashboard" className="sidebar-logo-link" onClick={() => setIsOpen(false)}>
+          {/* Puedes reemplazar esto con <img src="/ruta-al-logo.png" alt="Logo" className="sidebar-logo-img" /> */}
+          {/* <h2 className="sidebar-logo">✨ ESTÉTICA</h2> */}
+          <img src="/images/logoglanz.png" alt="Logo" className="sidebar-logo-img" />
+        </Link>
         <nav>
           <ul>
             <li>
@@ -77,14 +82,14 @@ const Sidebar = () => {
             </li>
             <li>
               <Link to="/SalesHistory" onClick={() => setIsOpen(false)}>
-                <BarChart2 size={18} /> Historial de Ventas
+                <History size={18} /> Historial de Ventas
               </Link>
             </li>
             {isAdmin && (
               <>
                 <li>
                   <Link to="/reembolsos" onClick={() => setIsOpen(false)}>
-                    <BarChart2 size={18} /> Reembolsos
+                    <BanknoteArrowDown size={18} /> Reembolsos
                   </Link>
                 </li>
                 <li>

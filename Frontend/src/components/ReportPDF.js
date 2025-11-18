@@ -90,6 +90,100 @@ export const ReportPDF = async (data, { inicio, fin }) => {
                 columnGap: 10,
             },
 
+            // Top Servicios y Estilistas
+            { text: "Top Servicios", style: "sectionHeader", pageBreak: "before" },
+            {
+                table: {
+                    headerRows: 1,
+                    widths: ["*", "auto", "auto"],
+                    body: [
+                        [
+                            { text: "Servicio", style: "tableHeader" },
+                            { text: "Citas", style: "tableHeader" },
+                            { text: "Monto", style: "tableHeader" },
+                        ],
+                        ...(data.topServicios || []).map((s) => [
+                            s.nombre,
+                            s.total_citas,
+                            `$${parseFloat(s.monto_total).toFixed(2)}`,
+                        ]),
+                    ],
+                },
+                layout: "lightHorizontalLines",
+                margin: [0, 10, 0, 20],
+            },
+
+            { text: "⭐ Top Estilistas", style: "sectionHeader" },
+            {
+                table: {
+                    headerRows: 1,
+                    widths: ["*", "auto", "auto"],
+                    body: [
+                        [
+                            { text: "Estilista", style: "tableHeader" },
+                            { text: "Citas", style: "tableHeader" },
+                            { text: "Monto", style: "tableHeader" },
+                        ],
+                        ...(data.topEstilistas || []).map((e) => [
+                            e.name,
+                            e.total_citas,
+                            `$${parseFloat(e.monto_total).toFixed(2)}`,
+                        ]),
+                    ],
+                },
+                layout: "lightHorizontalLines",
+                margin: [0, 10, 0, 20],
+            },
+
+            // Inventario - Productos con Rotación
+            { text: "Productos con Rotación", style: "sectionHeader", pageBreak: "before" },
+            {
+                table: {
+                    headerRows: 1,
+                    widths: ["*", "auto", "auto", "auto"],
+                    body: [
+                        [
+                            { text: "Producto", style: "tableHeader" },
+                            { text: "Stock", style: "tableHeader" },
+                            { text: "Cantidad Usada", style: "tableHeader" },
+                            { text: "Servicios", style: "tableHeader" },
+                        ],
+                        ...(data.productosRotacion || []).map((p) => [
+                            p.nombre,
+                            p.stock,
+                            p.cantidad_usada,
+                            p.servicios_asociados,
+                        ]),
+                    ],
+                },
+                layout: "lightHorizontalLines",
+                margin: [0, 10, 0, 20],
+            },
+
+            // Productos Bajo Stock
+            { text: "Productos Bajo Stock", style: "sectionHeader" },
+            {
+                table: {
+                    headerRows: 1,
+                    widths: ["*", "auto", "auto", "auto"],
+                    body: [
+                        [
+                            { text: "Producto", style: "tableHeader" },
+                            { text: "Stock", style: "tableHeader" },
+                            { text: "Precio", style: "tableHeader" },
+                            { text: "Valor Total", style: "tableHeader" },
+                        ],
+                        ...(data.productosBajoStock || []).map((p) => [
+                            p.nombre,
+                            { text: p.stock, color: "red", bold: true },
+                            `$${parseFloat(p.precio).toFixed(2)}`,
+                            `$${parseFloat(p.valor_total).toFixed(2)}`,
+                        ]),
+                    ],
+                },
+                layout: "lightHorizontalLines",
+                margin: [0, 10, 0, 20],
+            },
 
             // Totales
             {

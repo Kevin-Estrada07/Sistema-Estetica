@@ -457,5 +457,53 @@
   .modal-user-info h3 {
     font-size: 1.1rem;
   }
+
+  .toast {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    font-size: 14px;
+  }
 }
 
+/* Toast Notification */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  opacity: 0;
+  z-index: 2000;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  animation: slideInUp 0.4s ease forwards, fadeOut 0.4s ease 4.6s forwards;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 400px;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

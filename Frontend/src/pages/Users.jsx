@@ -66,10 +66,11 @@ const Users = () => {
   const handleDelete = async (id) => {
     try {
       await adminAPI.deleteUser(id);
-      showToast("✅ Usuario eliminado");
+      showToast("✅ Usuario eliminado correctamente");
       fetchUsers();
-    } catch {
-      alert("Error al eliminar usuario");
+    } catch (err) {
+      showToast("❌ Error al eliminar usuario");
+      console.error("Error al eliminar usuario:", err);
     }
   };
 

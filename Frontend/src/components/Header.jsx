@@ -22,15 +22,21 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <>
       <header className={`header ${hideHeader ? "hidden" : ""}`}>
         <div className='container'>
-          <div className='logo'>
-            <h1>
+          <div className='logo' onClick={scrollToTop} style={{ cursor: 'pointer' }}>
+            {/* Puedes reemplazar esto con <img src="/ruta-al-logo.png" alt="Logo Estética Bella" /> */}
+            {/* <h1>
               <span className="logo-main">Estética</span>
               <span className="logo-accent">Bella</span>
-            </h1>
+            </h1> */}
+            <img src="/images/logoglanz.png" alt="Logo Estética Bella" />
             <div className="logo-underline"></div>
           </div>
 

@@ -466,6 +466,12 @@
 /* RANKING - TOP SERVICIOS Y ESTILISTAS */
 /* ============================================ */
 
+.tabla-reportes th,
+tr,
+td {
+    text-align: center !important;
+}
+
 .reporte-ranking {
     width: 100%;
     margin-top: 28px;
@@ -669,8 +675,13 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Deshabilitar botones durante carga */

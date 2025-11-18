@@ -8,11 +8,17 @@ const TestimoniosAdmin = () => {
   const [testimonios, setTestimonios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('todos'); // todos, pendientes, aprobados, destacados
-  const [modalTestimonio, setModalTestimonio] = useState(null); 
+  const [modalTestimonio, setModalTestimonio] = useState(null);
+  const [toast, setToast] = useState('');
 
   useEffect(() => {
     fetchTestimonios();
   }, []);
+
+  const showToast = (message) => {
+    setToast(message);
+    setTimeout(() => setToast(''), 5000);
+  };
 
   const fetchTestimonios = async () => {
     try {
@@ -21,7 +27,7 @@ const TestimoniosAdmin = () => {
       setTestimonios(response.data);
     } catch (error) {
       console.error('Error al cargar testimonios:', error);
-      alert('Error al cargar testimonios');
+      showToast('❌ Error al cargar testimonios');
     } finally {
       setLoading(false);
     }
@@ -30,20 +36,22 @@ const TestimoniosAdmin = () => {
   const aprobarTestimonio = async (id) => {
     try {
       await testimoniosAPI.aprobar(id);
+      showToast('✅ Testimonio aprobado correctamente');
       fetchTestimonios();
     } catch (error) {
       console.error('Error al aprobar testimonio:', error);
-      alert('Error al aprobar testimonio');
+      showToast('❌ Error al aprobar testimonio');
     }
   };
 
   const destacarTestimonio = async (id) => {
     try {
       await testimoniosAPI.destacar(id);
+      showToast('⭐ Testimonio actualizado correctamente');
       fetchTestimonios();
     } catch (error) {
       console.error('Error al destacar testimonio:', error);
-      alert('Error al destacar testimonio');
+      showToast('❌ Error al actualizar testimonio');
     }
   };
 
@@ -54,10 +62,11 @@ const TestimoniosAdmin = () => {
 
     try {
       await testimoniosAPI.delete(id);
+      showToast('✅ Testimonio eliminado correctamente');
       fetchTestimonios();
     } catch (error) {
       console.error('Error al eliminar testimonio:', error);
-      alert('Error al eliminar testimonio');
+      showToast('❌ Error al eliminar testimonio');
     }
   };
 
@@ -264,6 +273,9 @@ const TestimoniosAdmin = () => {
           </div>
         )}
       </main>
+
+      {/* Toast Notification */}
+      {toast && <div className="toast">{toast}</div>}
     </div>
   );
 };

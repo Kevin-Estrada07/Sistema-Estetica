@@ -244,7 +244,7 @@ const SalePage = () => {
                                         setSelectedClient(clients.find(c => c.id === parseInt(value)));
                                     }
                                 }}>
-                                <option value="2">Invitado</option>
+                                <option value="2">Seleccione un cliente</option>
                                 {clients.map(c => (
                                     <option key={c.id} value={c.id}>
                                         {c.nombre}

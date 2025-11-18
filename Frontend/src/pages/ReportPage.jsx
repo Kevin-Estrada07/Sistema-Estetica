@@ -323,7 +323,7 @@ export default function ReportPage() {
                 <section className="reporte-tabla">
                     <h3>Últimas citas</h3>
                     <div className="tabla-wrapper">
-                        <table>
+                        <table className="tabla-reportes">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -357,7 +357,7 @@ export default function ReportPage() {
                     <div className="ranking-container">
                         <div className="ranking-card">
                             <h3>🏆 Top Servicios</h3>
-                            <table>
+                            <table className="tabla-reportes">
                                 <thead>
                                     <tr>
                                         <th>Servicio</th>
@@ -368,9 +368,9 @@ export default function ReportPage() {
                                 <tbody>
                                     {data.topServicios?.map((s, idx) => (
                                         <tr key={idx}>
-                                            <td>{s.nombre}</td>
-                                            <td className="text-center">{s.total_citas}</td>
-                                            <td className="text-right">${parseFloat(s.monto_total).toFixed(2)}</td>
+                                            <td >{s.nombre}</td>
+                                            <td>{s.total_citas}</td>
+                                            <td >${parseFloat(s.monto_total).toFixed(2)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -379,7 +379,7 @@ export default function ReportPage() {
 
                         <div className="ranking-card">
                             <h3>⭐ Top Estilistas</h3>
-                            <table>
+                            <table className="tabla-reportes">
                                 <thead>
                                     <tr>
                                         <th>Estilista</th>
@@ -391,8 +391,8 @@ export default function ReportPage() {
                                     {data.topEstilistas?.map((e, idx) => (
                                         <tr key={idx}>
                                             <td>{e.name}</td>
-                                            <td className="text-center">{e.total_citas}</td>
-                                            <td className="text-right">${parseFloat(e.monto_total).toFixed(2)}</td>
+                                            <td>{e.total_citas}</td>
+                                            <td>${parseFloat(e.monto_total).toFixed(2)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -406,7 +406,7 @@ export default function ReportPage() {
                     <div className="inventario-container">
                         <div className="inventario-card">
                             <h3>📦 Productos con Rotación</h3>
-                            <table>
+                            <table className="tabla-reportes">
                                 <thead>
                                     <tr>
                                         <th>Producto</th>
@@ -419,9 +419,9 @@ export default function ReportPage() {
                                     {data.productosRotacion?.map((p, idx) => (
                                         <tr key={idx}>
                                             <td>{p.nombre}</td>
-                                            <td className="text-center">{p.stock}</td>
-                                            <td className="text-center">{p.cantidad_usada}</td>
-                                            <td className="text-center">{p.servicios_asociados}</td>
+                                            <td>{p.stock}</td>
+                                            <td>{p.cantidad_usada}</td>
+                                            <td>{p.servicios_asociados}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -446,7 +446,7 @@ export default function ReportPage() {
                                     <p style={{ marginTop: '10px', color: '#666' }}>Cargando productos...</p>
                                 </div>
                             ) : data.productosBajoStock && data.productosBajoStock.length > 0 ? (
-                                <table>
+                                <table className="tabla-reportes">
                                     <thead>
                                         <tr>
                                             <th>Producto</th>
@@ -459,9 +459,9 @@ export default function ReportPage() {
                                         {data.productosBajoStock.map((p, idx) => (
                                             <tr key={idx} className="bajo-stock-row">
                                                 <td>{p.nombre}</td>
-                                                <td className="text-center stock-warning">{p.stock}</td>
-                                                <td className="text-right">${parseFloat(p.precio).toFixed(2)}</td>
-                                                <td className="text-right">${parseFloat(p.valor_total).toFixed(2)}</td>
+                                                <td className="stock-warning">{p.stock}</td>
+                                                <td>${parseFloat(p.precio).toFixed(2)}</td>
+                                                <td>${parseFloat(p.valor_total).toFixed(2)}</td>
                                             </tr>
                                         ))}
                                     </tbody>

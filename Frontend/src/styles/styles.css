@@ -61,11 +61,26 @@ body {
 }
 
 /* Logo */
+.logo {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
 .logo h1 {
   font-size: 1.75rem;
   font-weight: 700;
   display: flex;
   gap: 0.25rem;
+}
+
+.logo img {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
 }
 
 .logo-main {
