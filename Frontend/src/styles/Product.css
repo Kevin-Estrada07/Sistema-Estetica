@@ -5,13 +5,13 @@
 .dashboard {
     display: flex;
     min-height: 100vh;
-    background: #f5f7fa;
+    background: #f9fafb;
 }
 
 .products-content {
     flex: 1;
     padding: 24px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(135deg, #f9fafb 0%, #ffe5e6 100%);
     min-height: 100vh;
     overflow-x: hidden;
     margin-left: 220px;
@@ -121,7 +121,7 @@
 }
 
 .products-table th {
-    background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
+    background: linear-gradient(135deg, #ffe5e6 0%, #fd0208 100%);
     color: #2c3e50;
     padding: 16px 12px;
     text-align: center;
@@ -150,7 +150,7 @@
 .products-table tbody tr:hover {
     background: linear-gradient(135deg, #fff5f8 0%, #ffe0ec 100%);
     transform: scale(1.01);
-    box-shadow: 0 4px 12px rgba(244, 143, 177, 0.2);
+    box-shadow: 0 4px 12px rgba(253, 2, 8, 0.2);
 }
 
 /* ============================================ */
@@ -241,7 +241,7 @@
 
 .form-group label::before {
     content: "●";
-    color: #f48fb1;
+    color: #fd0208;
     font-size: 10px;
 }
 
@@ -262,16 +262,16 @@
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #f48fb1;
+    border-color: #fd0208;
     background: white;
-    box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.1);
+    box-shadow: 0 0 0 4px rgba(253, 2, 8, 0.1);
     transform: translateY(-2px);
 }
 
 .form-group input:hover,
 .form-group select:hover,
 .form-group textarea:hover {
-    border-color: #f8bbd0;
+    border-color: #ffe5e6;
 }
 
 .form-group textarea {
@@ -317,16 +317,16 @@
 } */
 
 /* .btn-submit {
-    background: linear-gradient(135deg, #f48fb1 0%, #f06292 100%);
+    background: linear-gradient(135deg, #fd0208 0%, #c40106 100%);
     color: white;
-    box-shadow: 0 4px 15px rgba(244, 143, 177, 0.4);
+    box-shadow: 0 4px 15px rgba(253, 2, 8, 0.4);
     width: 100%;
 }
 
 .btn-submit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(244, 143, 177, 0.5);
-    background: linear-gradient(135deg, #f06292 0%, #ec407a 100%);
+    box-shadow: 0 6px 20px rgba(253, 2, 8, 0.5);
+    background: linear-gradient(135deg, #c40106 0%, #c40106 100%);
 } */
 
 /* .btn-cancel {
@@ -429,12 +429,12 @@
 }
 
 .table-wrapper::-webkit-scrollbar-thumb {
-    background: #f48fb1;
+    background: #fd0208;
     border-radius: 10px;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #f06292;
+    background: #c40106;
 }
 
 /* ============================================ */
@@ -552,3 +552,5 @@
         transition-duration: 0.01ms !important;
     }
 }
+
+

@@ -328,7 +328,7 @@ const Dashboard = () => {
                 day: "Día",
               }}
               events={events}
-              eventColor="#7C3AED"
+              eventColor="#f15456"
               eventDisplay="block"
               height="80vh"
               slotMinTime="08:00:00"
@@ -442,7 +442,7 @@ const Dashboard = () => {
                 <strong>Fecha/hora anterior:</strong>{" "}
                 {new Date(draggedEvent.oldDate).toLocaleString("es-MX")}
               </p>
-              <p style={{ color: "#7C3AED", fontWeight: "600" }}>
+              <p style={{ color: "#f15456", fontWeight: "600" }}>
                 <strong>Nueva fecha/hora:</strong>{" "}
                 {new Date(draggedEvent.newDate).toLocaleString("es-MX")}
               </p>

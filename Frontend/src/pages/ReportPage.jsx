@@ -322,7 +322,7 @@ export default function ReportPage() {
 
                 <section className="reporte-tabla">
                     <h3>Últimas citas</h3>
-                    <div className="tabla-wrapper">
+                    <div className="tabla-citas">
                         <table className="tabla-reportes">
                             <thead>
                                 <tr>

@@ -1,21 +1,5 @@
-:root {
-  --primary: #C68B59;
-  /* Terracota suave */
-  --primary-light: #F4ECE6;
-  /* Beige claro */
-  --accent: #8C5E3C;
-  /* Marrón medio */
-  --text-dark: #3E332C;
-  --text-gray: #6F625A;
-  --text-light: #3E332C;
-  --bg-light: #FAF7F3;
-  --shadow: rgba(0, 0, 0, 0.1);
-  --radius: 12px;
-  --transition: 0.3s ease;
-}
-
-
-
+/* Importar variables globales */
+@import './variables.css';
 
 /* Reset base */
 * {
@@ -486,8 +470,8 @@ body {
 /* ---------- SERVICES ---------- */
 .services {
   padding: 80px 20px;
-  /* Fondo actualizado a un beige muy claro */
-  background: #F7F5F0;
+  /* Fondo actualizado a blanco */
+  background: #ffffff;
   text-align: center;
 }
 
@@ -1035,8 +1019,8 @@ body {
   font-size: 1.2rem;
   margin-bottom: 15px;
   font-weight: bold;
-  /* Texto de título en footer (beige claro) */
-  color: #F7F5F0;
+  /* Texto de título en footer (blanco) */
+  color: #ffffff;
 }
 
 .footer-section p {
@@ -1079,8 +1063,8 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.3);
   margin-top: 30px;
   font-size: 0.9rem;
-  color: #F7F5F0;
-  /* Texto de copyright en beige claro */
+  color: #ffffff;
+  /* Texto de copyright en blanco */
 }
 
 /* ---------- RESPONSIVE ---------- */
@@ -1123,3 +1107,5 @@ body {
     align-items: center;
   }
 }
+
+

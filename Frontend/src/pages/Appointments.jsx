@@ -379,7 +379,7 @@ const Appointments = () => {
       <Sidebar />
       <main className="appointments-content">
         <header className="appointments-header">
-          <h1>📅 Citas</h1>
+          <h1>📅 Citas</h1> 
           <div className="appointments-actions">
             {/* Botones de filtro por fecha */}
             <div className="filter-buttons">

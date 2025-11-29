@@ -5,13 +5,13 @@
 .report-page {
     display: flex;
     min-height: 100vh;
-    background: #f5f7fa;
+    background: #f9fafb;
 }
 
 .report-content {
     flex: 1;
     padding: 24px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(135deg, #f9fafb 0%, #ffe5e6 100%);
     min-height: 100vh;
     overflow-x: hidden;
     margin-left: 220px;
@@ -89,13 +89,13 @@
 }
 
 .btn-indigo {
-    background: linear-gradient(135deg, #f48fb1 0%, #f06292 100%);
-    box-shadow: 0 3px 10px rgba(244, 143, 177, 0.3);
+    background: linear-gradient(135deg, #fd0208 0%, #c40106 100%);
+    box-shadow: 0 3px 10px rgba(253, 2, 8, 0.3);
 }
 
 .btn-indigo:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(244, 143, 177, 0.4);
+    box-shadow: 0 5px 15px rgba(253, 2, 8, 0.4);
 }
 
 /* ============================================ */
@@ -128,9 +128,9 @@
 }
 
 .filtro-item:focus-within {
-    border-color: #f48fb1;
+    border-color: #fd0208;
     background: white;
-    box-shadow: 0 0 0 3px rgba(244, 143, 177, 0.1);
+    box-shadow: 0 0 0 3px rgba(253, 2, 8, 0.1);
 }
 
 .filtro-item input,
@@ -165,12 +165,12 @@
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
-    border-left: 4px solid #f48fb1;
+    border-left: 4px solid #fd0208;
 }
 
 .card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(244, 143, 177, 0.2);
+    box-shadow: 0 6px 20px rgba(253, 2, 8, 0.2);
 }
 
 .card-label {
@@ -255,41 +255,35 @@
     font-weight: 700;
 }
 
-.tabla-wrapper {
+.tabla-citas {
     width: 100%;
     overflow-x: auto;
     border-radius: 12px;
 }
 
-.tabla-wrapper table {
+.tabla-citas table {
     width: 100%;
     border-collapse: collapse;
     min-width: 700px;
 }
 
-.tabla-wrapper thead {
-    background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
+.tabla-citas thead {
+    background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%);
 }
 
-.tabla-wrapper th,
-.tabla-wrapper td {
+.tabla-citas th,
+.tabla-citas td {
     padding: 8px 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
     white-space: nowrap;
 }
 
-.tabla-wrapper thead {
-    background: #f3f4f6;
-    position: sticky;
-    top: 0;
-}
-
-.tabla-wrapper tbody tr {
+.tabla-citas tbody tr {
     transition: all 0.3s ease;
 }
 
-.tabla-wrapper tbody tr:hover {
+.tabla-citas tbody tr:hover {
     background: linear-gradient(135deg, #fff5f8 0%, #ffe0ec 100%);
 }
 
@@ -297,22 +291,22 @@
 /* SCROLLBAR PERSONALIZADO */
 /* ============================================ */
 
-.tabla-wrapper::-webkit-scrollbar {
+.tabla-citas::-webkit-scrollbar {
     height: 8px;
 }
 
-.tabla-wrapper::-webkit-scrollbar-track {
+.tabla-citas::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
 
-.tabla-wrapper::-webkit-scrollbar-thumb {
-    background: #f48fb1;
+.tabla-citas::-webkit-scrollbar-thumb {
+    background: #fd0208;
     border-radius: 10px;
 }
 
-.tabla-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #f06292;
+.tabla-citas::-webkit-scrollbar-thumb:hover {
+    background: #c40106;
 }
 
 /* ============================================ */
@@ -472,6 +466,20 @@ td {
     text-align: center !important;
 }
 
+.tabla-TopServices th {
+    background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%);
+    color: #2c3e50;
+    padding: 16px 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
 .reporte-ranking {
     width: 100%;
     margin-top: 28px;
@@ -504,7 +512,7 @@ td {
 }
 
 .ranking-card thead {
-    background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
+    background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%);
 }
 
 .ranking-card th,
@@ -580,8 +588,8 @@ td {
 
 .umbral-input:focus {
     outline: none;
-    border-color: #f48fb1;
-    box-shadow: 0 0 0 3px rgba(244, 143, 177, 0.1);
+    border-color: #fd0208;
+    box-shadow: 0 0 0 3px rgba(253, 2, 8, 0.1);
 }
 
 .inventario-card h3 {
@@ -597,7 +605,7 @@ td {
 }
 
 .inventario-card thead {
-    background: linear-gradient(135deg, #fff9c4 0%, #ffeb3b 100%);
+    background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%);
 }
 
 .inventario-card th,

@@ -4,6 +4,7 @@ import { clientsAPI } from "../api/clientesAPI";
 import { useAuth } from "../context/AuthContext";
 import "../styles/Clients.css";
 import Modal from "../components/Modal";
+import { FaHistory, FaTrashAlt, FaUserCheck } from "react-icons/fa";
 
 const Clients = () => {
     const { user } = useAuth();
@@ -298,9 +299,9 @@ const Clients = () => {
                                         <td>{c.telefono}</td>
                                         <td>{c.direccion}</td>
                                         <td>
-                                            <button className="btn-edit" onClick={() => openEditModal(c)}>✏️ Editar</button>
-                                            <button className="btn-history" onClick={() => fetchClientHistory(c.id)}>📋 Historial</button>
-                                            <button className="btn-delete" onClick={() => setConfirmDelete(c)}>🗑 Eliminar</button>
+                                            <button className="btn-edit" onClick={() => openEditModal(c)}><FaUserCheck /> Editar</button>
+                                            <button className="btn-history" onClick={() => fetchClientHistory(c.id)}><FaHistory />  Historial</button>
+                                            <button className="btn-delete" onClick={() => setConfirmDelete(c)}><FaTrashAlt />  Eliminar</button>
                                         </td>
                                     </tr>
                                 ))}

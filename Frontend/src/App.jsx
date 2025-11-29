@@ -6,6 +6,10 @@ import './styles/styles.css';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
+import Contact from './pages/Contact';
+import AboutUsPage from './pages/AboutUsPage';
+import ServicesPage from './pages/ServicesPage';
+import ProductsPage from './pages/ProductsPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Users from './pages/Users';
 import Unauthorized from './pages/Unauthorized';
@@ -53,7 +57,12 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* Rutas públicas */}
           <Route path="/" element={<Home />} />
+          <Route path="/nuestra-historia" element={<AboutUsPage />} />
+          <Route path="/servicios" element={<ServicesPage />} />
+          <Route path="/productos" element={<ProductsPage />} />
+          <Route path="/contacto" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 

@@ -2,7 +2,7 @@
 .dashboard {
     display: flex;
     min-height: 100vh;
-    background: #f5f7fa;
+    background: #f9fafb;
     position: relative;
 
 }
@@ -11,7 +11,7 @@
 .appointments-content {
     flex: 1;
     padding: 24px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(135deg, #f9fafb 0%, #ffe5e6 100%);
     min-height: 100vh;
     overflow-x: hidden;
     margin-left: 220px;
@@ -72,22 +72,22 @@
 }
 
 .btn-filter.active {
-    background-color: #C68B59;
-    /* Terracota suave - paleta HOME */
+    background-color: #fd0208;
+    /* Rojo brillante */
     color: white;
-    box-shadow: 0 4px 12px rgba(198, 139, 89, 0.3);
+    box-shadow: 0 4px 12px rgba(253, 2, 8, 0.3);
 }
 
 .btn-filter.active:hover {
-    background-color: #8C5E3C;
-    /* Marrón medio - paleta HOME */
+    background-color: #c40106;
+    /* Rojo oscuro */
 }
 
 /* Contador de resultados */
 .results-counter {
     padding: 10px 20px;
-    background-color: #FAF7F3;
-    /* Fondo claro - paleta HOME */
+    background-color: #f9fafb;
+    /* Fondo gris muy claro */
     border-radius: 8px;
     margin-bottom: 15px;
     display: flex;
@@ -97,13 +97,13 @@
 
 .results-counter-text {
     font-weight: 500;
-    color: #6F625A;
-    /* Texto gris - paleta HOME */
+    color: #6b7280;
+    /* Texto gris */
 }
 
 .results-counter-number {
-    color: #C68B59;
-    /* Terracota suave - paleta HOME */
+    color: #fd0208;
+    /* Rojo brillante */
     margin-left: 8px;
     font-weight: 700;
 }
@@ -125,37 +125,12 @@
 
 .search-input:focus {
     outline: none;
-    border-color: #C68B59;
-    /* Terracota suave - paleta HOME */
+    border-color: #fd0208;
+    /* Rojo brillante */
     background: white;
-    box-shadow: 0 0 0 3px rgba(198, 139, 89, 0.1);
+    box-shadow: 0 0 0 3px rgba(253, 2, 8, 0.1);
 }
 
-.btn-register {
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #C68B59 0%, #8C5E3C 100%);
-    /* Terracota a marrón - paleta HOME */
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 15px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(198, 139, 89, 0.3);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.btn-register:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(198, 139, 89, 0.4);
-}
-
-.btn-register:active {
-    transform: translateY(0);
-}
 
 /* Tabla */
 .table-wrapper {
@@ -185,10 +160,8 @@
 }
 
 .appointments-table th {
-    background: linear-gradient(135deg, #F4ECE6 0%, #C68B59 100%);
-    /* Beige a terracota - paleta HOME */
-    color: #3E332C;
-    /* Texto oscuro - paleta HOME */
+    /* background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%); */
+    color: #000000;
     padding: 16px 12px;
     text-align: center;
     font-weight: 700;
@@ -198,6 +171,10 @@
     position: sticky;
     top: 0;
     z-index: 10;
+}
+
+.appointments-table thead {
+    background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%);
 }
 
 .appointments-table td {
@@ -214,10 +191,10 @@
 }
 
 .appointments-table tbody tr:hover {
-    background: linear-gradient(135deg, #FAF7F3 0%, #F4ECE6 100%);
-    /* Fondo claro a beige - paleta HOME */
+    background: linear-gradient(135deg, #f9fafb 0%, #ffe5e6 100%);
+    /* Fondo claro a rosa claro */
     transform: scale(1.01);
-    box-shadow: 0 4px 12px rgba(198, 139, 89, 0.2);
+    box-shadow: 0 4px 12px rgba(253, 2, 8, 0.2);
 }
 
 .appointments-table select {
@@ -233,9 +210,9 @@
 
 .appointments-table select:focus {
     outline: none;
-    border-color: #C68B59;
-    /* Terracota suave - paleta HOME */
-    box-shadow: 0 0 0 3px rgba(198, 139, 89, 0.1);
+    border-color: #fd0208;
+    /* Rojo brillante */
+    box-shadow: 0 0 0 3px rgba(253, 2, 8, 0.1);
 }
 
 .appointments-table select[value="pendiente"] {
@@ -302,39 +279,39 @@
 
 /* 🎯 Colores coherentes con paleta HOME */
 .btn-attender {
-    background: linear-gradient(135deg, #C68B59 0%, #8C5E3C 100%);
-    /* Terracota a marrón - paleta HOME */
+    background: linear-gradient(135deg, #fd0208 0%, #c40106 100%);
+    /* Rojo a rojo oscuro */
     color: white;
-    box-shadow: 0 3px 10px rgba(198, 139, 89, 0.25);
+    box-shadow: 0 3px 10px rgba(253, 2, 8, 0.25);
 }
 
 .btn-attender:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(198, 139, 89, 0.35);
+    box-shadow: 0 4px 12px rgba(253, 2, 8, 0.35);
 }
 
 .btn-pagar {
-    background: linear-gradient(135deg, #8C5E3C 0%, #6F625A 100%);
-    /* Marrón medio a gris - paleta HOME */
+    background: linear-gradient(135deg, #b4161b 0%, #ff7300 100%);
+    /* Rojo oscuro a gris */
     color: white;
-    box-shadow: 0 3px 10px rgba(140, 94, 60, 0.25);
+    box-shadow: 0 3px 10px rgba(196, 1, 6, 0.25);
 }
 
 .btn-pagar:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(140, 94, 60, 0.35);
+    box-shadow: 0 4px 12px rgba(196, 1, 6, 0.35);
 }
 
 .btn-edit {
-    background: linear-gradient(135deg, #C68B59 0%, #A17B5A 100%);
-    /* Terracota suave - paleta HOME */
+    background: linear-gradient(135deg, #fd0208 0%, #c40106 100%);
+    /* Rojo a rojo oscuro */
     color: white;
-    box-shadow: 0 3px 10px rgba(198, 139, 89, 0.25);
+    box-shadow: 0 3px 10px rgba(253, 2, 8, 0.25);
 }
 
 .btn-edit:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(198, 139, 89, 0.35);
+    box-shadow: 0 4px 12px rgba(253, 2, 8, 0.35);
 }
 
 .btn-delete {
@@ -618,12 +595,12 @@
 }
 
 .table-wrapper::-webkit-scrollbar-thumb {
-    background: #f48fb1;
+    background: #fd0208;
     border-radius: 10px;
 }
 
 .table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #f06292;
+    background: #c40106;
 }
 
 /* ============================================ */
@@ -707,7 +684,7 @@
 
 .form-group label::before {
     content: "●";
-    color: #f48fb1;
+    color: #fd0208;
     font-size: 10px;
 }
 
@@ -728,17 +705,17 @@
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #C68B59;
+    border-color: #fd0208;
     /* Terracota suave - paleta HOME */
     background: white;
-    box-shadow: 0 0 0 4px rgba(198, 139, 89, 0.1);
+    box-shadow: 0 0 0 4px rgba(253, 2, 8, 0.1);
     transform: translateY(-2px);
 }
 
 .form-group input:hover,
 .form-group select:hover,
 .form-group textarea:hover {
-    border-color: #F4ECE6;
+    border-color: #ffe5e6;
     /* Beige claro - paleta HOME */
 }
 
@@ -746,8 +723,8 @@
 .form-group select {
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23C68B59' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-    /* Flecha terracota - paleta HOME */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23fd0208' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    /* Flecha roja - paleta pública */
     background-repeat: no-repeat;
     background-position: right 12px center;
     padding-right: 40px;
@@ -791,15 +768,15 @@
     font-size: 16px;
     width: 100%;
     justify-content: center;
-    background: linear-gradient(135deg, #C68B59 0%, #8C5E3C 100%);
+    background: linear-gradient(135deg, #fd0208 0%, #c40106 100%);
     /* Terracota a marrón - paleta HOME */
-    box-shadow: 0 4px 15px rgba(198, 139, 89, 0.4);
+    box-shadow: 0 4px 15px rgba(253, 2, 8, 0.4);
 }
 
 .modal-content form .btn-register:hover {
-    background: linear-gradient(135deg, #8C5E3C 0%, #6F625A 100%);
+    background: linear-gradient(135deg, #c40106 0%, #6b7280 100%);
     /* Marrón medio a gris - paleta HOME */
-    box-shadow: 0 6px 20px rgba(198, 139, 89, 0.5);
+    box-shadow: 0 6px 20px rgba(253, 2, 8, 0.5);
 }
 
 /* Estados de validación */
@@ -847,3 +824,5 @@
         font-size: 14px;
     }
 }
+
+

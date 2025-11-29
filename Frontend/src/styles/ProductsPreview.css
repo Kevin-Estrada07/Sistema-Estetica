@@ -1,0 +1,289 @@
+/* Products Preview - Home */
+.products-preview-section {
+  padding: 80px 20px;
+  background: white;
+  color: var(--text-dark);
+}
+
+.products-preview-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Content Wrapper - Layout de 2 columnas */
+.products-content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* ========== SECCIÓN IZQUIERDA: CAROUSEL ========== */
+.products-carousel-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Wrapper para el carrusel con flechas */
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+}
+
+.carousel-btn {
+  background: transparent;
+  border: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--primary);
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.carousel-btn:hover {
+  color: var(--primary-dark);
+  transform: scale(1.2);
+}
+
+/* Carousel Container */
+.products-carousel {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  max-width: 400px;
+}
+
+.carousel-slide {
+  transition: opacity 0.6s ease-in-out;
+}
+
+.carousel-item {
+  background: white;
+  text-align: center;
+}
+
+.carousel-item img {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+}
+
+.carousel-info {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.carousel-info h3 {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  margin-bottom: 5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.carousel-info p {
+  font-size: 0.9rem;
+  color: var(--text-gray);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Indicadores del Carousel */
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d0d0d0;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+  padding: 0;
+}
+
+.indicator.active {
+  background: var(--text-dark);
+}
+
+/* ========== SECCIÓN DERECHA: INFORMACIÓN DEL CATÁLOGO ========== */
+.catalog-info-section {
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.catalog-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  color: var(--primary);
+}
+
+.catalog-badge {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-dark);
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.catalog-title {
+  font-size: 2.5rem;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+.catalog-description {
+  font-size: 1rem;
+  color: var(--text-gray);
+  line-height: 1.8;
+  margin-bottom: 30px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.catalog-btn {
+  background: transparent;
+  color: var(--text-dark);
+  border: 2px solid var(--text-dark);
+  padding: 12px 35px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: inline-block;
+}
+
+.catalog-btn:hover {
+  background: var(--text-dark);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* ========== RESPONSIVE ========== */
+
+/* Tablet */
+@media (max-width: 968px) {
+  .products-preview-section {
+    padding: 60px 20px;
+  }
+
+  .products-content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .catalog-title {
+    font-size: 2rem;
+  }
+
+  .carousel-item img {
+    max-width: 300px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .products-preview-section {
+    padding: 50px 20px;
+  }
+
+  .products-content-wrapper {
+    gap: 40px;
+  }
+
+  .products-carousel-section {
+    gap: 10px;
+  }
+
+  .carousel-btn {
+    width: 35px;
+    height: 35px;
+  }
+
+  .carousel-btn.prev {
+    margin-right: -5px;
+  }
+
+  .carousel-btn.next {
+    margin-left: -5px;
+  }
+
+  .carousel-item img {
+    max-width: 250px;
+  }
+
+  .carousel-info h3 {
+    font-size: 0.85rem;
+  }
+
+  .carousel-info p {
+    font-size: 0.8rem;
+  }
+
+  .catalog-icon-wrapper {
+    margin-bottom: 15px;
+  }
+
+  .catalog-icon-wrapper svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .catalog-badge {
+    font-size: 0.7rem;
+  }
+
+  .catalog-title {
+    font-size: 1.75rem;
+  }
+
+  .catalog-description {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .catalog-btn {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 0.85rem;
+  }
+}
+
+
+
+

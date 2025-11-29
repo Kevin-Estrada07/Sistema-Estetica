@@ -1,45 +1,51 @@
 /* ============================================ */
-/* VARIABLES GLOBALES - PALETA DE COLORES HOME */
+/* VARIABLES GLOBALES - PALETA DE COLORES GLANZ ESTÉTICA */
 /* ============================================ */
 
 :root {
-  /* Colores principales - Paleta HOME */
-  --primary: #C68B59;           /* Terracota suave */
-  --primary-light: #F4ECE6;     /* Beige claro */
-  --accent: #8C5E3C;            /* Marrón medio */
-  --text-dark: #3E332C;         /* Texto oscuro */
-  --text-gray: #6F625A;         /* Texto gris */
-  --text-light: #3E332C;        /* Texto claro */
-  --bg-light: #FAF7F3;          /* Fondo claro */
-  
+  /* Colores principales - Paleta Glanz Estética */
+  --primary: #fd0208;           /* Rojo corporativo Glanz */
+  --primary-dark: #c40106;      /* Rojo oscuro */
+  --primary-light: #ffe5e6;     /* Rosa claro */
+  --accent: #2c3e50;            /* Gris oscuro elegante */
+  --text-dark: #2c3e50;         /* Texto oscuro */
+  --text-gray: #6b7280;         /* Texto gris */
+  --text-light: #ffffff;        /* Texto claro */
+  --bg-light: #f9fafb;          /* Fondo claro */
+  --bg-white: #ffffff;          /* Fondo blanco */
+
   /* Sombras y efectos */
   --shadow: rgba(0, 0, 0, 0.1);
-  --shadow-primary: rgba(198, 139, 89, 0.3);
-  --shadow-primary-hover: rgba(198, 139, 89, 0.4);
-  
+  --shadow-primary: rgba(253, 2, 8, 0.3);
+  --shadow-primary-hover: rgba(253, 2, 8, 0.4);
+
   /* Bordes y radios */
   --radius: 12px;
   --radius-small: 8px;
   --radius-large: 16px;
-  
+
   /* Transiciones */
   --transition: 0.3s ease;
   --transition-fast: 0.2s ease;
-  
+
   /* Gradientes */
-  --gradient-primary: linear-gradient(135deg, #C68B59 0%, #8C5E3C 100%);
-  --gradient-light: linear-gradient(135deg, #FAF7F3 0%, #F4ECE6 100%);
-  --gradient-header: linear-gradient(135deg, #F4ECE6 0%, #C68B59 100%);
-  
+  --gradient-primary: linear-gradient(135deg, #fd0208 0%, #c40106 100%);
+  --gradient-light: linear-gradient(135deg, #ffffff 0%, #ffe5e6 100%);
+  --gradient-header: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+
   /* Colores de estado */
-  --success: #43a047;
-  --warning: #ff9800;
-  --error: #ef5350;
-  --info: #42a5f5;
-  
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+
   /* Transparencias */
-  --primary-10: rgba(198, 139, 89, 0.1);
-  --primary-15: rgba(198, 139, 89, 0.15);
-  --primary-20: rgba(198, 139, 89, 0.2);
+  --primary-10: rgba(253, 2, 8, 0.1);
+  --primary-15: rgba(253, 2, 8, 0.15);
+  --primary-20: rgba(253, 2, 8, 0.2);
+  --primary-30: rgba(253, 2, 8, 0.3);
 }
+
+
+
 

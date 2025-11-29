@@ -239,7 +239,7 @@ const Services = () => {
                                                 ) : (
                                                     <span className="no-productos">Sin productos</span>
                                                 )}
-                                            </td>
+                                            </td> 
                                             <td>
                                                 <button className="btn-edit" onClick={() => openEditModal(s)}>✏️ Editar</button>
                                                 <button className="btn-delete" onClick={() => setConfirmDelete(s)}>🗑 Eliminar</button>

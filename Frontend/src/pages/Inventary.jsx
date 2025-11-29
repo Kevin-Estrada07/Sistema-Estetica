@@ -180,7 +180,7 @@ const Inventary = () => {
                                                 {p.tipo === 'venta' ? '🛒 Venta' :
                                                  p.tipo === 'servicio' ? '💅 Servicio' :
                                                  '🔄 Ambos'}
-                                            </span>
+                                            </span> 
                                         </td>
                                         <td>
                                             <span className={`stock-value ${p.stock === 0 ? 'stock-zero' : p.stock <= 10 ? 'stock-low' : ''}`}>

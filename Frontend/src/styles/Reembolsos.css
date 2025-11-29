@@ -7,7 +7,7 @@
     margin-left: 220px;
     padding: 24px;
     min-height: 100vh;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(135deg, #f9fafb 0%, #ffe5e6 100%);
     overflow-x: hidden;
 }
 
@@ -38,10 +38,10 @@
 }
 
 .stat-item {
-    background: linear-gradient(135deg, #f48fb1 0%, #ec407a 100%);
+    background: #f15456;
     padding: 16px 24px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(244, 143, 177, 0.3);
+    box-shadow: 0 4px 12px rgba(253, 2, 8, 0.3);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -80,8 +80,8 @@
 }
 
 .reembolsos-table thead {
-    background: linear-gradient(135deg, #f48fb1 0%, #ec407a 100%);
-    color: white;
+    background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%);
+    color: #000000;
 }
 
 .reembolsos-table th {
@@ -179,7 +179,7 @@
     background: #f8f9fa;
     padding: 20px;
     border-radius: 12px;
-    border-left: 4px solid #f48fb1;
+    border-left: 4px solid #fd0208;
 }
 
 .detail-section h3 {
@@ -239,8 +239,8 @@
 
 .comentario-input:focus {
     outline: none;
-    border-color: #f48fb1;
-    box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.1);
+    border-color: #fd0208;
+    box-shadow: 0 0 0 4px rgba(253, 2, 8, 0.1);
 }
 
 .action-buttons {
@@ -468,4 +468,7 @@
     color: #7f8c8d;
     margin: 0;
 }
+
+
+
 

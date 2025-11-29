@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Login from '../pages/Login';
 
 const Header = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [hideHeader, setHideHeader] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -26,34 +28,37 @@ const Header = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleNavigation = (path) => {
+    navigate(path);
+    setIsOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <>
       <header className={`header ${hideHeader ? "hidden" : ""}`}>
         <div className='container'>
           <div className='logo' onClick={scrollToTop} style={{ cursor: 'pointer' }}>
-            {/* Puedes reemplazar esto con <img src="/ruta-al-logo.png" alt="Logo Estética Bella" /> */}
-            {/* <h1>
-              <span className="logo-main">Estética</span>
-              <span className="logo-accent">Bella</span>
-            </h1> */}
-            <img src="/images/logoglanz.png" alt="Logo Estética Bella" />
-            <div className="logo-underline"></div>
+            <img src="/images/logoglanz.png" alt="Logo Glanz Estética" />
           </div>
 
           <nav className={`nav ${isOpen ? 'open' : ''}`}>
             <div className="nav-overlay" onClick={() => setIsOpen(false)}></div>
             <div className="nav-content">
-              {/* <a href="#services" className="nav-link" onClick={() => setIsOpen(false)}>
-                <span>Conexión</span>
-              </a> */}
-               <a href="#services" className="nav-link" onClick={() => setIsOpen(false)}>
+              <a href="/" className="nav-link" onClick={(e) => { e.preventDefault(); handleNavigation('/'); }}>
+                <span>Inicio</span>
+              </a>
+              <a href="/nuestra-historia" className="nav-link" onClick={(e) => { e.preventDefault(); handleNavigation('/nuestra-historia'); }}>
+                <span>Nuestra Historia</span>
+              </a>
+              <a href="/servicios" className="nav-link" onClick={(e) => { e.preventDefault(); handleNavigation('/servicios'); }}>
                 <span>Servicios</span>
               </a>
-              <a href="#appointment" className="nav-link" onClick={() => setIsOpen(false)}>
-                <span>Agendar Cita</span>
+              <a href="/productos" className="nav-link" onClick={(e) => { e.preventDefault(); handleNavigation('/productos'); }}>
+                <span>Productos</span>
               </a>
-              <a href="#testimonials" className="nav-link" onClick={() => setIsOpen(false)}>
-                <span>Opiniones</span>
+              <a href="/contacto" className="nav-link" onClick={(e) => { e.preventDefault(); handleNavigation('/contacto'); }}>
+                <span>Contacto</span>
               </a>
               <button
                 className="login-button-header"

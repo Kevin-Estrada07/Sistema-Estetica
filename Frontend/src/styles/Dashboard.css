@@ -3,7 +3,7 @@
 .dashboard {
   display: flex;
   min-height: 100vh;
-  background: #f5f7fa;
+  background: linear-gradient(135deg, #f9fafb 0%, #ffe5e6 100%);
 }
 
 .content {
@@ -53,22 +53,22 @@
 }
 
 .user-name {
-  color: #C68B59;
-  /* Terracota suave - paleta HOME */
+  color: #fd0208;
+  /* Rojo corporativo - paleta pública */
 }
 
 .user-role {
   font-size: 0.95rem;
-  color: #6F625A;
-  /* Texto gris - paleta HOME */
+  color: #6b7280;
+  /* Texto gris - nueva paleta */
   margin-top: 0.3rem;
 }
 
 .role-badge {
-  background: rgba(198, 139, 89, 0.1);
-  /* Terracota muy suave */
-  color: #8C5E3C;
-  /* Marrón medio - paleta HOME */
+  background: rgba(253, 2, 8, 0.1);
+  /* Rojo muy suave */
+  color: #fd0208;
+  /* Rojo corporativo - paleta pública */
   padding: 2px 8px;
   border-radius: 12px;
   font-weight: 600;
@@ -84,8 +84,8 @@
 }
 
 .btn-register {
-  background: #C68B59;
-  /* Terracota suave - paleta HOME */
+  background: #fd0208 !important; 
+  /* Rojo corporativo - paleta pública */
   color: #fff;
   border: none;
   padding: 0.7rem 1.4rem;
@@ -97,8 +97,8 @@
 }
 
 .btn-register:hover {
-  background: #8C5E3C;
-  /* Marrón medio - paleta HOME */
+  background: #c40106;
+  /* Rojo oscuro - paleta pública */
   transform: translateY(-2px);
 }
 
@@ -128,16 +128,16 @@
 .card h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #C68B59;
-  /* Terracota suave - paleta HOME */
+  color: #fd0208;
+  /* Rojo corporativo - paleta pública */
   margin-bottom: 0.5rem;
 }
 
 .card p {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #3E332C;
-  /* Texto oscuro - paleta HOME */
+  color: #2c3e50;
+  /* Texto oscuro - paleta pública */
   margin-bottom: 0.5rem;
 }
 
@@ -149,8 +149,8 @@
 
 .card-clickable:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 15px 35px rgba(198, 139, 89, 0.2);
-  /* Terracota suave con transparencia */
+  box-shadow: 0 15px 35px rgba(253, 2, 8, 0.2);
+  /* Rojo corporativo con transparencia */
 }
 
 .card-clickable:active {
@@ -160,8 +160,8 @@
 .card-hint {
   display: block;
   font-size: 11px;
-  color: #C68B59;
-  /* Terracota suave - paleta HOME */
+  color: #fd0208;
+  /* Rojo corporativo - paleta pública */
   font-weight: 500;
   margin-top: 8px;
   opacity: 0.7;
@@ -212,7 +212,7 @@
 .panel-header h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #7C3AED;
+  color: #000000;
 }
 
 /* FullCalendar estilizado */
@@ -246,7 +246,7 @@
   padding: 5px 8px !important;
   font-size: 0.9rem;
   font-weight: 600;
-  background-color: #7C3AED !important;
+  background-color: #f15456 !important;
   color: #fff !important;
 }
 
@@ -419,3 +419,5 @@
     grid-template-columns: 1fr;
   }
 }
+
+
