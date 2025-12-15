@@ -122,15 +122,17 @@
 }
 
 .btn-cancel {
-  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+
+  background: #00000000 !important;
+  /* background: linear-gradient(135deg, #898a6252 0%, #2bff00 100%) !important; */
+  color: rgb(0, 0, 0) !important;
+  /* box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4); */
 }
 
 .btn-cancel:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
-  background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+  background: linear-gradient(135deg, #6563d4 0%, #1100ff 100%);
 }
 
 .btn-cancel:active {

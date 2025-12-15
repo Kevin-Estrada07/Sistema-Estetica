@@ -517,59 +517,65 @@
 
 .history-section h3 {
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 700; 
     color: #2c3e50;
     margin: 0;
     padding-bottom: 8px;
     border-bottom: 2px solid #fd0208;
 }
 
-.history-table {
+.history-client-table {
     width: 100%;
     border-collapse: collapse;
     background: white;
     border-radius: 8px;
     overflow-x: auto;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(255, 0, 0, 0.05);
     display: block;
 }
 
-.history-table thead,
-.history-table tbody,
-.history-table tr {
+.history-client-table thead,
+.history-client-table tbody,
+.history-client-table tr {
     display: table;
     width: 100%;
     table-layout: fixed;
+    
 }
 
-.history-table th {
-    background: var(--gradient-header);
+.history-client-table thead{
+    background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%);
+    color: #000000;
+}
+
+.history-client-table th {
+    /* background: var(--gradient-header); */
     /* Gradiente beige a terracota - paleta HOME */
     color: var(--text-dark);
     padding: 12px;
-    text-align: left;
-    font-weight: 700;
+    text-align: center;
+    font-weight: 700 !important;
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-.history-table td {
+.history-client-table td {
     padding: 12px;
     border-bottom: 1px solid #f0f0f0;
     color: #555;
     font-size: 13px;
 }
 
-.history-table tbody tr {
+.history-client-table tbody tr {
     transition: all 0.3s ease;
 }
 
-.history-table tbody tr:hover {
+.history-client-table tbody tr:hover {
     background: #f9f9f9;
 }
 
-.history-table tbody tr:last-child td {
+.history-client-table tbody tr:last-child td {
     border-bottom: none;
 }
 

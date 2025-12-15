@@ -238,6 +238,17 @@
 /* TABLA DE CITAS */
 /* ============================================ */
 
+.tabla-wrapper,
+.tabla-servicios,
+.tabla-estilistas,
+.tabla-productos,
+.ranking-card table,
+.inventario-card table {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+
 .reporte-tabla {
     width: 100%;
     margin-top: 20px;
@@ -274,7 +285,7 @@
 .tabla-citas th,
 .tabla-citas td {
     padding: 8px 12px;
-    text-align: left;
+    /* text-align: center; */
     border-bottom: 1px solid #ddd;
     white-space: nowrap;
 }
@@ -464,6 +475,7 @@
 tr,
 td {
     text-align: center !important;
+    /* border-radius: 16px !important; */
 }
 
 .tabla-TopServices th {
@@ -486,6 +498,7 @@ td {
     animation: fadeIn 0.6s ease;
 }
 
+
 .ranking-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -495,7 +508,7 @@ td {
 .ranking-card {
     background: white;
     padding: 24px;
-    border-radius: 16px;
+    /* border-radius: 16px; */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -509,16 +522,18 @@ td {
 .ranking-card table {
     width: 100%;
     border-collapse: collapse;
+    /* border-radius: 16px !important; */
 }
 
 .ranking-card thead {
     background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%);
+
 }
 
 .ranking-card th,
 .ranking-card td {
     padding: 12px;
-    text-align: left;
+    text-align: center;
     border-bottom: 1px solid #ddd;
     font-size: 14px;
 }

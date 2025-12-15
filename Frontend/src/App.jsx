@@ -23,6 +23,7 @@ import Inventary from './pages/Inventary';
 import SalesHistory from './pages/SalesHistory';
 import Reembolsos from './pages/Reembolsos';
 import TestimoniosAdmin from './pages/TestimoniosAdmin';
+import Conexion from './components/conexion';
 
 // Componente para rutas protegidas
 const PrivateRoute = ({ children }) => {
@@ -65,6 +66,7 @@ function App() {
           <Route path="/contacto" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="/conexion" element={<Conexion />} />
 
           {/* Dashboard protegido */}
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />

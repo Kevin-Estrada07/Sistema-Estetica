@@ -42,9 +42,9 @@ const Modal = ({
               {/* <button className="btn-attend" onClick={onAttend}>
                 ✅ Atender
               </button> */}
-              <button className="btn-cancel" onClick={onClose}>
+              {/* <button className="btn-cancel" onClick={onClose}>
                 ❌ Cerrar
-              </button>
+              </button> */}
             </>
           )}
         </div>

@@ -20,6 +20,7 @@ import { Download, Calendar, Printer } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import "../styles/ReportePage.css";
 import { ReportPDF } from "../components/ReportPDF";
+import { inventaryAPI } from "../api/inventaryAPI";
 
 
 export default function ReportPage() {
@@ -77,10 +78,10 @@ export default function ReportPage() {
     async function fetchProductosBajoStock() {
         setLoadingStock(true);
         try {
-            const bajoStockRes = await dashboard.getProductosBajoStock(umbralStock);
+            const bajoStockRes = await inventaryAPI.bajoStock(umbralStock);
             setData(prev => ({
                 ...prev,
-                productosBajoStock: bajoStockRes.data.productosBajoStock || [],
+                productosBajoStock: bajoStockRes.data.productos || [],
             }));
         } catch (e) {
             console.error("Error al cargar productos bajo stock:", e);
@@ -360,7 +361,7 @@ export default function ReportPage() {
                             <table className="tabla-reportes">
                                 <thead>
                                     <tr>
-                                        <th>Servicio</th>
+                                        <th >Servicio</th>
                                         <th>Citas</th>
                                         <th>Monto</th>
                                     </tr>
@@ -379,7 +380,7 @@ export default function ReportPage() {
 
                         <div className="ranking-card">
                             <h3>⭐ Top Estilistas</h3>
-                            <table className="tabla-reportes">
+                            <table >
                                 <thead>
                                     <tr>
                                         <th>Estilista</th>
@@ -452,7 +453,7 @@ export default function ReportPage() {
                                             <th>Producto</th>
                                             <th>Stock</th>
                                             <th>Precio</th>
-                                            <th>Valor Total</th>
+                                            {/* <th>Valor Total</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -461,7 +462,7 @@ export default function ReportPage() {
                                                 <td>{p.nombre}</td>
                                                 <td className="stock-warning">{p.stock}</td>
                                                 <td>${parseFloat(p.precio).toFixed(2)}</td>
-                                                <td>${parseFloat(p.valor_total).toFixed(2)}</td>
+                                                {/* <td>${parseFloat(p.valor_total).toFixed(2)}</td> */}
                                             </tr>
                                         ))}
                                     </tbody>

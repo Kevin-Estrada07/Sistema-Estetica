@@ -435,7 +435,7 @@ const Clients = () => {
                             <div className="history-section">
                                 <h3>📅 Citas</h3>
                                 {selectedClientHistory.citas.length > 0 ? (
-                                    <table className="history-table">
+                                    <table className="history-client-table">
                                         <thead>
                                             <tr>
                                                 <th>Fecha</th>
@@ -466,12 +466,12 @@ const Clients = () => {
                             <div className="history-section">
                                 <h3>💰 Ventas</h3>
                                 {selectedClientHistory.ventas.length > 0 ? (
-                                    <table className="history-table">
+                                    <table className="history-client-table">
                                         <thead>
                                             <tr>
                                                 <th>Fecha</th>
                                                 <th>Total</th>
-                                                <th>Método Pago</th>
+                                                <th>Mét. Pago</th>
                                                 <th>Vendedor</th>
                                             </tr>
                                         </thead>

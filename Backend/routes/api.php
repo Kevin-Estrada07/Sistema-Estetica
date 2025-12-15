@@ -24,17 +24,6 @@ Route::get('/conexion', function () {
     ]);
 });
 
-// Endpoint para verificar fecha y hora del servidor
-Route::get('/server-time', function () {
-    $now = Carbon::now();
-    return response()->json([
-        'server_time' => $now->toDateTimeString(),
-        'server_date' => $now->toDateString(),
-        'server_hour' => $now->format('H:i:s'),
-        'timezone' => config('app.timezone'),
-        'timestamp' => $now->timestamp,
-    ]);
-});
 
 // Login y logout
 Route::post('/login', [AuthController::class, 'login']);
@@ -47,9 +36,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Rutas protegidas solo para admin
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::get('/users', [AdminUserController::class, 'getAllUsers']);          // Listado de usuarios
-    Route::post('/admin/register', [AdminUserController::class, 'registerUser']); // Registro de usuarios
-    Route::delete('/users/{id}', [AdminUserController::class, 'deleteUser']); // Eliminar usuario
+    Route::get('/users', [AdminUserController::class, 'getAllUsers']);         
+    Route::post('/admin/register', [AdminUserController::class, 'registerUser']); 
+    Route::delete('/users/{id}', [AdminUserController::class, 'deleteUser']); 
 });
 
 // Clientes: accesibles a todos los roles autenticados

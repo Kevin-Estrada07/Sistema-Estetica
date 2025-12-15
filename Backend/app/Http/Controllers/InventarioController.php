@@ -83,7 +83,7 @@ class InventarioController extends Controller
      */
     public function destroy($id)
     {
-        $inventory = Inventory::findOrFail($id);
+        $inventory = Inventory::findOrFail($id); 
         $inventory->delete();
 
         return response()->json(['message' => 'Producto eliminado del inventario'], 200);
@@ -105,5 +105,6 @@ class InventarioController extends Controller
             'total' => $productosBajoStock->count(),
             'umbral' => $umbral
         ]);
+        
     }
 }
