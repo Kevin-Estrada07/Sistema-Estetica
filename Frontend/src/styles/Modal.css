@@ -108,8 +108,9 @@
 
 /* Botón cancelar */
 .btn-cancel,
+.btn-attend,
 .btn-confirm {
-  flex: 1;
+  flex: 1; 
   min-width: 150px;
   padding: 14px 28px;
   border: none;
@@ -122,7 +123,6 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-
 }
 
 .btn-cancel {

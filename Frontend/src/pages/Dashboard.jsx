@@ -12,6 +12,9 @@ import Modal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
 import { adminAPI } from "../api/adminAPI";
 import { inventaryAPI } from "../api/InventaryAPI";
+import {
+  MessageCircle
+} from "lucide-react";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -49,7 +52,7 @@ const Dashboard = () => {
         setShowCalendar(true);
       }
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -67,12 +70,12 @@ const Dashboard = () => {
   useEffect(() => {
     if (showCalendar && isMobile) {
       setCalendarReady(false);
-      
+
       // Esperar a que el DOM esté listo
       setTimeout(() => {
         setCalendarReady(true);
         setCalendarKey(prev => prev + 1);
-        
+
         // Forzar actualizaciones múltiples
         [100, 300, 500, 800, 1000].forEach(delay => {
           setTimeout(() => {
@@ -349,8 +352,8 @@ const Dashboard = () => {
             <div className="mobile-appointments">
               <div className="date-selector-container">
                 <div className="date-selector">
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     className="date-input"
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
@@ -358,7 +361,7 @@ const Dashboard = () => {
                   />
                 </div>
                 {selectedDate && (
-                  <button 
+                  <button
                     className="btn-show-all"
                     onClick={() => setSelectedDate('')}
                   >
@@ -369,11 +372,11 @@ const Dashboard = () => {
 
               {(() => {
                 // Filtrar citas por fecha seleccionada (si hay una)
-                const filteredEvents = selectedDate 
+                const filteredEvents = selectedDate
                   ? events.filter(event => {
-                      const eventDate = new Date(event.start).toISOString().split('T')[0];
-                      return eventDate === selectedDate;
-                    })
+                    const eventDate = new Date(event.start).toISOString().split('T')[0];
+                    return eventDate === selectedDate;
+                  })
                   : events;
 
                 // Ordenar por fecha
@@ -402,17 +405,17 @@ const Dashboard = () => {
                     {Object.keys(groupedByDate).map(date => {
                       const dateObj = new Date(date + 'T00:00:00');
                       const isToday = date === new Date().toISOString().split('T')[0];
-                      
+
                       return (
                         <div key={date}>
                           {/* Mostrar separador de fecha solo cuando se muestran todas */}
                           {!selectedDate && (
                             <div className={`date-divider ${isToday ? 'today-divider' : ''}`}>
                               <span className="date-divider-text">
-                                {isToday ? '📍 Hoy' : ''} {dateObj.toLocaleDateString('es-MX', { 
-                                  weekday: 'long', 
-                                  day: 'numeric', 
-                                  month: 'long' 
+                                {isToday ? '📍 Hoy' : ''} {dateObj.toLocaleDateString('es-MX', {
+                                  weekday: 'long',
+                                  day: 'numeric',
+                                  month: 'long'
                                 })}
                               </span>
                             </div>
@@ -422,10 +425,10 @@ const Dashboard = () => {
                             const eventDate = new Date(event.start);
                             const estado = event.extendedProps.estado;
                             const isCompleted = estado === 'completada' || estado === 'cancelada';
-                            
+
                             return (
-                              <div 
-                                key={event.id} 
+                              <div
+                                key={event.id}
                                 className={`appointment-card ${isCompleted ? 'completed' : 'active'}`}
                                 onClick={() => {
                                   const fakeEvent = {
@@ -440,9 +443,9 @@ const Dashboard = () => {
                                 <div className="appointment-time">
                                   <span className="time-icon">🕐</span>
                                   <span className="time-text">
-                                    {eventDate.toLocaleTimeString('es-MX', { 
-                                      hour: '2-digit', 
-                                      minute: '2-digit' 
+                                    {eventDate.toLocaleTimeString('es-MX', {
+                                      hour: '2-digit',
+                                      minute: '2-digit'
                                     })}
                                   </span>
                                 </div>
@@ -534,13 +537,13 @@ const Dashboard = () => {
                         setToast("❌ Error al atender la cita");
                       }
                     }}>
-                    ✅ Atender
+                    Atender
                   </button>
                 )}
 
                 {selectedEvent.extendedProps.estado === "en proceso" && (
                   <button
-                    className="btn-complete"
+                    className="btn-confirm"
                     onClick={async () => {
                       try {
                         await appointmentsAPI.updateEstado(selectedEvent.id, { estado: "completada" });
@@ -552,7 +555,7 @@ const Dashboard = () => {
                         setToast("❌ Error al completar la cita");
                       }
                     }}>
-                    ✔️ Completar
+                    Completar
                   </button>
                 )}
 
@@ -564,16 +567,14 @@ const Dashboard = () => {
                     selectedEvent.extendedProps.estado === 'en proceso';
 
                   return esFutura && esPendienteOEnProceso && selectedEvent.extendedProps.cliente_telefono ? (
-                    <button
-                      className="btn-whatsapp"
-                      onClick={() => enviarRecordatorioWhatsApp(selectedEvent)}>
-                      📱 Enviar WhatsApp
+                    <button className="btn-whatsapp-modal" onClick={() => enviarRecordatorioWhatsApp(selectedEvent)}>
+                      <MessageCircle size={18} /> whatsapp
                     </button>
                   ) : null;
                 })()}
 
                 <button className="btn-cancel" onClick={() => setSelectedEvent(null)}>
-                  ❌ Cerrar
+                  Cerrar
                 </button>
               </>
             }>
