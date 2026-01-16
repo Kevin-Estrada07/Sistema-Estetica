@@ -676,8 +676,12 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+.detalle-table thead {
+    background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%);
+    color: #000000;
+}
+
 .detalle-table th {
-    background: linear-gradient(135deg, #ffe5e6 0%, #fd0208 100%);
     color: #2c3e50;
     padding: 12px;
     text-align: left;
@@ -736,6 +740,18 @@
     border-top: 2px solid #fd0208;
 }
 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.detalle-table {
+    min-width: 600px;
+    /* CLAVE */
+}
+
+
 /* ============================================ */
 /* RESPONSIVE */
 /* ============================================ */
@@ -756,6 +772,11 @@
 
     .table-wrapper {
         overflow-x: scroll;
+    }
+
+    .detalle-table {
+        font-size: 12px;
+        min-width: 520px;
     }
 
     .cards-grid {
@@ -840,8 +861,7 @@
     margin-top: 8px;
 }
 
-.btn-submit-refund,
-.btn-cancel {
+.btn-submit-refund {
     flex: 1;
     padding: 12px 24px;
     border: none;
@@ -867,21 +887,6 @@
     cursor: not-allowed;
 }
 
-.btn-cancel {
-    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
-    color: white;
-}
-
-.btn-cancel:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(127, 140, 141, 0.4);
-}
-
-/* Toast ya existe en el archivo, no es necesario agregarlo */
-
-/* ============================================ */
-/* MODAL DE ACCESO DENEGADO */
-/* ============================================ */
 
 .access-denied-overlay {
     position: fixed;

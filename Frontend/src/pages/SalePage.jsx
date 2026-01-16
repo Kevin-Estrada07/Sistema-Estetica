@@ -330,7 +330,7 @@ const SalePage = () => {
                                         <th>Stock</th>
                                         <th>Cantidad</th>
                                         <th>Subtotal</th>
-                                        <th>Acciones</th>
+                                        {/* <th>Acciones</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>

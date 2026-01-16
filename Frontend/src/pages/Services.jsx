@@ -296,7 +296,7 @@ const Services = () => {
                             />
                         </div>
 
-                        {/* Duración y Precio en la misma fila */}
+                        {/* Duración y Precio */}
                         <div className="form-row">
                             <div className="form-group half">
                                 <label>Duración (minutos)</label>

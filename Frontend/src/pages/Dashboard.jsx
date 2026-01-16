@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../styles/Dashboard.css";
 import Sidebar from "../components/Sidebar";
 import { useAuth } from "../context/AuthContext";
@@ -16,6 +16,7 @@ import { inventaryAPI } from "../api/InventaryAPI";
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const calendarRef = useRef(null);
 
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -25,15 +26,36 @@ const Dashboard = () => {
     servicios: 0,
   });
 
-  // ⭐ Nuevos estados para drag & drop
+  // Estados para drag & drop
   const [draggedEvent, setDraggedEvent] = useState(null);
   const [toast, setToast] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // ⭐ Estado para productos bajo stock
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarKey, setCalendarKey] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [calendarReady, setCalendarReady] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('');
+
+  // Estado para productos bajo stock
   const [productosBajoStock, setProductosBajoStock] = useState([]);
 
-  // ⭐ Auto-ocultar toast
+  // Detectar cambios en tamaño de pantalla
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setShowCalendar(true);
+      }
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Auto-ocultar toast
   useEffect(() => {
     if (toast) {
       const timer = setTimeout(() => setToast(""), 3000);
@@ -41,11 +63,40 @@ const Dashboard = () => {
     }
   }, [toast]);
 
+  // Forzar re-render del calendario cuando se muestra en móvil
+  useEffect(() => {
+    if (showCalendar && isMobile) {
+      setCalendarReady(false);
+      
+      // Esperar a que el DOM esté listo
+      setTimeout(() => {
+        setCalendarReady(true);
+        setCalendarKey(prev => prev + 1);
+        
+        // Forzar actualizaciones múltiples
+        [100, 300, 500, 800, 1000].forEach(delay => {
+          setTimeout(() => {
+            if (calendarRef.current) {
+              try {
+                const calendarApi = calendarRef.current.getApi();
+                calendarApi.updateSize();
+                calendarApi.render();
+              } catch (e) {
+                console.log('Error actualizando calendario:', e);
+              }
+            }
+          }, delay);
+        });
+      }, 50);
+    } else if (!isMobile && !showCalendar) {
+      setShowCalendar(true);
+      setCalendarReady(true);
+    }
+  }, [showCalendar, isMobile]);
+
   const fetchAppointments = async () => {
     try {
       const res = await appointmentsAPI.getAll();
-
-      // Extraer array de citas (ahora viene en res.data.data con paginación)
       const citasArray = Array.isArray(res.data.data) ? res.data.data : [];
 
       const citas = citasArray.map((a) => ({
@@ -61,7 +112,6 @@ const Dashboard = () => {
           notas: a.notas,
           fecha: a.fecha,
           hora: a.hora,
-          // ⭐ Guardar IDs necesarios para la actualización
           cliente_id: a.cliente_id,
           servicio_id: a.servicio_id,
           empleado_id: a.empleado_id,
@@ -85,7 +135,6 @@ const Dashboard = () => {
     };
     fetchStats();
 
-    // Cargar productos bajo stock
     const fetchProductosBajoStock = async () => {
       try {
         const res = await inventaryAPI.bajoStock(10);
@@ -97,24 +146,20 @@ const Dashboard = () => {
     fetchProductosBajoStock();
   }, []);
 
-  // ⭐ Manejar cuando se suelta el evento (drop)
   const handleEventDrop = (info) => {
     const event = info.event;
     const newDate = info.event.start;
 
-    // ⭐ Validar que no sea una fecha/hora pasada
     const ahora = new Date();
     if (newDate < ahora) {
       setToast("❌ No puedes mover una cita a una fecha u hora que ya pasó");
-      info.revert(); // Revertir inmediatamente
+      info.revert();
       return;
     }
 
-    // Extraer nueva fecha y hora
     const fecha = newDate.toISOString().split("T")[0];
     const hora = newDate.toTimeString().split(" ")[0].substring(0, 5);
 
-    // Guardar información para el modal de confirmación
     setDraggedEvent({
       id: event.id,
       title: event.title,
@@ -127,11 +172,10 @@ const Dashboard = () => {
       empleado_id: event.extendedProps.empleado_id,
       estado: event.extendedProps.estado,
       notas: event.extendedProps.notas,
-      revertFunc: info.revert, // Función para revertir si hay error
+      revertFunc: info.revert,
     });
   };
 
-  // ⭐ Confirmar cambio de fecha/hora
   const confirmEventUpdate = async () => {
     if (!draggedEvent) return;
 
@@ -150,12 +194,11 @@ const Dashboard = () => {
 
       await appointmentsAPI.update(draggedEvent.id, data);
       setToast("✅ Cita actualizada exitosamente");
-      fetchAppointments(); // Recargar eventos
+      fetchAppointments();
       setDraggedEvent(null);
     } catch (err) {
       console.error("Error al actualizar cita:", err);
 
-      // ⭐ Capturar error del backend (traslapes)
       if (err.response) {
         const errorMessage = err.response.data?.message || err.response.data?.error;
 
@@ -168,7 +211,6 @@ const Dashboard = () => {
         setToast("❌ Error de conexión");
       }
 
-      // ⭐ Revertir el cambio visual en el calendario
       if (draggedEvent.revertFunc) {
         draggedEvent.revertFunc();
       }
@@ -179,7 +221,6 @@ const Dashboard = () => {
     }
   };
 
-  // ⭐ Cancelar cambio de fecha/hora
   const cancelEventUpdate = () => {
     if (draggedEvent && draggedEvent.revertFunc) {
       draggedEvent.revertFunc();
@@ -187,14 +228,12 @@ const Dashboard = () => {
     setDraggedEvent(null);
   };
 
-  // Enviar recordatorio por WhatsApp
   const enviarRecordatorioWhatsApp = (event) => {
     if (!event.extendedProps.cliente_telefono) {
       setToast("❌ El cliente no tiene teléfono registrado");
       return;
     }
 
-    // Formatear fecha y hora
     const fechaCita = new Date(event.start);
     const opciones = {
       weekday: 'long',
@@ -206,7 +245,6 @@ const Dashboard = () => {
     };
     const fechaFormateada = fechaCita.toLocaleDateString('es-MX', opciones);
 
-    // Crear mensaje personalizado
     const mensaje = `¡Hola ${event.extendedProps.cliente}! 👋\n\n` +
       `Te recordamos tu cita en nuestra estética:\n\n` +
       `📅 *Fecha y hora:* ${fechaFormateada}\n` +
@@ -214,15 +252,10 @@ const Dashboard = () => {
       `👤 *Atendido por:* ${event.extendedProps.empleado}\n\n` +
       `¡Te esperamos! Si necesitas reagendar, contáctanos. 💕`;
 
-    // Limpiar número de teléfono (solo dígitos)
     const telefonoLimpio = event.extendedProps.cliente_telefono.replace(/\D/g, '');
-
-    // Crear URL de WhatsApp
     const urlWhatsApp = `https://wa.me/52${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
 
-    // Abrir WhatsApp en nueva ventana
     window.open(urlWhatsApp, '_blank');
-
     setToast("✅ Abriendo WhatsApp...");
   };
 
@@ -310,43 +343,172 @@ const Dashboard = () => {
           <div className="panel-header">
             <h2>📅 Agenda de Citas</h2>
           </div>
-          <div className="calendar-wrapper">
-            <FullCalendar
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              headerToolbar={{
-                left: "prev,next today",
-                center: "title",
-                right: "dayGridMonth,timeGridWeek,timeGridDay",
-              }}
-              locales={[esLocale]}
-              locale="es"
-              buttonText={{
-                today: "Hoy",
-                month: "Mes",
-                week: "Semana",
-                day: "Día",
-              }}
-              events={events}
-              eventColor="#f15456"
-              eventDisplay="block"
-              height="80vh"
-              slotMinTime="08:00:00"
-              slotMaxTime="24:00:00"
-              eventClick={(info) => setSelectedEvent(info.event)}
-              // ⭐ Habilitar drag & drop
-              editable={true}
-              droppable={true}
-              eventDrop={handleEventDrop}
-              // ⭐ Opcional: cambiar cursor al arrastrar
-              eventDragStart={(info) => {
-                info.el.style.cursor = "grabbing";
-              }}
-              eventDragStop={(info) => {
-                info.el.style.cursor = "grab";
-              }}
-            />
-          </div>
+
+          {/* VISTA MÓVIL - LISTA DE CITAS */}
+          {isMobile ? (
+            <div className="mobile-appointments">
+              <div className="date-selector-container">
+                <div className="date-selector">
+                  <input 
+                    type="date" 
+                    className="date-input"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    placeholder="Seleccionar fecha"
+                  />
+                </div>
+                {selectedDate && (
+                  <button 
+                    className="btn-show-all"
+                    onClick={() => setSelectedDate('')}
+                  >
+                    📋 Mostrar Todas
+                  </button>
+                )}
+              </div>
+
+              {(() => {
+                // Filtrar citas por fecha seleccionada (si hay una)
+                const filteredEvents = selectedDate 
+                  ? events.filter(event => {
+                      const eventDate = new Date(event.start).toISOString().split('T')[0];
+                      return eventDate === selectedDate;
+                    })
+                  : events;
+
+                // Ordenar por fecha
+                const sortedEvents = filteredEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+
+                if (sortedEvents.length === 0) {
+                  return (
+                    <div className="no-appointments">
+                      <p>📅 {selectedDate ? 'No hay citas programadas para este día' : 'No hay citas programadas'}</p>
+                    </div>
+                  );
+                }
+
+                // Agrupar por fecha cuando se muestran todas
+                const groupedByDate = {};
+                sortedEvents.forEach(event => {
+                  const eventDate = new Date(event.start).toISOString().split('T')[0];
+                  if (!groupedByDate[eventDate]) {
+                    groupedByDate[eventDate] = [];
+                  }
+                  groupedByDate[eventDate].push(event);
+                });
+
+                return (
+                  <div className="appointments-list">
+                    {Object.keys(groupedByDate).map(date => {
+                      const dateObj = new Date(date + 'T00:00:00');
+                      const isToday = date === new Date().toISOString().split('T')[0];
+                      
+                      return (
+                        <div key={date}>
+                          {/* Mostrar separador de fecha solo cuando se muestran todas */}
+                          {!selectedDate && (
+                            <div className={`date-divider ${isToday ? 'today-divider' : ''}`}>
+                              <span className="date-divider-text">
+                                {isToday ? '📍 Hoy' : ''} {dateObj.toLocaleDateString('es-MX', { 
+                                  weekday: 'long', 
+                                  day: 'numeric', 
+                                  month: 'long' 
+                                })}
+                              </span>
+                            </div>
+                          )}
+
+                          {groupedByDate[date].map(event => {
+                            const eventDate = new Date(event.start);
+                            const estado = event.extendedProps.estado;
+                            const isCompleted = estado === 'completada' || estado === 'cancelada';
+                            
+                            return (
+                              <div 
+                                key={event.id} 
+                                className={`appointment-card ${isCompleted ? 'completed' : 'active'}`}
+                                onClick={() => {
+                                  const fakeEvent = {
+                                    id: event.id,
+                                    title: event.title,
+                                    start: event.start,
+                                    extendedProps: event.extendedProps
+                                  };
+                                  setSelectedEvent(fakeEvent);
+                                }}
+                              >
+                                <div className="appointment-time">
+                                  <span className="time-icon">🕐</span>
+                                  <span className="time-text">
+                                    {eventDate.toLocaleTimeString('es-MX', { 
+                                      hour: '2-digit', 
+                                      minute: '2-digit' 
+                                    })}
+                                  </span>
+                                </div>
+                                <div className="appointment-info">
+                                  <h4>{event.extendedProps.cliente}</h4>
+                                  <p className="service-name-card">💅 {event.extendedProps.servicio}</p>
+                                  <p className="employee-name">👤 {event.extendedProps.empleado}</p>
+                                  <span className={`status-badge status-${estado.replace(' ', '-')}`}>
+                                    {estado}
+                                  </span>
+                                </div>
+                                <div className="appointment-date">
+                                  <span className="date-day">
+                                    {eventDate.getDate()}
+                                  </span>
+                                  <span className="date-month">
+                                    {eventDate.toLocaleDateString('es-MX', { month: 'short' })}
+                                  </span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+            </div>
+          ) : (
+            /* VISTA ESCRITORIO - CALENDARIO */
+            <div className="calendar-wrapper">
+              <FullCalendar
+                ref={calendarRef}
+                key={calendarKey}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                initialView="dayGridMonth"
+                headerToolbar={{
+                  left: "prev,next today",
+                  center: "title",
+                  right: "dayGridMonth,timeGridWeek,timeGridDay",
+                }}
+                locales={[esLocale]}
+                locale="es"
+                buttonText={{
+                  today: "Hoy",
+                  month: "Mes",
+                  week: "Semana",
+                  day: "Día",
+                }}
+                events={events}
+                eventColor="#f15456"
+                eventDisplay="block"
+                height="auto"
+                slotMinTime="07:00:00"
+                slotMaxTime="21:00:00"
+                scrollTime="08:00:00"
+                allDaySlot={false}
+                expandRows={true}
+                editable={true}
+                droppable={true}
+                eventDrop={handleEventDrop}
+                eventClick={(info) => setSelectedEvent(info.event)}
+              />
+            </div>
+          )}
         </section>
 
         {/* Modal de detalles de cita */}
@@ -365,7 +527,7 @@ const Dashboard = () => {
                       try {
                         await appointmentsAPI.updateEstado(selectedEvent.id, { estado: "en proceso" });
                         setSelectedEvent(null);
-                        fetchAppointments(); // Recargar citas
+                        fetchAppointments();
                         setToast("✅ Cita En proceso");
                       } catch (err) {
                         console.error("Error al atender cita:", err);
@@ -376,13 +538,30 @@ const Dashboard = () => {
                   </button>
                 )}
 
-                {/* Botón Enviar WhatsApp - Solo para citas futuras */}
+                {selectedEvent.extendedProps.estado === "en proceso" && (
+                  <button
+                    className="btn-complete"
+                    onClick={async () => {
+                      try {
+                        await appointmentsAPI.updateEstado(selectedEvent.id, { estado: "completada" });
+                        setSelectedEvent(null);
+                        fetchAppointments();
+                        setToast("✅ Cita Completada");
+                      } catch (err) {
+                        console.error("Error al completar cita:", err);
+                        setToast("❌ Error al completar la cita");
+                      }
+                    }}>
+                    ✔️ Completar
+                  </button>
+                )}
+
                 {(() => {
                   const citaFecha = new Date(selectedEvent.start);
                   const ahora = new Date();
                   const esFutura = citaFecha > ahora;
                   const esPendienteOEnProceso = selectedEvent.extendedProps.estado === 'pendiente' ||
-                                                selectedEvent.extendedProps.estado === 'en proceso';
+                    selectedEvent.extendedProps.estado === 'en proceso';
 
                   return esFutura && esPendienteOEnProceso && selectedEvent.extendedProps.cliente_telefono ? (
                     <button
@@ -424,7 +603,7 @@ const Dashboard = () => {
           </Modal>
         )}
 
-        {/* ⭐ Modal de confirmación de cambio de fecha/hora */}
+        {/* Modal de confirmación de cambio de fecha/hora */}
         {draggedEvent && (
           <Modal
             isOpen={!!draggedEvent}
@@ -465,12 +644,11 @@ const Dashboard = () => {
           </Modal>
         )}
 
-        {/* ⭐ Toast para notificaciones */}
+        {/* Toast para notificaciones */}
         {toast && (
           <div
-            className={`toast ${
-              toast.startsWith("❌") ? "toast-error" : "toast-success"
-            }`}>
+            className={`toast ${toast.startsWith("❌") ? "toast-error" : "toast-success"
+              }`}>
             {toast}
           </div>
         )}

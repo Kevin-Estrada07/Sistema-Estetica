@@ -153,7 +153,7 @@ const Inventary = () => {
 
                 {loading ? <p>Cargando...</p> : error ? <p>{error}</p> :
                     <div className="table-wrapper">
-                        <table className="products-table">
+                        <table className="inventary-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>

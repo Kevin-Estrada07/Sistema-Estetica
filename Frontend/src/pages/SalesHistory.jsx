@@ -437,22 +437,19 @@ const SalesHistory = () => {
                                 <div className="card-actions">
                                     <button
                                         className="btn-view-card"
-                                        onClick={() => handleView(venta)}
-                                    >
+                                        onClick={() => handleView(venta)}>
                                         👁️ Ver Detalles
                                     </button>
                                     <button
                                         className="btn-print-card"
-                                        onClick={() => generatePDF(venta)}
-                                    >
+                                        onClick={() => generatePDF(venta)}>
                                         🖨️ Ticket
                                     </button>
                                     {/* Solo mostrar botón de reembolso si no tiene reembolso */}
                                     {(!venta.reembolsos || venta.reembolsos.length === 0) && (
                                         <button
                                             className="btn-refund-card"
-                                            onClick={() => handleOpenReembolsoModal(venta)}
-                                        >
+                                            onClick={() => handleOpenReembolsoModal(venta)}>
                                             💰 Reembolso
                                         </button>
                                     )}
@@ -505,95 +502,101 @@ const SalesHistory = () => {
 
                             {/* Servicios */}
                             {selectedVenta.detalles?.some((d) => d.servicio) && (
-                                <>
+                                <div className="detail-section">
                                     <h3>🧴 Servicios</h3>
-                                    <table className="detalle-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Servicio</th>
-                                                <th>Precio</th>
-                                                <th>Cantidad</th>
-                                                <th>Subtotal</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {selectedVenta.detalles
-                                                .filter((d) => d.servicio)
-                                                .map((d) => (
-                                                    <tr key={d.id}>
-                                                        <td>{d.servicio.nombre}</td>
-                                                        <td>${d.precio_unitario}</td>
-                                                        <td>{d.cantidad}</td>
-                                                        <td>${d.subtotal}</td>
-                                                    </tr>
-                                                ))}
-                                        </tbody>
-                                    </table>
-                                </>
+                                    <div className="table-responsive">
+                                        <table className="detalle-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Servicio</th>
+                                                    <th>Precio</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Subtotal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {selectedVenta.detalles
+                                                    .filter((d) => d.servicio)
+                                                    .map((d) => (
+                                                        <tr key={d.id}>
+                                                            <td>{d.servicio.nombre}</td>
+                                                            <td>${d.precio_unitario}</td>
+                                                            <td>{d.cantidad}</td>
+                                                            <td>${d.subtotal}</td>
+                                                        </tr>
+                                                    ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             )}
 
                             {/* Productos */}
                             {selectedVenta.detalles?.some((d) => d.producto) && (
                                 <div className="detail-section">
                                     <h3>📦 Productos</h3>
-                                    <table className="detalle-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Producto</th>
-                                                <th>Precio</th>
-                                                <th>Cantidad</th>
-                                                <th>Subtotal</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {selectedVenta.detalles
-                                                .filter((d) => d.producto)
-                                                .map((d) => (
-                                                    <tr key={d.id}>
-                                                        <td>{d.producto.nombre}</td>
-                                                        <td>${parseFloat(d.precio_unitario).toFixed(2)}</td>
-                                                        <td>{d.cantidad}</td>
-                                                        <td>${parseFloat(d.subtotal).toFixed(2)}</td>
-                                                    </tr>
-                                                ))}
-                                        </tbody>
-                                    </table>
+                                    <div className="table-responsive">
+                                        <table className="detalle-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Producto</th>
+                                                    <th>Precio</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Subtotal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {selectedVenta.detalles
+                                                    .filter((d) => d.producto)
+                                                    .map((d) => (
+                                                        <tr key={d.id}>
+                                                            <td>{d.producto.nombre}</td>
+                                                            <td>${parseFloat(d.precio_unitario).toFixed(2)}</td>
+                                                            <td>{d.cantidad}</td>
+                                                            <td>${parseFloat(d.subtotal).toFixed(2)}</td>
+                                                        </tr>
+                                                    ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             )}
 
                             {/* Resumen de Totales */}
                             <div className="detail-section">
                                 <h3>💰 Resumen de Pago</h3>
-                                <div className="totals-summary">
-                                    <div className="total-row">
-                                        <span>Subtotal:</span>
-                                        <span>${parseFloat(selectedVenta.subtotal || 0).toFixed(2)}</span>
-                                    </div>
-                                    {selectedVenta.descuento_monto > 0 && (
-                                        <div className="total-row discount">
-                                            <span>Descuento ({selectedVenta.descuento_porcentaje}%):</span>
-                                            <span>-${parseFloat(selectedVenta.descuento_monto).toFixed(2)}</span>
+                                <div className="table-responsive">
+                                    <div className="totals-summary">
+                                        <div className="total-row">
+                                            <span>Subtotal:</span>
+                                            <span>${parseFloat(selectedVenta.subtotal || 0).toFixed(2)}</span>
                                         </div>
-                                    )}
-                                    {selectedVenta.impuesto_monto > 0 && (
-                                        <div className="total-row tax">
-                                            <span>Impuesto ({selectedVenta.impuesto_porcentaje}%):</span>
-                                            <span>+${parseFloat(selectedVenta.impuesto_monto).toFixed(2)}</span>
+                                        {selectedVenta.descuento_monto > 0 && (
+                                            <div className="total-row discount">
+                                                <span>Descuento ({selectedVenta.descuento_porcentaje}%):</span>
+                                                <span>-${parseFloat(selectedVenta.descuento_monto).toFixed(2)}</span>
+                                            </div>
+                                        )}
+                                        {selectedVenta.impuesto_monto > 0 && (
+                                            <div className="total-row tax">
+                                                <span>Impuesto ({selectedVenta.impuesto_porcentaje}%):</span>
+                                                <span>+${parseFloat(selectedVenta.impuesto_monto).toFixed(2)}</span>
+                                            </div>
+                                        )}
+                                        <div className="total-row final">
+                                            <span>Total:</span>
+                                            <span>
+                                                {selectedVenta.reembolsado ? (
+                                                    <>
+                                                        <span className="total-original">${parseFloat(selectedVenta.total_original).toFixed(2)}</span>
+                                                        {" "}
+                                                        <span className="total-reembolsado">$0.00</span>
+                                                    </>
+                                                ) : (
+                                                    `$${parseFloat(selectedVenta.total).toFixed(2)}`
+                                                )}
+                                            </span>
                                         </div>
-                                    )}
-                                    <div className="total-row final">
-                                        <span>Total:</span>
-                                        <span>
-                                            {selectedVenta.reembolsado ? (
-                                                <>
-                                                    <span className="total-original">${parseFloat(selectedVenta.total_original).toFixed(2)}</span>
-                                                    {" "}
-                                                    <span className="total-reembolsado">$0.00</span>
-                                                </>
-                                            ) : (
-                                                `$${parseFloat(selectedVenta.total).toFixed(2)}`
-                                            )}
-                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -643,8 +646,7 @@ const SalesHistory = () => {
                                     onChange={(e) => setMotivoReembolso(e.target.value)}
                                     placeholder="Describe el motivo de la solicitud de reembolso..."
                                     rows={5}
-                                    className="motivo-textarea"
-                                />
+                                    className="motivo-textarea" />
                                 <small className="char-count">
                                     {motivoReembolso.length} / 10 caracteres mínimo
                                 </small>
@@ -653,14 +655,12 @@ const SalesHistory = () => {
                                 <button
                                     className="btn-submit-refund"
                                     onClick={handleSolicitarReembolso}
-                                    disabled={motivoReembolso.length < 10}
-                                >
+                                    disabled={motivoReembolso.length < 10}>
                                     ✅ Enviar Solicitud
                                 </button>
                                 <button
                                     className="btn-cancel"
-                                    onClick={handleCloseReembolsoModal}
-                                >
+                                    onClick={handleCloseReembolsoModal}>
                                     ❌ Cancelar
                                 </button>
                             </div>

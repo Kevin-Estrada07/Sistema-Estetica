@@ -13,8 +13,8 @@
     padding: 24px;
     background: linear-gradient(135deg, #f9fafb 0%, #ffe5e6 100%);
     min-height: 100vh;
-    overflow-x: hidden;
-    margin-left: 220px; 
+    overflow-x: auto;
+    margin-left: 220px;
 }
 
 /* ============================================ */
@@ -96,6 +96,7 @@
 /* ============================================ */
 
 .table-wrapper {
+    /* width: 100%; */
     background: white;
     border-radius: 16px;
     overflow: hidden;
@@ -108,19 +109,20 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-.products-table {
+.inventary-table {
     width: 100%;
     border-collapse: collapse;
     min-width: 800px;
 }
 
-.products-table th {
+.inventary-table th {
     /* background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%); */
     color: #000000;
     padding: 16px 12px;
@@ -134,12 +136,11 @@
     z-index: 10;
 }
 
-.products-table thead {
+.inventary-table thead {
     background: linear-gradient(135deg, #ffe5e6 0%, #f15456 100%);
 }
 
-
-.products-table td {
+.inventary-table td {
     padding: 16px 12px;
     border-bottom: 1px solid #f0f0f0;
     text-align: center;
@@ -148,11 +149,11 @@
     vertical-align: middle;
 }
 
-.products-table tbody tr {
+.inventary-table tbody tr {
     transition: all 0.3s ease;
 }
 
-.products-table tbody tr:hover {
+.inventary-table tbody tr:hover {
     background: linear-gradient(135deg, #fff5f8 0%, #ffe0ec 100%);
     transform: scale(1.01);
     box-shadow: 0 4px 12px rgba(253, 2, 8, 0.2);
@@ -229,6 +230,7 @@
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -300,26 +302,6 @@
     border-color: #4CAF50;
 }
 
-/* ============================================ */
-/* BOTONES DEL MODAL */
-/* ============================================ */
-
-/* .btn-submit,
-.btn-cancel,
-.btn-confirm {
-    padding: 12px 28px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 15px;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 8px;
-} */
 
 .btn-submit {
     background: linear-gradient(135deg, #fd0208 0%, #c40106 100%);
@@ -333,28 +315,6 @@
     box-shadow: 0 6px 20px rgba(253, 2, 8, 0.5);
     background: linear-gradient(135deg, #c40106 0%, #c40106 100%);
 }
-
-/* .btn-cancel {
-    background: #e0e0e0;
-    color: #555;
-}
-
-.btn-cancel:hover {
-    background: #d0d0d0;
-    transform: translateY(-2px);
-} */
-
-/* .btn-confirm {
-    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
-}
-
-.btn-confirm:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
-    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
-} */
 
 /* ============================================ */
 /* BADGES DE TIPO */
@@ -434,9 +394,12 @@
 }
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
     }
+
     50% {
         opacity: 0.6;
     }
@@ -464,7 +427,7 @@
 /* ESTADOS Y MENSAJES */
 /* ============================================ */
 
-.products-content > p {
+.products-content>p {
     text-align: center;
     font-size: 18px;
     color: #666;
@@ -507,6 +470,7 @@
         opacity: 0;
         transform: translateX(100px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -518,6 +482,7 @@
         opacity: 1;
         transform: translateX(0);
     }
+
     to {
         opacity: 0;
         transform: translateX(100px);
@@ -549,35 +514,25 @@
 /* ============================================ */
 /* RESPONSIVE DESIGN */
 /* ============================================ */
-
 @media screen and (max-width: 768px) {
+
+    /* Layout general */
     .dashboard {
         flex-direction: column;
     }
 
     .products-content {
-        padding: 20px;
-        margin-left: 0;
-    }
-
-    .products-header {
-        padding: 16px 20px;
-    }
-
-    .table-wrapper {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .products-content {
         padding: 16px;
+        margin-left: 0;
+        overflow-x: visible;
+        /* importante */
     }
 
+    /* Header */
     .products-header {
         flex-direction: column;
         align-items: flex-start;
+        gap: 12px;
         padding: 16px;
     }
 
@@ -588,36 +543,52 @@
     .products-actions {
         width: 100%;
         flex-direction: column;
+        gap: 12px;
     }
 
-    .search-input {
+    .search-input,
+    .btn-register {
         width: 100%;
     }
 
     .btn-register {
-        width: 100%;
         justify-content: center;
     }
 
-    .products-table th,
-    .products-table td {
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        display: block;
+    }
+
+    .col-descripcion,
+    .col-tipo {
+        display: none;
+    }
+
+    .inventary-table th,
+    .inventary-table td {
         padding: 12px 8px;
         font-size: 13px;
     }
 
+    /* Botones tabla */
     .btn-edit,
     .btn-delete {
         padding: 6px 10px;
         font-size: 12px;
     }
 
+    /* Toast */
     .toast {
         bottom: 16px;
-        right: 16px;
         left: 16px;
+        right: 16px;
         font-size: 14px;
     }
 
+    /* Formularios */
     .form-client {
         gap: 16px;
     }
@@ -650,6 +621,7 @@
     }
 }
 
+
 /* ============================================ */
 /* ACCESIBILIDAD */
 /* ============================================ */
@@ -661,5 +633,3 @@
         transition-duration: 0.01ms !important;
     }
 }
-
-

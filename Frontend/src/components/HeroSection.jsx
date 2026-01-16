@@ -32,13 +32,13 @@ const HeroSection = () => (
             <span>Reservar Cita</span>
           </a>
           {/* <button href="#services" className="cta-secondary">Ver Servicios</button> */}
-          <a href="#services" className="cta-secondary" >
+          {/* <a href="#services" className="cta-secondary" >
             <span>Servicios</span>
-          </a>
+          </a> */}
         </div> 
 
         {/* Features */}
-        <div className="hero-features">
+        {/* <div className="hero-features">
           <div className="feature">
             <div className="feature-icon">💆‍♀️</div>
             <span>Faciales</span>
@@ -51,7 +51,7 @@ const HeroSection = () => (
             <div className="feature-icon">🧘‍♀️</div>
             <span>Relajación</span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Imagen o ilustración */}

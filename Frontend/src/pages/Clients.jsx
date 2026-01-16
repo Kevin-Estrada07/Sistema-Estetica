@@ -435,7 +435,7 @@ const Clients = () => {
                             <div className="history-section">
                                 <h3>📅 Citas</h3>
                                 {selectedClientHistory.citas.length > 0 ? (
-                                    <table className="history-client-table">
+                                    <table className="history-client-table"> 
                                         <thead>
                                             <tr>
                                                 <th>Fecha</th>

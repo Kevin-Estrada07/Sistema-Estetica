@@ -18,16 +18,28 @@ const Testimonials = () => {
   }, []);
 
   const fetchTestimonios = async () => {
-    try {
-      setLoading(true);
-      const response = await testimoniosAPI.getDestacados();
-      setComments(response.data);
-    } catch (error) {
-      console.error('Error al cargar testimonios:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    const response = await testimoniosAPI.getDestacados();
+    
+    console.log('Response completo:', response);
+    console.log('response.data:', response.data);
+    
+    // Axios ya devuelve response.data
+    // Pero Laravel puede devolver {data: [...]} o directamente [...]
+    const testimonios = Array.isArray(response.data) 
+      ? response.data 
+      : (response.data.data || []);
+    
+    console.log('Testimonios procesados:', testimonios);
+    setComments(testimonios);
+  } catch (error) {
+    console.error('Error al cargar testimonios:', error);
+    setComments([]); // ← IMPORTANTE: Array vacío en caso de error
+  } finally {
+    setLoading(false);
+  }
+};
 
   const toggleExpand = (id) => {
     const s = new Set(expandedIds);

@@ -9,6 +9,7 @@
   z-index: 2000;
   /* 🔹 más alto que el sidebar */
   animation: fadeIn 0.3s ease;
+  padding: 1rem;
 }
 
 
@@ -23,6 +24,8 @@
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-header {
@@ -119,20 +122,20 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+
 }
 
 .btn-cancel {
-
-  background: #00000000 !important;
+  background: linear-gradient(135deg, #ff5638 0%, #ff5638 100%);
   /* background: linear-gradient(135deg, #898a6252 0%, #2bff00 100%) !important; */
-  color: rgb(0, 0, 0) !important;
+  color: white;
   /* box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4); */
 }
 
 .btn-cancel:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
-  background: linear-gradient(135deg, #6563d4 0%, #1100ff 100%);
+  background: linear-gradient(135deg, #ff3300 0%, #ff3300 100%);
 }
 
 .btn-cancel:active {
@@ -181,6 +184,43 @@
     transform: translateY(0);
     opacity: 1;
   }
+
+
 }
 
+@media (max-width: 768px) {
+  .modal-footer {
+    flex-direction: column-reverse ;
+    gap: 1rem;
+  }
 
+  .btn-confirm,
+  .btn-cancel {
+    width: 100%;
+    min-width: unset;
+    padding: 14px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .modal-close {
+    font-size: 1.1rem;
+  }
+
+  .modal-body {
+    font-size: 0.9rem;
+  }
+
+  .delete-client-text {
+    font-size: 1.1rem;
+  }
+}

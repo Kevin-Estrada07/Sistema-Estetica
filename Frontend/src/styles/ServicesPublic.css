@@ -336,7 +336,7 @@
   .service-item {
     flex-wrap: wrap;
   }
-
+ 
   .service-name,
   .service-price {
     font-size: 0.9rem;

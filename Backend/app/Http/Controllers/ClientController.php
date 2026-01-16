@@ -127,7 +127,7 @@ class ClientController extends Controller
                 ->with([
                     'usuario:id,name',
                     'detalles.servicio:id,nombre,precio',
-                    'detalles.producto:id,nombre,precio_unitario'
+                    'detalles.producto:id,nombre,precio'
                 ])
                 ->select('id', 'cliente_id', 'usuario_id', 'total', 'metodo_pago', 'fecha')
                 ->orderBy('fecha', 'desc')

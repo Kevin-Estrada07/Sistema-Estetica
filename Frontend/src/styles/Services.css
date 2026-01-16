@@ -334,26 +334,6 @@
 
 
 
-/* ============================================ */
-/* BOTONES DEL MODAL */
-/* ============================================ */
-
-/* .btn-submit,
-.btn-cancel,
-.btn-confirm {
-    padding: 12px 28px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 15px;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 8px;
-} */
 
 .btn-submit {
     background: linear-gradient(135deg, #fd0208 0%, #c40106 100%);
@@ -367,28 +347,6 @@
     box-shadow: 0 6px 20px rgba(253, 2, 8, 0.5);
     background: linear-gradient(135deg, #c40106 0%, #c40106 100%);
 }
-
-/* .btn-cancel {
-    background: #e0e0e0;
-    color: #555;
-}
-
-.btn-cancel:hover {
-    background: #d0d0d0;
-    transform: translateY(-2px);
-} */
-
-/* .btn-confirm {
-    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
-}
-
-.btn-confirm:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.5);
-    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
-} */
 
 /* ============================================ */
 /* ESTADOS Y MENSAJES */
@@ -500,6 +458,12 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
+
+    .producto-item {
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        padding: 0.6rem 0.8rem;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -566,6 +530,16 @@
     .btn-confirm {
         width: 100%;
     }
+
+    .productos-container {
+        margin-top: 0.4rem;
+    }
+
+    .producto-item {
+        gap: 0.6rem;
+        padding: 0.6rem 0.8rem;
+        font-size: 14px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -579,6 +553,18 @@
 
     .services-header h1 {
         font-size: 20px;
+    }
+
+    .productos-container {
+        margin-top: 0.3rem;
+    }
+
+    .producto-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.5rem 0.7rem;
+        font-size: 13px;
     }
 }
 
@@ -651,6 +637,7 @@
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -719,5 +706,3 @@
         transition-duration: 0.01ms !important;
     }
 }
-
-

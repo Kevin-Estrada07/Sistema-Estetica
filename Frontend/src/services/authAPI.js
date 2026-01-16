@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8000/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const login = async (email, password) => {
   try {
@@ -15,7 +15,7 @@ export const login = async (email, password) => {
       throw new Error("Error del servidor");
     }
   }
-};
+}; 
 
 export const logout = async () => {
   const token = localStorage.getItem("access_token");
